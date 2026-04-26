@@ -1,0 +1,204 @@
+﻿@model List<Plantopia.Models.Plant>
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+<section id="hero">
+    <div class="container">
+        <div class="row" style="min-height: calc(100vh - var(--nav-h));">
+            <div class="col-lg-5 col-md-7 d-flex flex-column justify-content-center">
+
+                <div class="hero-badge">
+                    🌱 LOCALLY GROWN · CEBU, PHILIPPINES
+                </div>
+
+                <h1 class="hero-title">
+                    Plants Gonna Make
+                    <em>People Happy</em>
+                </h1>
+
+                <p class="hero-sub">
+                    Let's bring a new friend home. Proudly sourced from
+                    local Cebuano plant growers — homegrown, heart-grown,
+                    Cebu-grown. 🇵🇭
+                </p>
+
+                <div class="d-flex gap-3 flex-wrap">
+                    <a class="btn btn-plant" asp-controller="Shop" asp-action="Index">Shop Plants</a>
+                    <a class="btn btn-outline-plant" href="#about">Our Story</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="collection">
+    <div class="container">
+
+        <span class="section-tag text-center d-block">BROWSE COLLECTION</span>
+        <h2 class="section-title text-center mb-4">Shop By Category</h2>
+
+        <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
+            <a class="category-tab active" asp-controller="Shop" asp-action="Index">Indoor Plants</a>
+            <a class="category-tab" asp-controller="Shop" asp-action="Index" asp-route-category="Outdoor Plants">Outdoor Plants</a>
+            <a class="category-tab" asp-controller="Shop" asp-action="Index" asp-route-category="Balcony / Patio">Balcony / Patio</a>
+        </div>
+
+        <div class="row g-4">
+            @foreach (var plant in Model)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="plant-card h-100">
+
+                        @if (!string.IsNullOrEmpty(plant.Badge))
+                        {
+                            <span class="plant-badge @(plant.Badge == "Hot" ? "badge-hot" : "badge-new")">
+                                @plant.Badge
+                            </span>
+                        }
+
+                        <a asp-controller="Shop" asp-action="Detail" asp-route-id="@plant.Id">
+                            @if (!string.IsNullOrEmpty(plant.ImageUrl))
+                            {
+                                <img src="@plant.ImageUrl" alt="@plant.Name" class="plant-img" />
+                            }
+                            else
+                            {
+                                <div class="plant-placeholder">@plant.Name</div>
+                            }
+                        </a>
+
+                        <div class="plant-info">
+                            <h5 class="plant-name">
+                                <a asp-controller="Shop" asp-action="Detail" asp-route-id="@plant.Id">
+                                    @plant.Name
+                                </a>
+                            </h5>
+                            <div class="plant-stars">★★★★★</div>
+                            <div class="plant-price-row">
+                                @if (plant.Badge == "New")
+                                {
+                                    <span class="price-original">₱@((plant.Price * 1.14m).ToString("0"))</span>
+                                }
+                                <span class="plant-price">₱@plant.Price.ToString("0.00")</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center mt-5">
+            <p class="scroll-hint">↓ SCROLL TO EXPLORE</p>
+        </div>
+
+    </div>
+</section>
+
+<section id="about">
+    <div class="about-overlay">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 col-md-10">
+
+                    <div class="story-card">
+                        <span class="section-tag-dark">Our Story · Ang Among Istorya</span>
+
+                        <h2 class="story-title">
+                            Dili ka mag-inusara —
+                            <em>Plantopia is here.</em>
+                        </h2>
+
+                        <p class="story-body">
+                            Dili ka mag-inusara sa imong balay — Plantopia has the perfect
+                            green companion para sa'yo! Proudly sourced from our local Cebuano
+                            plant growers or sellers, every plant you bring home is more than
+                            just décor — it's a pag-ampo sa atong mga kababayan who pour their
+                            love and hardwork into every leaf and stem.
+                        </p>
+
+                        <p class="story-body">
+                            Laban lang, mga local farmers! 🧑‍🌾 When you choose Plantopia,
+                            you're not just greening up your space — you're supporting Cebuano
+                            lives, Cebuano hands, and Cebuano hearts. Panahon na para
+                            mag-invest sa natural beauty —
+                            <strong>homegrown, heart-grown, Cebu-grown.</strong> 🌿
+                        </p>
+
+                        <p class="story-body">
+                            Shop local. Grow happy. Every plant at Plantopia comes straight
+                            from Cebuano hands to your home.
+                        </p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="sellers">
+    <div class="container">
+
+        <span class="section-tag text-center d-block">MEET OUR SELLERS</span>
+        <h2 class="section-title text-center mb-5">The People Behind Every Plant</h2>
+
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <div class="seller-card" style="background-image: linear-gradient(to top, rgba(10,30,10,0.85) 40%, transparent 100%), url('/images/farmer-dante.png');">
+                    <div class="seller-info">
+                        <h4>Kuya Dante</h4>
+                        <p class="seller-role">Succulent Specialist · Talamban, Cebu</p>
+                        <p class="seller-quote">"Every plant I grow is a piece of my heart sa atong Sugbo."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="seller-card" style="background-image: linear-gradient(to top, rgba(10,30,10,0.85) 40%, transparent 100%), url('/images/farmer-cris.jpg');">
+                    <div class="seller-info">
+                        <h4>Ate Cris</h4>
+                        <p class="seller-role">Vine &amp; Fern Expert · Consolacion, Cebu</p>
+                        <p class="seller-quote">"Ang akong mga tanom mao ang akong kinabuhi ug gugma."</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="seller-card" style="background-image: linear-gradient(to top, rgba(10,30,10,0.85) 40%, transparent 100%), url('/images/farmer-tomas.jpg');">
+                    <div class="seller-info">
+                        <h4>Lolo Tomas</h4>
+                        <p class="seller-role">Master Grower · Liloan, Cebu</p>
+                        <p class="seller-quote">"40 years of nurturing — each plant tells a story of Cebu."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<section id="cta">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <span class="section-tag d-block">LIVING THING GROWS</span>
+                <h2 class="cta-title">You Have No Plants? Are You Ready to Grow?</h2>
+                <p class="cta-sub">
+                    Come and shop with us — discover your perfect green companion,
+                    straight from the hands of our local Cebuano farmers.
+                </p>
+                <p class="cta-price">Starting from ₱260.00</p>
+            </div>
+            <div class="col-lg-5 d-flex flex-column gap-3 align-items-lg-end mt-4 mt-lg-0">
+                <a class="btn btn-plant cta-btn" asp-controller="Shop" asp-action="Index">Continue Shopping 🛒</a>
+                <a class="btn btn-outline-plant cta-btn" href="#sellers">Meet Our Farmers</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script src="~/js/plantopia.js" asp-append-version="true"></script>
+}

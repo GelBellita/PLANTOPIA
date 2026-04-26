@@ -1,0 +1,41 @@
+﻿@model Plantopia.Models.LoginModel
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<section class="auth-page">
+    <div class="auth-card">
+
+        <a class="auth-logo" asp-controller="Home" asp-action="Index">🌿 Plantopia</a>
+        <h2 class="auth-title">Welcome Back</h2>
+        <p class="auth-subtitle">Log in to your Plantopia account</p>
+
+        <!-- for wrong credentials 67 -->
+        <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small text-start"></div>
+
+        <form asp-controller="Auth" asp-action="Login" method="post">
+
+            <div class="mb-3 text-start">
+                <label asp-for="Email" class="form-label fw-semibold"></label>
+                <input asp-for="Email" class="form-control plant-input" placeholder="hello@plantopia.ph" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4 text-start">
+                <label asp-for="Password" class="form-label fw-semibold"></label>
+                <input asp-for="Password" class="form-control plant-input" placeholder="Enter your password" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn btn-plant w-100">Login</button>
+        </form>
+
+        <p class="auth-hint mt-3">Demo: <strong>demo@plantopia.ph</strong> / <strong>plant123</strong></p>
+
+        <p class="auth-switch mt-3">
+            Don't have an account?
+            <a asp-controller="Auth" asp-action="Register">Register here</a>
+        </p>
+    </div>
+</section>

@@ -1,0 +1,726 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+/* ── Design Tokens ──────────────────────────────────────────── */
+:root {
+    --green-dark: #1a3a1a;
+    --green-forest: #2d5a27;
+    --green-mid: #4a7c3f;
+    --green-section: #4a7a45;
+    --green-light: #e8f2e8;
+    --cream: #f5f0e8;
+    --cream-light: #faf7f2;
+    --white: #ffffff;
+    --text-dark: #1a2e1a;
+    --text-muted: #6b7c6b;
+    --star: #e2a800;
+    --radius: 16px;
+    --nav-h: 80px;
+    --transition: 0.28s ease;
+}
+
+/* ── Global Base ────────────────────────────────────────────── */
+body {
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text-dark);
+    background-color: var(--cream-light);
+}
+
+h1, h2, h3, h4, h5, h6, .font-serif {
+    font-family: 'Playfair Display', serif;
+}
+
+/* ── NAVBAR — Floating Pill ─────────────────────────────────── */
+.plantopia-nav {
+    height: auto !important;
+    background: transparent !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    padding: 14px 20px !important;
+    transition: padding var(--transition);
+}
+
+    .plantopia-nav .container {
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border-radius: 50px;
+        border: 1px solid rgba(210, 228, 210, 0.60);
+        box-shadow: 0 4px 28px rgba(30, 60, 30, 0.10);
+        padding: 10px 24px !important;
+        display: flex;
+        align-items: center;
+        transition: box-shadow var(--transition), background var(--transition);
+        max-width: 1140px;
+    }
+
+    .plantopia-nav.scrolled .container {
+        background: rgba(255, 255, 255, 0.99);
+        box-shadow: 0 6px 36px rgba(30, 60, 30, 0.16);
+    }
+
+.plant-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--green-dark) !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+}
+
+.nav-logo-img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+
+.plantopia-nav .nav-link {
+    font-size: 0.88rem;
+    font-weight: 400;
+    color: var(--text-dark) !important;
+    padding: 4px 2px;
+    padding-bottom: 3px;
+    border-bottom: 2px solid transparent;
+    transition: color var(--transition), border-color var(--transition), font-weight var(--transition);
+    white-space: nowrap;
+}
+
+    .plantopia-nav .nav-link:hover,
+    .plantopia-nav .nav-link.active {
+        color: var(--green-forest) !important;
+        font-weight: 600;
+        border-bottom-color: var(--green-forest);
+    }
+
+.nav-user {
+    font-size: 0.83rem;
+    color: var(--text-muted);
+}
+
+/* ── BUTTONS ────────────────────────────────────────────────── */
+.btn-plant,
+.btn.btn-plant {
+    background: var(--green-dark);
+    color: #fff !important;
+    border: none;
+    border-radius: 50px;
+    padding: 0.65rem 1.75rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background var(--transition), transform 0.2s;
+}
+
+    .btn-plant:hover,
+    .btn.btn-plant:hover {
+        background: var(--green-forest);
+        color: #fff !important;
+        transform: translateY(-2px);
+    }
+
+.btn-outline-plant,
+.btn.btn-outline-plant {
+    border: 1.5px solid var(--green-dark);
+    color: var(--green-dark) !important;
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(4px);
+    border-radius: 50px;
+    padding: 0.65rem 1.75rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: background var(--transition), color var(--transition);
+}
+
+    .btn-outline-plant:hover,
+    .btn.btn-outline-plant:hover {
+        background: var(--green-dark);
+        color: #fff !important;
+    }
+
+.btn-plant.btn-sm,
+.btn.btn-plant.btn-sm {
+    padding: 0.42rem 1.2rem;
+    font-size: 0.85rem;
+}
+
+.btn-outline-plant.btn-sm,
+.btn.btn-outline-plant.btn-sm {
+    padding: 0.38rem 1.1rem;
+    font-size: 0.85rem;
+}
+
+/* ── FLASH MESSAGES ─────────────────────────────────────────── */
+.flash-msg {
+    position: fixed;
+    top: calc(var(--nav-h) + 12px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1050;
+    padding: 10px 28px;
+    border-radius: 50px;
+    font-size: 0.88rem;
+    font-weight: 500;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+}
+
+.flash-success {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-error {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+/* ── SHARED SECTION HELPERS ─────────────────────────────────── */
+.section-tag {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--green-forest);
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.section-tag-light {
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: rgba(255, 255, 255, 0.70);
+    font-weight: 600;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.85rem, 3.5vw, 2.7rem);
+    font-weight: 700;
+    color: var(--green-dark);
+}
+
+.scroll-hint {
+    font-size: 0.68rem;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+}
+
+/* ── HERO ───────────────────────────────────────────────────── */
+#hero {
+    min-height: 100vh;
+    padding-top: var(--nav-h);
+    background-image: url('/images/hero-bg.png');
+    background-size: cover;
+    background-position: center top;
+    background-color: #c5dde8;
+    display: flex;
+    align-items: center;
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid rgba(255, 255, 255, 0.90);
+    backdrop-filter: blur(6px);
+    border-radius: 50px;
+    padding: 6px 18px;
+    font-size: 0.73rem;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    color: var(--green-dark);
+    margin-bottom: 1.4rem;
+}
+
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.4rem, 5vw, 3.7rem);
+    font-weight: 700;
+    color: var(--green-dark);
+    line-height: 1.12;
+    margin-bottom: 1.2rem;
+}
+
+    .hero-title em {
+        font-style: italic;
+        font-weight: 500;
+        color: var(--green-forest);
+        display: block;
+    }
+
+.hero-sub {
+    font-size: 0.98rem;
+    color: #3a5040;
+    max-width: 420px;
+    line-height: 1.75;
+    margin-bottom: 2.2rem;
+}
+
+/* ── SHOP BY CATEGORY ───────────────────────────────────────── */
+#collection {
+    background: var(--cream);
+    padding: 80px 0;
+}
+
+.category-tab {
+    border: 1.5px solid #c5cfc0;
+    border-radius: 50px;
+    padding: 8px 22px;
+    font-size: 0.87rem;
+    font-weight: 400;
+    color: var(--text-dark);
+    text-decoration: none;
+    display: inline-block;
+    transition: background var(--transition), color var(--transition), border-color var(--transition);
+}
+
+    .category-tab:hover,
+    .category-tab.active {
+        background: var(--green-dark);
+        color: #fff;
+        border-color: var(--green-dark);
+    }
+
+.plant-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+    .plant-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    }
+
+.plant-img {
+    width: 100%;
+    height: 230px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+}
+
+.plant-card:hover .plant-img {
+    transform: scale(1.03);
+}
+
+.plant-placeholder {
+    height: 230px;
+    background: var(--green-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--green-dark);
+    padding: 20px;
+    text-align: center;
+}
+
+.plant-badge {
+    position: absolute;
+    top: 13px;
+    left: 13px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 4px 13px;
+    border-radius: 50px;
+    color: #fff;
+    z-index: 1;
+    letter-spacing: 0.3px;
+}
+
+.badge-new {
+    background: var(--green-forest);
+}
+
+.badge-hot {
+    background: var(--green-dark);
+}
+
+.plant-info {
+    padding: 14px 16px 18px;
+}
+
+.plant-name {
+    font-size: 0.97rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+    .plant-name a {
+        text-decoration: none;
+        color: var(--text-dark);
+    }
+
+        .plant-name a:hover {
+            color: var(--green-forest);
+        }
+
+.plant-stars {
+    color: var(--star);
+    font-size: 0.83rem;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+
+.plant-price-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.price-original {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+.plant-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--green-dark);
+}
+
+/* ── OUR STORY ──────────────────────────────────────────────── */
+#about {
+    background-image: url('/images/about-bg.png');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    position: relative;
+}
+
+.about-overlay {
+    padding: 100px 0;
+}
+
+/* Single centered frosted-glass card — matches screenshot */
+.story-card {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.70);
+    border-radius: 20px;
+    padding: 44px 48px;
+    box-shadow: 0 8px 40px rgba(30, 60, 30, 0.10);
+}
+
+.section-tag-dark {
+    font-size: 0.7rem;
+    letter-spacing: 2.5px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 14px;
+}
+
+.story-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--text-dark);
+    line-height: 1.2;
+    margin-bottom: 22px;
+}
+
+    .story-title em {
+        font-style: italic;
+        font-weight: 500;
+        color: var(--green-forest);
+    }
+
+.story-body {
+    font-size: 0.95rem;
+    color: var(--text-dark);
+    line-height: 1.82;
+    margin-bottom: 14px;
+}
+
+    .story-body strong {
+        color: var(--green-dark);
+        font-weight: 600;
+    }
+
+/* ── MEET OUR SELLERS ───────────────────────────────────────── */
+#sellers {
+    background: var(--cream);
+    padding: 80px 0;
+}
+
+.seller-card {
+    border-radius: var(--radius);
+    height: 380px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+    .seller-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+    }
+
+.seller-info {
+    padding: 22px 20px;
+    color: #fff;
+}
+
+    .seller-info h4 {
+        font-family: 'Playfair Display', serif;
+        font-size: 1.35rem;
+        margin-bottom: 4px;
+    }
+
+.seller-role {
+    font-size: 0.78rem;
+    color: #a8d5a0;
+    margin-bottom: 10px;
+}
+
+.seller-quote {
+    font-style: italic;
+    font-size: 0.86rem;
+    color: rgba(255, 255, 255, 0.84);
+    line-height: 1.5;
+}
+
+/* ── CTA ────────────────────────────────────────────────────── */
+#cta {
+    background: var(--green-light);
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.7rem, 3.5vw, 2.5rem);
+    font-weight: 700;
+    color: var(--green-dark);
+    margin-bottom: 14px;
+    line-height: 1.2;
+}
+
+.cta-sub {
+    color: var(--text-muted);
+    font-size: 0.96rem;
+    margin-bottom: 10px;
+    max-width: 460px;
+}
+
+.cta-price {
+    color: var(--green-forest);
+    font-weight: 700;
+    font-size: 1.05rem;
+}
+
+.cta-btn {
+    min-width: 220px;
+    text-align: center;
+}
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+.plant-footer {
+    background: var(--green-dark);
+    background-image: linear-gradient(135deg, rgba(45, 90, 39, 0.9) 0%, rgba(26, 58, 26, 0.97) 60%), url('/images/footer-bg.png');
+    background-size: cover;
+    background-position: center;
+    color: rgba(255, 255, 255, 0.72);
+    padding: 60px 0 0;
+}
+
+.footer-brand {
+    padding-right: 2rem;
+}
+
+.footer-brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: #fff;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.footer-tagline {
+    font-size: 0.84rem;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.60);
+    margin-bottom: 20px;
+}
+
+.footer-socials {
+    display: flex;
+    gap: 10px;
+}
+
+.footer-social-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: rgba(255, 255, 255, 0.70);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background var(--transition), color var(--transition);
+}
+
+    .footer-social-btn:hover {
+        background: rgba(255, 255, 255, 0.15);
+        color: #fff;
+    }
+
+.footer-heading {
+    font-size: 0.67rem;
+    letter-spacing: 2.5px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .footer-links li,
+    .footer-links a {
+        display: block;
+        font-size: 0.84rem;
+        margin-bottom: 10px;
+        color: rgba(255, 255, 255, 0.60);
+        text-decoration: none;
+        transition: color var(--transition);
+    }
+
+        .footer-links a:hover {
+            color: #fff;
+        }
+
+.footer-newsletter-text {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.60);
+    margin-bottom: 12px;
+}
+
+.footer-newsletter {
+    display: flex;
+    gap: 0;
+    border-radius: 50px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    max-width: 280px;
+}
+
+.footer-newsletter-input {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.08);
+    border: none;
+    outline: none;
+    padding: 10px 16px;
+    font-size: 0.83rem;
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+}
+
+    .footer-newsletter-input::placeholder {
+        color: rgba(255, 255, 255, 0.40);
+    }
+
+.footer-newsletter-btn {
+    background: var(--green-forest);
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+    .footer-newsletter-btn:hover {
+        background: var(--green-mid);
+    }
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.10);
+    margin-top: 48px;
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.76rem;
+    color: rgba(255, 255, 255, 0.32);
+}
+
+    .footer-bottom p {
+        margin: 0;
+    }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 991px) {
+    .plantopia-nav {
+        padding: 10px 16px !important;
+    }
+
+        .plantopia-nav .container {
+            border-radius: 28px;
+            padding: 8px 16px !important;
+            flex-wrap: wrap;
+        }
+
+        .plantopia-nav .navbar-collapse {
+            background: transparent;
+            border-radius: 0;
+            padding: 0.75rem 0 0.25rem;
+            box-shadow: none;
+            border-top: 1px solid rgba(0, 0, 0, 0.07);
+            margin-top: 8px;
+            width: 100%;
+        }
+
+        .plantopia-nav .d-flex.align-items-center {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+    #about {
+        background-attachment: scroll;
+    }
+
+    .story-card {
+        padding: 32px 28px;
+    }
+}
+
+@media (max-width: 576px) {
+    .story-card {
+        padding: 28px 20px;
+    }
+}
