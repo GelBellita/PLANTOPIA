@@ -580,10 +580,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 600;
     text-decoration: none;
-    text-transform: uppercase;
     transition: background var(--transition), color var(--transition);
 }
 
