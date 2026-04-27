@@ -7,45 +7,84 @@
 <section class="auth-page">
     <div class="auth-card">
 
-        <a class="auth-logo" asp-controller="Home" asp-action="Index">🌿 Plantopia</a>
         <h2 class="auth-title">Create Account</h2>
-        <p class="auth-subtitle">Join the Plantopia community 🌱</p>
+        <p class="auth-subtitle">Join Plantopia & support local Cebuano farmers</p>
 
         <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 small text-start"></div>
 
         <form asp-controller="Auth" asp-action="Register" method="post">
 
-            <div class="mb-3 text-start">
-                <label asp-for="FullName" class="form-label fw-semibold"></label>
-                <input asp-for="FullName" class="form-control plant-input" placeholder="Juan dela Cruz" />
-                <span asp-validation-for="FullName" class="text-danger small"></span>
+            <div class="row mb-3">
+                <div class="col-6 text-start">
+                    <label class="form-label fw-semibold">First Name</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </span>
+                        <input asp-for="FullName" class="form-control plant-input plant-input-icon" placeholder="Juan" />
+                    </div>
+                </div>
+                <div class="col-6 text-start">
+                    <label class="form-label fw-semibold">Last Name</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </span>
+                        <input class="form-control plant-input plant-input-icon" placeholder="dela Cruz" />
+                    </div>
+                </div>
             </div>
+            <span asp-validation-for="FullName" class="text-danger small d-block mb-2"></span>
 
             <div class="mb-3 text-start">
-                <label asp-for="Email" class="form-label fw-semibold"></label>
-                <input asp-for="Email" class="form-control plant-input" placeholder="hello@plantopia.ph" />
+                <label asp-for="Email" class="form-label fw-semibold">Email Address</label>
+                <div class="input-icon-wrap">
+                    <span class="input-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </span>
+                    <input asp-for="Email" class="form-control plant-input plant-input-icon" placeholder="you@email.com" />
+                </div>
                 <span asp-validation-for="Email" class="text-danger small"></span>
             </div>
 
             <div class="mb-3 text-start">
-                <label asp-for="Password" class="form-label fw-semibold"></label>
-                <input asp-for="Password" class="form-control plant-input" placeholder="At least 6 characters" />
+                <label asp-for="Password" class="form-label fw-semibold">Password</label>
+                <div class="input-icon-wrap">
+                    <span class="input-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </span>
+                    <input asp-for="Password" class="form-control plant-input plant-input-icon" placeholder="Create a password" />
+                </div>
                 <span asp-validation-for="Password" class="text-danger small"></span>
             </div>
 
             <div class="mb-4 text-start">
-                <label asp-for="ConfirmPassword" class="form-label fw-semibold"></label>
-                <input asp-for="ConfirmPassword" class="form-control plant-input" placeholder="Re-enter your password" />
-
+                <label asp-for="ConfirmPassword" class="form-label fw-semibold">Confirm Password</label>
+                <div class="input-icon-wrap">
+                    <span class="input-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </span>
+                    <input asp-for="ConfirmPassword" class="form-control plant-input plant-input-icon" placeholder="Repeat your password" />
+                </div>
                 <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
             </div>
 
-            <button type="submit" class="btn btn-plant w-100">Create Account</button>
+            <button type="submit" class="btn btn-plant w-100">Create My Account</button>
         </form>
 
         <p class="auth-switch mt-3">
             Already have an account?
-            <a asp-controller="Auth" asp-action="Login">Log in here</a>
+            <a asp-controller="Auth" asp-action="Login">Login here</a>
         </p>
     </div>
 </section>
