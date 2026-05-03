@@ -9,7 +9,7 @@
 <div class="welcome-banner">
     <div class="welcome-banner-bg"></div>
     <div class="welcome-banner-text">
-        <h2>Welcome back, Maria! 🌿</h2>
+        <h2>Welcome back, @(Context.Session.GetString("UserName")?.Split(' ')[0] ?? "Guest")! 🌿</h2>
         <p>Find the perfect plants to bring life and freshness to your space.</p>
         <a href="#" class="btn btn-plant">Shop Now</a>
     </div>

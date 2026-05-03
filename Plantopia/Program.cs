@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies; // ← add this at the top
+﻿using Microsoft.EntityFrameworkCore;
+using Plantopia.Data;
+using Microsoft.AspNetCore.Authentication.Cookies; // ← add this at the top
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
@@ -17,6 +19,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Auth/Login";
         options.LogoutPath = "/Auth/Logout";
     });
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())

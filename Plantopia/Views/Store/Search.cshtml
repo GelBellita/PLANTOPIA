@@ -1,0 +1,35 @@
+﻿@model List<Plantopia.Models.Plant>
+
+@{
+    Layout = "_SideTopBar";
+    ViewData["Title"] = "Search Results";
+    var query = ViewData["Query"]?.ToString();
+}
+
+<h4>Search Results</h4>
+
+
+<form asp-controller="Store" asp-action="Search" method="get">
+    <input name="query" value="@query" class="form-control" placeholder="Search plants..." />
+    <button type="submit" class="btn btn-plant mt-2">Search</button>
+</form>
+
+<hr />
+
+@if (Model.Count == 0)
+{
+    <p>No results found for "<strong>@query</strong>".</p>
+}
+else
+{
+    <p>@Model.Count result(s) found</p>
+
+    <ul>
+        @foreach (var plant in Model)
+        {
+            <li>
+                <strong>@plant.Name</strong> — @plant.Category — ₱@plant.Price.ToString("N0")
+            </li>
+        }
+    </ul>
+}

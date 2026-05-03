@@ -1,4 +1,23 @@
 ﻿@{
+    var userName = Context.Session.GetString("UserName") ?? "Guest";
+    var userEmail = Context.Session.GetString("UserEmail") ?? "";
+    var initials = string.IsNullOrEmpty(userName) ? "?" :
+        string.Join("", userName.Split(' ')
+        .Where(w => w.Length > 0)
+        .Select(w => w[0]))
+        .ToUpper();
+    var firstName = userName.Split(' ')[0];
+
+    // ── Fetch profile photo from DB ──
+    var profilePhoto = "";
+    if (!string.IsNullOrEmpty(userEmail))
+    {
+        var dbContext = Context.RequestServices.GetService<Plantopia.Data.AppDbContext>();
+        var currentUser = dbContext?.Users.FirstOrDefault(u => u.Email == userEmail);
+        profilePhoto = currentUser?.ProfilePhoto ?? "";
+    }
+}
+@{
     var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
     var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
 
@@ -27,7 +46,7 @@
 
     <div class="store-wrapper">
 
-        @* ===== SIDEBAR — once lang diri, shared sa tanan store pages ===== *@
+        @*  SIDEBAR — once lang diri, shared sa tanan store pages *@
         <aside class="store-sidebar">
             <div class="sidebar-logo">
                 <a asp-controller="Store" asp-action="Index" class="sidebar-logo-name">🌿 Plantopia</a>
@@ -97,20 +116,22 @@
             </div>
         </aside>
 
-        @* ===== MAIN AREA ===== *@
+        @* MAIN AREA  *@
         <div class="store-main">
 
-            @* ===== TOPBAR — once lang diri, shared sa tanan store pages ===== *@
+            @*  TOPBAR — once lang diri, shared sa tanan store pages*@
             <div class="store-topbar">
-                <div class="topbar-search">
+                <form asp-controller="Store" asp-action="Search" method="get" class="topbar-search">
                     <span class="topbar-search-icon">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                             <circle cx="11" cy="11" r="8" />
                             <line x1="21" y1="21" x2="16.65" y2="16.65" />
                         </svg>
                     </span>
-                    <input type="text" placeholder="Search for plants, pots, or care accessories..." />
-                </div>
+                    <input type="text"
+                           name="query"
+                           placeholder="Search for plants, pots, or care accessories..." />
+                </form>
                 <div class="topbar-actions">
 
                     @* Notifications button *@
@@ -136,16 +157,34 @@
 
                     @* User dropdown *@
                     <div class="topbar-user" id="userMenuToggle">
-                        <div class="topbar-avatar">M</div>
-                        <span class="topbar-username">Hello, Maria! ▾</span>
+                        <div class="topbar-avatar">
+                            @if (!string.IsNullOrEmpty(profilePhoto))
+                            {
+                                <img src="@profilePhoto" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="avatar" />
+                            }
+                            else
+                            {
+                                @initials
+                            }
+                        </div>
+                        <span class="topbar-username">Hello, @firstName! ▾</span>
 
                         <div class="user-dropdown" id="userDropdown">
                             @* Header *@
                             <div class="user-dropdown-header">
-                                <div class="user-dropdown-avatar">MS</div>
+                                <div class="user-dropdown-avatar">
+                                    @if (!string.IsNullOrEmpty(profilePhoto))
+                                    {
+                                        <img src="@profilePhoto" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="avatar" />
+                                    }
+                                    else
+                                    {
+                                        @initials
+                                    }
+                                </div>
                                 <div class="user-dropdown-info">
-                                    <div class="dropdown-name">Maria Santos</div>
-                                    <div class="dropdown-email">maria@email.com</div>
+                                    <div class="dropdown-name">@userName</div>
+                                    <div class="dropdown-email">@userEmail</div>
                                 </div>
                             </div>
 

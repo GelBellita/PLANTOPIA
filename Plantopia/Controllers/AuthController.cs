@@ -1,49 +1,90 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Plantopia.Data;
 using Plantopia.Models;
 using System.Security.Claims;
 
 namespace Plantopia.Controllers
 {
-
     [Route("auth")]
     public class AuthController : Controller
     {
+        // ── Dependency Injection
+        private readonly AppDbContext _context;
 
-        [HttpPost("login")]
-        public IActionResult Login(LoginModel model)
+        public AuthController(AppDbContext context)
         {
-            if (!ModelState.IsValid) return View(model);  
-
-            if (model.Email == "demo@plantopia.ph" && model.Password == "plant123")
-            {
-                HttpContext.Session.SetString("UserEmail", model.Email);
-                return RedirectToAction("Index", "Home");
-            }
-            ModelState.AddModelError("", "Invalid email or password.");
-            return View(model);
+            _context = context;
         }
 
-       
+        // ── HttpGet 
         [HttpGet("login")]
         public IActionResult Login() => View(new LoginModel());
 
-       
+        // ── HttpPost 
+        [HttpPost("login")]
+        public IActionResult Login(LoginModel model)
+        {
+            // ── ModelState.IsValid like
+            if (!ModelState.IsValid) return View(model);
+
+            // ── LINQ query sa database 
+            var user = _context.Users
+                .FirstOrDefault(u => u.Email == model.Email &&
+                                     u.Password == model.Password);
+
+            if (user == null)
+            {
+                ModelState.AddModelError("", "Invalid email or password.");
+                return View(model);
+            }
+
+            // ── Store session
+            HttpContext.Session.SetString("UserEmail", user.Email);
+            HttpContext.Session.SetString("UserName", user.FullName);
+
+            return RedirectToAction("Index", "Store");
+        }
+
+        // ── HttpGet
         [HttpGet("register")]
         public IActionResult Register() => View(new RegisterModel());
 
-        
+        // ── HttpPost 
         [HttpPost("register")]
         public IActionResult Register(RegisterModel model)
         {
-            if (!ModelState.IsValid) return View(model);  
+            // ── ModelState.IsValid 
+            if (!ModelState.IsValid) return View(model);
+
+            // ── Check if email already exists ──
+            var existing = _context.Users
+                .FirstOrDefault(u => u.Email == model.Email);
+
+            if (existing != null)
+            {
+                ModelState.AddModelError("Email", "Email already registered.");
+                return View(model);
+            }
+
+           
+            var user = new User
+            {
+                FullName = model.FullName,
+                Email = model.Email,
+                Password = model.Password,
+                Role = "Customer"
+            };
+
+            _context.Users.Add(user);
+            _context.SaveChanges();
 
             TempData["Success"] = $"Welcome, {model.FullName}! Please log in.";
             return RedirectToAction("Login");
         }
 
-        
+        // ── Logout ──
         [HttpGet("logout")]
         public IActionResult Logout()
         {
@@ -54,13 +95,12 @@ namespace Plantopia.Controllers
         [HttpPost]
         public async Task<IActionResult> DemoLogin()
         {
-            // Hardcoded test user — no DB check
             var claims = new List<Claim>
-    {
-        new Claim(ClaimTypes.Name, "Demo User"),
-        new Claim(ClaimTypes.Email, "demo@plantopia.ph"),
-        new Claim(ClaimTypes.Role, "Customer") // adjust to your role
-    };
+            {
+                new Claim(ClaimTypes.Name, "Demo User"),
+                new Claim(ClaimTypes.Email, "demo@plantopia.ph"),
+                new Claim(ClaimTypes.Role, "Customer")
+            };
 
             var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
             var principal = new ClaimsPrincipal(identity);
