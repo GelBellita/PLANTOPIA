@@ -1,0 +1,190 @@
+﻿@{
+    Layout = "_SideTopBar";
+    ViewData["Title"] = "Plants";
+
+    @* Override the sidebar promo box for this page *@
+    ViewData["PromoTitle"] = "Bring nature<br>to your home.";
+    ViewData["PromoSub"] = "Discover our best-selling plants today!";
+    ViewData["PromoCta"] = "Shop Now →";
+}
+
+@* ============================================================
+   PLANTS PAGE — content lang, sidebar/topbar naa na sa layout
+   ============================================================ *@
+
+@* Extra CSS specific to this page only *@
+@section Styles {
+    <link rel="stylesheet" href="~/css/plants.css" />
+}
+
+<div class="plants-banner">
+    <div class="plants-banner-bg"></div>
+    <div class="plants-banner-text">
+        <h2>Find your perfect plant</h2>
+        <p>Green your space with plants<br>that bring life and joy.</p>
+        <a href="#" class="btn btn-plant">Shop Now</a>
+    </div>
+</div>
+
+<div class="section-header">
+    <h4>Shop by Category</h4>
+    <a href="#" class="view-all-link">View all ›</a>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg-3">
+        <a href="#" class="cat-card">
+            <div>
+                <div class="cat-card-label">Indoor Plants</div>
+                <div class="cat-card-sub">Beautiful plants for<br>your home</div>
+            </div>
+            <img src="~/images/snake.jpg" alt="Indoor" class="cat-card-img" />
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a href="#" class="cat-card">
+            <div>
+                <div class="cat-card-label">Outdoor Plants</div>
+                <div class="cat-card-sub">Thrives in your<br>outdoor space</div>
+            </div>
+            <img src="~/images/plant.png" alt="Outdoor" class="cat-card-img" />
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a href="#" class="cat-card">
+            <div>
+                <div class="cat-card-label">Succulents</div>
+                <div class="cat-card-sub">Small plants,<br>big beauty</div>
+            </div>
+            <img src="~/images/succulent.jpg" alt="Succulents" class="cat-card-img" />
+        </a>
+    </div>
+    <div class="col-6 col-lg-3">
+        <a href="#" class="cat-card">
+            <div>
+                <div class="cat-card-label">Hanging Plants</div>
+                <div class="cat-card-sub">Perfect for<br>any corner</div>
+            </div>
+            <img src="~/images/Santan.jpg" alt="Hanging" class="cat-card-img" />
+        </a>
+    </div>
+</div>
+
+<div class="section-header mt-2">
+    <h4>Best Sellers</h4>
+    <a href="#" class="view-all-link">View all ›</a>
+</div>
+
+<div class="row g-3">
+
+    <div class="col-6 col-md-4 col-xl-2half">
+        <div class="plant-product-card">
+            <div class="plant-product-img-wrap">
+                <img src="~/images/monstera.jpg" alt="Monstera" class="plant-product-img" />
+                <button class="plant-wish-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="plant-product-info">
+                <div class="plant-product-name">Monstera Deliciosa</div>
+                <div class="plant-product-seller">By Green Haven PH</div>
+                <div class="plant-product-rating">
+                    <span class="plant-product-stars">★★★★★</span>
+                    <span class="plant-product-rating-num">4.9</span>
+                </div>
+                <div class="plant-product-price">₱850</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2half">
+        <div class="plant-product-card">
+            <div class="plant-product-img-wrap">
+                <img src="~/images/snake.jpg" alt="Snake Plant" class="plant-product-img" />
+                <button class="plant-wish-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="plant-product-info">
+                <div class="plant-product-name">Snake Plant</div>
+                <div class="plant-product-seller">By Cebu Plant Shop</div>
+                <div class="plant-product-rating">
+                    <span class="plant-product-stars">★★★★★</span>
+                    <span class="plant-product-rating-num">4.8</span>
+                </div>
+                <div class="plant-product-price">₱450</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2half">
+        <div class="plant-product-card">
+            <div class="plant-product-img-wrap">
+                <img src="~/images/plant.png" alt="Fiddle Leaf" class="plant-product-img" />
+                <button class="plant-wish-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="plant-product-info">
+                <div class="plant-product-name">Fiddle Leaf Fig</div>
+                <div class="plant-product-seller">By Plantita Cebu</div>
+                <div class="plant-product-rating">
+                    <span class="plant-product-stars">★★★★★</span>
+                    <span class="plant-product-rating-num">4.9</span>
+                </div>
+                <div class="plant-product-price">₱1,200</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2half">
+        <div class="plant-product-card">
+            <div class="plant-product-img-wrap">
+                <img src="~/images/succulent.jpg" alt="Pothos" class="plant-product-img" />
+                <button class="plant-wish-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="plant-product-info">
+                <div class="plant-product-name">Pothos Golden</div>
+                <div class="plant-product-seller">By Green Haven PH</div>
+                <div class="plant-product-rating">
+                    <span class="plant-product-stars">★★★★★</span>
+                    <span class="plant-product-rating-num">4.8</span>
+                </div>
+                <div class="plant-product-price">₱350</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-xl-2half">
+        <div class="plant-product-card">
+            <div class="plant-product-img-wrap">
+                <img src="~/images/Santan.jpg" alt="Aglaonema" class="plant-product-img" />
+                <button class="plant-wish-btn">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="plant-product-info">
+                <div class="plant-product-name">Aglaonema Red</div>
+                <div class="plant-product-seller">By Leaf &amp; Stem PH</div>
+                <div class="plant-product-rating">
+                    <span class="plant-product-stars">★★★★★</span>
+                    <span class="plant-product-rating-num">4.9</span>
+                </div>
+                <div class="plant-product-price">₱500</div>
+            </div>
+        </div>
+    </div>
+
+</div>

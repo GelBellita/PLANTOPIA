@@ -1,0 +1,192 @@
+﻿/* ── Plants Page — inherits store layout from store.css ── */
+
+/* ── Plants Banner ───────────────────────────── */
+.plants-banner {
+    border-radius: 18px;
+    padding: 40px 44px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 36px;
+    min-height: 300px;
+}
+
+.plants-banner-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('/images/plants.png');
+    background-size: cover;
+    background-position: center bottom;
+    border-radius: 18px;
+}
+
+.plants-banner-text {
+    position: relative;
+    z-index: 2;
+    padding-left: 110px;
+}
+
+    .plants-banner-text h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1a3a1a;
+        margin-bottom: 8px;
+    }
+
+    .plants-banner-text p {
+        font-size: 0.92rem;
+        color: #3a5a3a;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+
+.plants-banner-img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 52%;
+    object-fit: cover;
+    object-position: left center;
+    z-index: 1;
+    border-radius: 0 18px 18px 0;
+}
+
+/* ── Category Cards ──────────────────────────── */
+.cat-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 18px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: transform 0.22s, box-shadow 0.22s;
+    overflow: hidden;
+}
+
+    .cat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+        color: inherit;
+    }
+
+.cat-card-label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #1a3a1a;
+    margin-bottom: 4px;
+}
+
+.cat-card-sub {
+    font-size: 0.76rem;
+    color: #6b7c6b;
+    line-height: 1.4;
+}
+
+.cat-card-img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+/* ── Product Cards ───────────────────────────── */
+.plant-product-card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    transition: transform 0.22s, box-shadow 0.22s;
+    position: relative;
+}
+
+    .plant-product-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 32px rgba(0,0,0,0.11);
+    }
+
+.plant-product-img-wrap {
+    position: relative;
+    height: 180px;
+    background: #f3f8f2;
+    overflow: hidden;
+}
+
+.plant-product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.plant-product-card:hover .plant-product-img {
+    transform: scale(1.04);
+}
+
+.plant-wish-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255,255,255,0.85);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #9ab89a;
+    transition: color 0.2s, background 0.2s;
+    z-index: 2;
+}
+
+    .plant-wish-btn:hover {
+        color: #e05555;
+        background: #fff;
+    }
+
+.plant-product-info {
+    padding: 12px 14px 15px;
+}
+
+.plant-product-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1a3a1a;
+    margin-bottom: 2px;
+}
+
+.plant-product-seller {
+    font-size: 0.73rem;
+    color: #8a9e8a;
+    margin-bottom: 5px;
+}
+
+.plant-product-rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 6px;
+}
+
+.plant-product-stars {
+    color: #e2a800;
+    font-size: 0.75rem;
+}
+
+.plant-product-rating-num {
+    font-size: 0.73rem;
+    color: #8a9e8a;
+}
+
+.plant-product-price {
+    font-size: 0.97rem;
+    font-weight: 700;
+    color: #1a3a1a;
+}

@@ -1,0 +1,431 @@
+﻿@* Views/Account/Purchases.cshtml *@
+@{
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewData["Title"] = "My Purchase";
+}
+
+<style>
+    /* ── Filter Tabs ── */
+    .purchase-tabs {
+        display: flex;
+        gap: 6px;
+        flex-wrap: wrap;
+        margin-bottom: 24px;
+    }
+
+    .purchase-tab {
+        padding: 8px 20px;
+        border-radius: 20px;
+        border: 1.5px solid var(--border);
+        background: var(--white);
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--text-mid);
+        cursor: pointer;
+        transition: all 0.15s;
+        text-decoration: none;
+    }
+
+        .purchase-tab:hover {
+            border-color: var(--green-soft);
+            color: var(--green-mid);
+            background: var(--green-pale);
+        }
+
+        .purchase-tab.active {
+            background: var(--green-dark);
+            color: var(--white);
+            border-color: var(--green-dark);
+            font-weight: 600;
+        }
+
+    /* ── Order Cards ── */
+    .purchase-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .order-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        padding: 20px 24px;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        cursor: pointer;
+        transition: box-shadow 0.15s;
+        text-decoration: none;
+        color: inherit;
+    }
+
+        .order-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+    /* Left: order info */
+    .order-info {
+        min-width: 160px;
+    }
+
+    .order-number {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .order-date {
+        font-size: 12px;
+        color: var(--text-muted);
+        margin-top: 3px;
+    }
+
+    .order-total {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--green-dark);
+        margin-top: 8px;
+    }
+
+    .order-total-label {
+        font-size: 11px;
+        font-weight: 400;
+        color: var(--text-muted);
+        display: block;
+    }
+
+    /* Middle: product images */
+    .order-images {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex: 1;
+    }
+
+    .order-img-wrap {
+        width: 72px;
+        height: 72px;
+        border-radius: var(--radius-sm);
+        background: var(--green-pale);
+        overflow: hidden;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .order-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+    .order-img-more {
+        width: 72px;
+        height: 72px;
+        border-radius: var(--radius-sm);
+        background: var(--green-pale);
+        border: 1.5px dashed var(--green-light);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--green-soft);
+        flex-shrink: 0;
+        gap: 2px;
+    }
+
+    .order-img-more span {
+        font-size: 10px;
+        font-weight: 500;
+        color: var(--text-muted);
+    }
+
+    /* Right: status */
+    .order-status-col {
+        min-width: 200px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .order-status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        width: fit-content;
+    }
+
+    .status-topay    { background: #fff8e1; color: #b8860b; }
+    .status-toship   { background: #e3f2fd; color: #1565c0; }
+    .status-toreceive{ background: #e8f5e9; color: #2e7d32; }
+    .status-completed{ background: #e8f5e9; color: #1b5e20; }
+    .status-cancelled{ background: #fce4ec; color: #c62828; }
+    .status-refund   { background: #fce4ec; color: #ad1457; }
+
+    .order-status-desc {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .order-status-sub {
+        font-size: 12px;
+        color: var(--text-muted);
+        line-height: 1.4;
+    }
+
+    .btn-pay-now {
+        background: var(--green-dark);
+        color: var(--white);
+        border: none;
+        border-radius: var(--radius-sm);
+        padding: 8px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 4px;
+        width: fit-content;
+        transition: background 0.15s;
+        font-family: var(--font-ui);
+    }
+
+        .btn-pay-now:hover {
+            background: var(--green-mid);
+        }
+
+    /* Arrow */
+    .order-arrow {
+        color: var(--text-muted);
+        flex-shrink: 0;
+    }
+</style>
+
+<div class="profile-page">
+
+    @* Header *@
+    <div class="profile-header">
+        <h1 class="profile-title">My Purchase <span class="profile-title-emoji">🌿</span></h1>
+        <p class="profile-subtitle">Track and manage all your orders in one place.</p>
+    </div>
+
+    @* Filter Tabs *@
+    <div class="purchase-tabs">
+        <a href="#" class="purchase-tab active">All</a>
+        <a href="#" class="purchase-tab">To Pay</a>
+        <a href="#" class="purchase-tab">To Ship</a>
+        <a href="#" class="purchase-tab">To Receive</a>
+        <a href="#" class="purchase-tab">Completed</a>
+        <a href="#" class="purchase-tab">Cancelled</a>
+        <a href="#" class="purchase-tab">Return/Refund</a>
+    </div>
+
+    @* Order List *@
+    <div class="purchase-list">
+
+        @* Order 1 — To Pay *@
+        <div class="order-card">
+            <div class="order-info">
+                <div class="order-number">Order #PT-2025-0512</div>
+                <div class="order-date">May 12, 2025 • 10:23 AM</div>
+                <div class="order-total">
+                    <span class="order-total-label">Total</span>
+                    ₱1,250
+                </div>
+            </div>
+
+            <div class="order-images">
+                <div class="order-img-wrap">
+                    <img src="~/images/plant1.png" alt="Plant"
+                         onerror="this.src='https://placehold.co/72x72/eef4eb/4a7c4a?text=🌿'" />
+                </div>
+                <div class="order-img-wrap">
+                    <img src="~/images/plant2.png" alt="Plant"
+                         onerror="this.src='https://placehold.co/72x72/eef4eb/4a7c4a?text=🪴'" />
+                </div>
+                <div class="order-img-more">+1<span>more</span></div>
+            </div>
+
+            <div class="order-status-col">
+                <div class="order-status-badge status-topay">
+                    🕐 To Pay
+                </div>
+                <div class="order-status-desc">Payment awaited</div>
+                <div class="order-status-sub">Please complete your payment within 24 hours.</div>
+                <button class="btn-pay-now">Pay Now</button>
+            </div>
+
+            <svg class="order-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </div>
+
+        @* Order 2 — To Ship *@
+        <div class="order-card">
+            <div class="order-info">
+                <div class="order-number">Order #PT-2025-0508</div>
+                <div class="order-date">May 8, 2025 • 02:15 PM</div>
+                <div class="order-total">
+                    <span class="order-total-label">Total</span>
+                    ₱950
+                </div>
+            </div>
+
+            <div class="order-images">
+                <div class="order-img-wrap">
+                    <img src="~/images/plant3.png" alt="Plant"
+                         onerror="this.src='https://placehold.co/72x72/eef4eb/4a7c4a?text=🌱'" />
+                </div>
+                <div class="order-img-wrap">
+                    <img src="~/images/plant4.png" alt="Plant"
+                         onerror="this.src='https://placehold.co/72x72/eef4eb/4a7c4a?text=🌿'" />
+                </div>
+                <div class="order-img-more">+1<span>more</span></div>
+            </div>
+
+            <div class="order-status-col">
+                <div class="order-status-badge status-toship">
+                    📦 To Ship
+                </div>
+                <div class="order-status-desc">Your order is being prepared</div>
+                <div class="order-status-sub">We'll notify you once it has been shipped.</div>
+            </div>
+
+            <svg class="order-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </div>
+
+        @* Order 3 — To Receive *@
+        <div class="order-card">
+            <div class="order-info">
+                <div class="order-number">Order #PT-2025-0501</div>
+                <div class="order-date">May 1, 2025 • 11:05 AM</div>
+                <div class="order-total">
+                    <span class="order-total-label">Total</span>
+                    ₱1,100
+                </div>
+            </div>
+
+            <div class="order-images">
+                <div class="order-img-wrap">
+                    <img src="~/images/plant5.png" alt="Plant"
+                         onerror="this.src='https://placehold.co/72x72/eef4eb/4a7c4a?text=🌵'" />
+                </div>
+            </div>
+
+            <div class="order-status-col">
+                <div class="order-status-badge status-toreceive">
+                    🚚 To Receive
+                </div>
+                <div class="order-status-desc">Out for delivery</div>
+                <div class="order-status-sub">Your order is on its way! Expected today.</div>
+            </div>
+
+            <svg class="order-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </div>
+
+        @* Order 4 — Completed *@
+        <div class="order-card">
+            <div class="order-info">
+                <div class="order-number">Order #PT-2025-0425</div>
+                <div class="order-date">Apr 25, 2025 • 09:30 AM</div>
+                <div class="order-total">
+                    <span class="order-total-label">Total</span>
+                    ₱650
+                </div>
+            </div>
+
+            <div class="order-images">
+                <div class="order-img-wrap">
+                    <img src="~/images/plant6.png" alt="Plant"
+                         onerror="this.src='https://placehold.co/72x72/eef4eb/4a7c4a?text=🌿'" />
+                </div>
+            </div>
+
+            <div class="order-status-col">
+                <div class="order-status-badge status-completed">
+                    ✅ Completed
+                </div>
+                <div class="order-status-desc">Delivered on Apr 28, 2025</div>
+                <div class="order-status-sub">Thank you for shopping with Plantopia!</div>
+            </div>
+
+            <svg class="order-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </div>
+
+        @* Order 5 — Cancelled *@
+        <div class="order-card">
+            <div class="order-info">
+                <div class="order-number">Order #PT-2025-0418</div>
+                <div class="order-date">Apr 18, 2025 • 04:20 PM</div>
+                <div class="order-total">
+                    <span class="order-total-label">Total</span>
+                    ₱470
+                </div>
+            </div>
+
+            <div class="order-images">
+                <div class="order-img-wrap">
+                    <img src="~/images/plant7.png" alt="Plant"
+                         onerror="this.src='https://placehold.co/72x72/eef4eb/4a7c4a?text=🌱'" />
+                </div>
+            </div>
+
+            <div class="order-status-col">
+                <div class="order-status-badge status-cancelled">
+                    ❌ Cancelled
+                </div>
+                <div class="order-status-desc">Order was cancelled</div>
+                <div class="order-status-sub">If you have any questions, we're here to help.</div>
+            </div>
+
+            <svg class="order-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </div>
+
+        @* Order 6 — Return/Refund *@
+        <div class="order-card">
+            <div class="order-info">
+                <div class="order-number">Order #PT-2025-0405</div>
+                <div class="order-date">Apr 5, 2025 • 01:10 PM</div>
+                <div class="order-total">
+                    <span class="order-total-label">Total</span>
+                    ₱890
+                </div>
+            </div>
+
+            <div class="order-images">
+                <div class="order-img-wrap">
+                    <img src="~/images/plant8.png" alt="Plant"
+                         onerror="this.src='https://placehold.co/72x72/eef4eb/4a7c4a?text=🪴'" />
+                </div>
+            </div>
+
+            <div class="order-status-col">
+                <div class="order-status-badge status-refund">
+                    🔄 Return/Refund
+                </div>
+                <div class="order-status-desc">Return approved</div>
+                <div class="order-status-sub">Your refund is being processed. It may take 3–5 business days.</div>
+            </div>
+
+            <svg class="order-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="9 18 15 12 9 6"/>
+            </svg>
+        </div>
+
+    </div>
+</div>

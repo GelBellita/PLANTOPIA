@@ -1,0 +1,428 @@
+﻿@* Views/Account/Wishlist.cshtml *@
+@{
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewData["Title"] = "My Wishlist";
+}
+
+<style>
+    /* ── Page Header Row ── */
+    .wishlist-header-row {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 24px;
+    }
+
+    .wishlist-count {
+        font-size: 14px;
+        color: var(--text-muted);
+        margin-top: 4px;
+    }
+
+    .btn-share-wishlist {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 18px;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--white);
+        font-size: 13.5px;
+        font-weight: 500;
+        color: var(--text-mid);
+        cursor: pointer;
+        transition: border-color 0.15s, background 0.15s;
+        font-family: var(--font-ui);
+        text-decoration: none;
+    }
+
+        .btn-share-wishlist:hover {
+            border-color: var(--green-soft);
+            background: var(--green-pale);
+            color: var(--green-mid);
+        }
+
+    /* ── Wishlist Grid ── */
+    .wishlist-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-bottom: 24px;
+    }
+
+    /* ── Plant Card ── */
+    .wishlist-card {
+        background: var(--white);
+        border-radius: var(--radius-lg);
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+        display: flex;
+        flex-direction: column;
+        transition: box-shadow 0.15s;
+    }
+
+        .wishlist-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+    .wishlist-card-img-wrap {
+        position: relative;
+        background: var(--green-pale);
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+    }
+
+        .wishlist-card-img-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+    .wishlist-heart-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: var(--white);
+        border: none;
+        border-radius: 50%;
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: var(--shadow-sm);
+        font-size: 16px;
+        transition: transform 0.15s;
+    }
+
+        .wishlist-heart-btn:hover {
+            transform: scale(1.15);
+        }
+
+    .wishlist-card-body {
+        padding: 14px 16px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        flex: 1;
+    }
+
+    .wishlist-plant-name {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .wishlist-plant-meta {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .wishlist-plant-shop {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    .wishlist-plant-rating {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+        .wishlist-plant-rating svg {
+            fill: #f5a623;
+            stroke: none;
+        }
+
+    .wishlist-plant-price {
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--green-dark);
+        margin-top: 4px;
+    }
+
+    .btn-add-to-cart {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        width: 100%;
+        padding: 9px 0;
+        border: 1.5px solid var(--border);
+        border-radius: var(--radius-sm);
+        background: var(--white);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--text-mid);
+        cursor: pointer;
+        margin-top: 10px;
+        transition: border-color 0.15s, background 0.15s, color 0.15s;
+        font-family: var(--font-ui);
+    }
+
+        .btn-add-to-cart:hover {
+            border-color: var(--green-soft);
+            background: var(--green-pale);
+            color: var(--green-mid);
+        }
+
+    .btn-remove {
+        background: none;
+        border: none;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        cursor: pointer;
+        padding: 6px 0 2px;
+        text-align: center;
+        width: 100%;
+        transition: color 0.15s;
+        font-family: var(--font-ui);
+    }
+
+        .btn-remove:hover {
+            color: var(--red);
+        }
+
+    /* ── Promo Banner ── */
+    .wishlist-promo {
+        background: var(--green-pale);
+        border-radius: var(--radius-lg);
+        padding: 32px 40px;
+        display: flex;
+        align-items: center;
+        gap: 32px;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .wishlist-promo-left {
+        font-size: 80px;
+        line-height: 1;
+        flex-shrink: 0;
+    }
+
+    .wishlist-promo-text {
+        flex: 1;
+    }
+
+    .wishlist-promo-title {
+        font-family: var(--font-main);
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-dark);
+        line-height: 1.3;
+    }
+
+    .wishlist-promo-sub {
+        font-size: 13.5px;
+        color: var(--text-muted);
+        margin-top: 6px;
+    }
+
+    .btn-shop-arrivals {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 16px;
+        background: var(--green-dark);
+        color: var(--white);
+        border-radius: var(--radius-sm);
+        padding: 11px 22px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.15s;
+    }
+
+        .btn-shop-arrivals:hover {
+            background: var(--green-mid);
+            color: var(--white);
+        }
+
+    .wishlist-promo-right {
+        font-size: 80px;
+        line-height: 1;
+        flex-shrink: 0;
+        opacity: 0.5;
+        letter-spacing: 8px;
+    }
+</style>
+
+<div class="profile-page">
+
+    @* Header Row *@
+    <div class="wishlist-header-row">
+        <div>
+            <h1 class="profile-title">My Wishlist <span class="profile-title-emoji">🌿</span></h1>
+            <p class="wishlist-count">4 items saved</p>
+        </div>
+        <a href="#" class="btn-share-wishlist">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+            </svg>
+            Share Wishlist
+        </a>
+    </div>
+
+    @* Wishlist Grid *@
+    <div class="wishlist-grid">
+
+        @* Card 1 *@
+        <div class="wishlist-card">
+            <div class="wishlist-card-img-wrap">
+                <img src="~/images/monstera.png" alt="Monstera Deliciosa"
+                     onerror="this.src='https://placehold.co/300x300/eef4eb/4a7c4a?text=🌿'" />
+                <button class="wishlist-heart-btn">❤️</button>
+            </div>
+            <div class="wishlist-card-body">
+                <div class="wishlist-plant-name">Monstera Deliciosa</div>
+                <div class="wishlist-plant-meta">
+                    <span class="wishlist-plant-shop">By Green Haven PH</span>
+                    <span class="wishlist-plant-rating">
+                        <svg width="11" height="11" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                        4.9
+                    </span>
+                </div>
+                <div class="wishlist-plant-price">₱850</div>
+                <button class="btn-add-to-cart">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    Add to Cart
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                </button>
+                <button class="btn-remove">Remove</button>
+            </div>
+        </div>
+
+        @* Card 2 *@
+        <div class="wishlist-card">
+            <div class="wishlist-card-img-wrap">
+                <img src="~/images/snake-plant.png" alt="Snake Plant"
+                     onerror="this.src='https://placehold.co/300x300/eef4eb/4a7c4a?text=🪴'" />
+                <button class="wishlist-heart-btn">❤️</button>
+            </div>
+            <div class="wishlist-card-body">
+                <div class="wishlist-plant-name">Snake Plant</div>
+                <div class="wishlist-plant-meta">
+                    <span class="wishlist-plant-shop">By Cebu Plant Shop</span>
+                    <span class="wishlist-plant-rating">
+                        <svg width="11" height="11" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                        4.8
+                    </span>
+                </div>
+                <div class="wishlist-plant-price">₱450</div>
+                <button class="btn-add-to-cart">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    Add to Cart
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                </button>
+                <button class="btn-remove">Remove</button>
+            </div>
+        </div>
+
+        @* Card 3 *@
+        <div class="wishlist-card">
+            <div class="wishlist-card-img-wrap">
+                <img src="~/images/fiddle-leaf.png" alt="Fiddle Leaf Fig"
+                     onerror="this.src='https://placehold.co/300x300/eef4eb/4a7c4a?text=🌱'" />
+                <button class="wishlist-heart-btn">❤️</button>
+            </div>
+            <div class="wishlist-card-body">
+                <div class="wishlist-plant-name">Fiddle Leaf Fig</div>
+                <div class="wishlist-plant-meta">
+                    <span class="wishlist-plant-shop">By Plantae Cebu</span>
+                    <span class="wishlist-plant-rating">
+                        <svg width="11" height="11" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                        4.9
+                    </span>
+                </div>
+                <div class="wishlist-plant-price">₱1,200</div>
+                <button class="btn-add-to-cart">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    Add to Cart
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                </button>
+                <button class="btn-remove">Remove</button>
+            </div>
+        </div>
+
+        @* Card 4 *@
+        <div class="wishlist-card">
+            <div class="wishlist-card-img-wrap">
+                <img src="~/images/pothos.png" alt="Pothos Golden"
+                     onerror="this.src='https://placehold.co/300x300/eef4eb/4a7c4a?text=🌿'" />
+                <button class="wishlist-heart-btn">❤️</button>
+            </div>
+            <div class="wishlist-card-body">
+                <div class="wishlist-plant-name">Pothos Golden</div>
+                <div class="wishlist-plant-meta">
+                    <span class="wishlist-plant-shop">By Green Haven PH</span>
+                    <span class="wishlist-plant-rating">
+                        <svg width="11" height="11" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+                        4.8
+                    </span>
+                </div>
+                <div class="wishlist-plant-price">₱350</div>
+                <button class="btn-add-to-cart">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    Add to Cart
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                </button>
+                <button class="btn-remove">Remove</button>
+            </div>
+        </div>
+
+    </div>
+
+    @* Promo Banner *@
+    <div class="wishlist-promo">
+        <div class="wishlist-promo-left">🪴</div>
+        <div class="wishlist-promo-text">
+            <div class="wishlist-promo-title">Still looking for your<br>perfect plant?</div>
+            <div class="wishlist-promo-sub">Discover more greens that'll brighten up your space.</div>
+            <a asp-controller="Store" asp-action="NewArrivals" class="btn-shop-arrivals">
+                Shop New Arrivals →
+            </a>
+        </div>
+        <div class="wishlist-promo-right">🌿🌵🪴</div>
+    </div>
+
+</div>

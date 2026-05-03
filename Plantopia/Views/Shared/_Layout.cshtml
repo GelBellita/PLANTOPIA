@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/plantopia.css" />
+    @RenderSection("Styles", required: false)
 </head>
 <body>
 
@@ -14,7 +15,7 @@
         var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
         var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
         string IsActive(string ctrl, string act = "Index") =>
-        currentController == ctrl && currentAction == act ? "active" : "";
+            currentController == ctrl && currentAction == act ? "active" : "";
 
         var loggedInUser = Context.Session.GetString("UserEmail");
     }
@@ -82,96 +83,20 @@
         @RenderBody()
     </main>
 
-    <footer class="plant-footer">
-        <div class="container">
-            <div class="row g-4 align-items-start">
-
-                <div class="col-lg-4 col-md-12 mb-2">
-                    <div class="footer-brand">
-                        <span class="footer-brand-name">🌿 Plantopia</span>
-                        <p class="footer-tagline">
-                            Homegrown, heart-grown, Cebu-grown.<br />
-                            Supporting local farmers, one plant at a time. 🇵🇭
-                        </p>
-                        <div class="footer-socials">
-                            <a href="#" class="footer-social-btn" aria-label="Facebook">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z" />
-                                </svg>
-                            </a>
-                            <a href="#" class="footer-social-btn" aria-label="Instagram">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
-                                    <circle cx="12" cy="12" r="4" />
-                                    <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
-                                </svg>
-                            </a>
-                            <a href="#" class="footer-social-btn" aria-label="X / Twitter">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622Zm-1.161 17.52h1.833L7.084 4.126H5.117Z" />
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-2 col-md-3 col-6">
-                    <h6 class="footer-heading">SHOP</h6>
-                    <ul class="footer-links">
-                        <li><a asp-controller="Shop" asp-action="Index">All Plants</a></li>
-                        <li><a asp-controller="Shop" asp-action="Index" asp-route-category="Indoor Plants">Indoor Plants</a></li>
-                        <li><a asp-controller="Shop" asp-action="Index" asp-route-category="Outdoor Plants">Outdoor Plants</a></li>
-                        <li><a asp-controller="Shop" asp-action="Index" asp-route-category="Balcony / Patio">Balcony / Patio</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-2 col-md-3 col-6">
-                    <h6 class="footer-heading">COMPANY</h6>
-                    <ul class="footer-links">
-                        <li><a asp-controller="Home" asp-action="About">About Us</a></li>
-                        <li><a asp-controller="Home" asp-action="Services">Our Farmers</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Careers</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-4 col-md-6">
-                    <h6 class="footer-heading">STAY IN THE LOOP</h6>
-                    <p class="footer-newsletter-text">Get plant care tips & new arrivals straight to your inbox.</p>
-                    <div class="footer-newsletter">
-                        <input type="email" class="footer-newsletter-input" placeholder="your@email.com" />
-                        <button class="footer-newsletter-btn">→</button>
-                    </div>
-                    <ul class="footer-links mt-3">
-                        <li>📍 Cebu City, PH</li>
-                        <li>📞 0917-PLANTOPIA</li>
-                        <li>✉️ hello@plantopia.ph</li>
-                    </ul>
-                </div>
-
-            </div>
-
-            <div class="footer-bottom">
-                <p>© @DateTime.Now.Year Plantopia. All rights reserved. Made with 💚 in Cebu.</p>
-                <p>Privacy Policy · Terms of Use</p>
-            </div>
-        </div>
-    </footer>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        const navbar = document.getElementById('mainNavbar');
-        window.addEventListener('scroll', () => {
-            navbar.classList.toggle('scrolled', window.scrollY > 40);
-        });
-        setTimeout(() => {
-            const flash = document.getElementById('flashMsg');
-            if (flash) { flash.style.transition = 'opacity 0.6s'; flash.style.opacity = '0'; }
-        }, 3000);
-    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
+    <script>
+        const navbar = document.getElementById('mainNavbar');
+        window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 40);
+        });
+        setTimeout(() => {
+        const flash = document.getElementById('flashMsg');
+        if (flash) { flash.style.transition = 'opacity 0.6s'; flash.style.opacity = '0'; }
+        }, 3000);
+    </script>
     @RenderSection("Scripts", required: false)
 </body>
 </html>

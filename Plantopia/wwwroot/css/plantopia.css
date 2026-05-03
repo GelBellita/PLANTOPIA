@@ -538,10 +538,10 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 
 /* ── FOOTER ─────────────────────────────────────────────────── */
 .plant-footer {
-    background: var(--green-dark);
-    background-image: linear-gradient(135deg, rgba(45, 90, 39, 0.9) 0%, rgba(26, 58, 26, 0.97) 60%), url('/images/footer-bg.png');
+    background-image: linear-gradient(rgba(10, 30, 10, 0.72), rgba(10, 30, 10, 0.82)), url('/images/footer_image.png');
     background-size: cover;
-    background-position: center;
+    background-position: center bottom;
+    background-repeat: no-repeat;
     color: rgba(255, 255, 255, 0.72);
     padding: 60px 0 0;
 }

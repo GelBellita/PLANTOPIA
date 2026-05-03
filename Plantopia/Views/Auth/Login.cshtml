@@ -56,6 +56,14 @@
             <button type="submit" class="btn btn-plant w-100">Login</button>
         </form>
 
+        <!-- Demo Login (remove before production) -->
+        <form asp-controller="Auth" asp-action="DemoLogin" method="post">
+            <button type="submit" class="btn w-100 mt-2"
+                    style="background:#e8f5e9; color:#2e7d32; border:1px dashed #81c784; font-size:0.85rem;">
+                🧪 Demo Login (Testing Only)
+            </button>
+        </form>
+
         <p class="auth-switch mt-3">
             Don't have an account?
             <a asp-controller="Auth" asp-action="Register">Register here</a>

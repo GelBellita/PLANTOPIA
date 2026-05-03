@@ -1,0 +1,241 @@
+﻿@{
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+
+    string NavActive(string action) =>
+        currentController == "Store" && currentAction == action ? "active" : "";
+
+    @* Each store page can override the sidebar promo via ViewData *@
+    var promoTitle = ViewData["PromoTitle"]?.ToString() ?? "Bring nature<br>to your home.";
+    var promoSub = ViewData["PromoSub"]?.ToString() ?? "Discover our best-selling plants today!";
+    var promoCta = ViewData["PromoCta"]?.ToString() ?? "Shop Now →";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] — Plantopia</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/plantopia.css" />
+    <link rel="stylesheet" href="~/css/store.css" />
+    <link rel="stylesheet" href="~/css/shared-pages.css" />
+    <link rel="stylesheet" href="~/css/user-dropdown.css" />
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+
+    <div class="store-wrapper">
+
+        @* ===== SIDEBAR — once lang diri, shared sa tanan store pages ===== *@
+        <aside class="store-sidebar">
+            <div class="sidebar-logo">
+                <a asp-controller="Store" asp-action="Index" class="sidebar-logo-name">🌿 Plantopia</a>
+                <div class="sidebar-logo-sub">Your green space, our passion</div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a asp-controller="Store" asp-action="Index" class="sidebar-nav-item @NavActive("Index")">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                        <polyline points="9 22 9 12 15 12 15 22" fill="none" stroke="currentColor" stroke-width="2" />
+                    </svg>
+                    Home
+                </a>
+                <a asp-controller="Store" asp-action="Plants" class="sidebar-nav-item @NavActive("Plants")">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22V12M12 12C10 10 5 9 5 5a7 7 0 0 1 14 0c0 4-5 5-7 7z" />
+                    </svg>
+                    Plants
+                </a>
+                <a asp-controller="Store" asp-action="PotsAndPlanters" class="sidebar-nav-item @NavActive("PotsAndPlanters")">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 22V12M12 12C12 12 7 10 7 5a5 5 0 0 1 10 0c0 5-5 7-5 7z" />
+                    </svg>
+                    Pots &amp; Planters
+                </a>
+                <a asp-controller="Store" asp-action="PlantCare" class="sidebar-nav-item @NavActive("PlantCare")">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                    </svg>
+                    Plant Care
+                </a>
+                <a asp-controller="Store" asp-action="Accessories" class="sidebar-nav-item @NavActive("Accessories")">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
+                    </svg>
+                    Accessories
+                </a>
+                <a asp-controller="Store" asp-action="BestSellers" class="sidebar-nav-item @NavActive("BestSellers")">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                    </svg>
+                    Best Sellers
+                </a>
+                <a asp-controller="Store" asp-action="NewArrivals" class="sidebar-nav-item @NavActive("NewArrivals")">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19" />
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                    New Arrivals
+                </a>
+                <a asp-controller="Store" asp-action="Sale" class="sidebar-nav-item @NavActive("Sale")">
+                    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="9" y="9" width="13" height="13" rx="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                    Sale
+                </a>
+            </nav>
+
+            @* Sidebar promo box — customizable per page via ViewData["PromoTitle"] etc. *@
+            <div class="sidebar-promo">
+                <div class="sidebar-promo-title">@Html.Raw(promoTitle)</div>
+                <div class="sidebar-promo-sub">@promoSub</div>
+                <a href="#" class="btn btn-plant btn-sm">@promoCta</a>
+            </div>
+        </aside>
+
+        @* ===== MAIN AREA ===== *@
+        <div class="store-main">
+
+            @* ===== TOPBAR — once lang diri, shared sa tanan store pages ===== *@
+            <div class="store-topbar">
+                <div class="topbar-search">
+                    <span class="topbar-search-icon">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                            <circle cx="11" cy="11" r="8" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                    </span>
+                    <input type="text" placeholder="Search for plants, pots, or care accessories..." />
+                </div>
+                <div class="topbar-actions">
+
+                    @* Notifications button *@
+                    <button class="topbar-icon-btn" style="position:relative;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                        </svg>
+                        <span class="topbar-cart-badge">5</span>
+                        Notifications
+                    </button>
+
+                    @* Cart button *@
+                    <button class="topbar-icon-btn" style="position:relative;">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="9" cy="21" r="1" />
+                            <circle cx="20" cy="21" r="1" />
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                        </svg>
+                        <span class="topbar-cart-badge">3</span>
+                        Cart
+                    </button>
+
+                    @* User dropdown *@
+                    <div class="topbar-user" id="userMenuToggle">
+                        <div class="topbar-avatar">M</div>
+                        <span class="topbar-username">Hello, Maria! ▾</span>
+
+                        <div class="user-dropdown" id="userDropdown">
+                            @* Header *@
+                            <div class="user-dropdown-header">
+                                <div class="user-dropdown-avatar">MS</div>
+                                <div class="user-dropdown-info">
+                                    <div class="dropdown-name">Maria Santos</div>
+                                    <div class="dropdown-email">maria@email.com</div>
+                                </div>
+                            </div>
+
+                            @* Menu items *@
+                            <div class="user-dropdown-menu">
+                                <a asp-controller="Store" asp-action="Profile" class="user-dropdown-item active">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" />
+                                    </svg>
+                                    My Profile
+                                </a>
+                                <a asp-controller="Store" asp-action="Purchases" class="user-dropdown-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="3" width="7" height="7" rx="1" />
+                                        <rect x="14" y="3" width="7" height="7" rx="1" />
+                                        <rect x="3" y="14" width="7" height="7" rx="1" />
+                                        <rect x="14" y="14" width="7" height="7" rx="1" />
+                                    </svg>
+                                    My Purchase
+                                </a>
+                                <a asp-controller="Store" asp-action="Wishlist" class="user-dropdown-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                                    </svg>
+                                    Wishlist
+                                </a>
+                                <a asp-controller="Store" asp-action="Messages" class="user-dropdown-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                                    </svg>
+                                    Messages
+                                </a>
+                                <a asp-controller="Store" asp-action="Cart" class="user-dropdown-item">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                                        <line x1="3" y1="6" x2="21" y2="6" />
+                                        <path d="M16 10a4 4 0 0 1-8 0" />
+                                    </svg>
+                                    My Cart
+                                    <span class="dropdown-badge">1</span>
+                                </a>
+                            </div>
+
+                            @* Logout *@
+                            <div class="user-dropdown-logout">
+                                <a asp-controller="Account" asp-action="Logout">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                                        <polyline points="16 17 21 12 16 7" />
+                                        <line x1="21" y1="12" x2="9" y2="12" />
+                                    </svg>
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            @* ===== PAGE CONTENT — ang each .cshtml mag-render dinhi lang ===== *@
+            <div class="store-content">
+                @RenderBody()
+            </div>
+
+        </div>
+    </div>
+
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+            // User dropdown toggle
+            const userMenuToggle = document.getElementById('userMenuToggle');
+            const userDropdown   = document.getElementById('userDropdown');
+
+            userMenuToggle.addEventListener('click', function (e) {
+                e.stopPropagation();
+                this.classList.toggle('open');
+            });
+
+            // Close when clicking outside
+            document.addEventListener('click', function (e) {
+                if (!userMenuToggle.contains(e.target)) {
+                    userMenuToggle.classList.remove('open');
+                }
+            });
+    </script>
+
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>
