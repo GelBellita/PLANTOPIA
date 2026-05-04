@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Home";
+    var activeCategory = ViewData["ActiveCategory"]?.ToString() ?? "Indoor Plants";
 }
 
 <section id="hero">
@@ -41,58 +42,71 @@
         <h2 class="section-title text-center mb-4">Shop By Category</h2>
 
         <div class="d-flex justify-content-center flex-wrap gap-2 mb-5">
-            <a class="category-tab active" asp-controller="Shop" asp-action="Index">Indoor Plants</a>
-            <a class="category-tab" asp-controller="Shop" asp-action="Index" asp-route-category="Outdoor Plants">Outdoor Plants</a>
-            <a class="category-tab" asp-controller="Shop" asp-action="Index" asp-route-category="Balcony / Patio">Balcony / Patio</a>
+            <a class="category-tab @(activeCategory == "Indoor Plants" ? "active" : "")"
+               asp-controller="Home" asp-action="Index"
+               asp-route-category="Indoor Plants">Indoor Plants</a>
+
+            <a class="category-tab @(activeCategory == "Outdoor Plants" ? "active" : "")"
+               asp-controller="Home" asp-action="Index"
+               asp-route-category="Outdoor Plants">Outdoor Plants</a>
+
+            <a class="category-tab @(activeCategory == "Balcony / Patio" ? "active" : "")"
+               asp-controller="Home" asp-action="Index"
+               asp-route-category="Balcony / Patio">Balcony / Patio</a>
         </div>
 
         <div class="row g-4">
-            @foreach (var plant in Model)
+            @if (Model.Count == 0)
             {
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="plant-card h-100">
-
-                        @if (!string.IsNullOrEmpty(plant.Badge))
-                        {
-                            <span class="plant-badge @(plant.Badge == "Hot" ? "badge-hot" : "badge-new")">
-                                @plant.Badge
-                            </span>
-                        }
-
-                        <a asp-controller="Shop" asp-action="Detail" asp-route-id="@plant.Id">
-                            @if (!string.IsNullOrEmpty(plant.ImageUrl))
-                            {
-                                <img src="@plant.ImageUrl" alt="@plant.Name" class="plant-img" />
-                            }
-                            else
-                            {
-                                <div class="plant-placeholder">@plant.Name</div>
-                            }
-                        </a>
-
-                        <div class="plant-info">
-                            <h5 class="plant-name">
-                                <a asp-controller="Shop" asp-action="Detail" asp-route-id="@plant.Id">
-                                    @plant.Name
-                                </a>
-                            </h5>
-                            <div class="plant-stars">★★★★★</div>
-                            <div class="plant-price-row">
-                                @if (plant.Badge == "New")
-                                {
-                                    <span class="price-original">₱@((plant.Price * 1.14m).ToString("0"))</span>
-                                }
-                                <span class="plant-price">₱@plant.Price.ToString("0.00")</span>
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="col-12 text-center py-5">
+                    <p class="text-muted">No plants available in this category yet. Check back soon! 🌱</p>
                 </div>
             }
-        </div>
+            else
+            {
+                @foreach (var plant in Model)
+                {
+                    <div class="col-lg-3 col-md-4 col-sm-6">
+                        <div class="plant-card h-100">
 
-        <div class="text-center mt-5">
-            <p class="scroll-hint">↓ SCROLL TO EXPLORE</p>
+                            @if (!string.IsNullOrEmpty(plant.Badge))
+                            {
+                                <span class="plant-badge @(plant.Badge == "Hot" ? "badge-hot" : "badge-new")">
+                                    @plant.Badge
+                                </span>
+                            }
+
+                            <a asp-controller="Shop" asp-action="Detail" asp-route-id="@plant.Id">
+                                @if (!string.IsNullOrEmpty(plant.ImageUrl))
+                                {
+                                    <img src="@plant.ImageUrl" alt="@plant.Name" class="plant-img" />
+                                }
+                                else
+                                {
+                                    <div class="plant-placeholder">@plant.Name</div>
+                                }
+                            </a>
+
+                            <div class="plant-info">
+                                <h5 class="plant-name">
+                                    <a asp-controller="Shop" asp-action="Detail" asp-route-id="@plant.Id">
+                                        @plant.Name
+                                    </a>
+                                </h5>
+                                <div class="plant-stars">★★★★★</div>
+                                <div class="plant-price-row">
+                                    @if (plant.Badge == "New")
+                                    {
+                                        <span class="price-original">₱@((plant.Price * 1.14m).ToString("0"))</span>
+                                    }
+                                    <span class="plant-price">₱@plant.Price.ToString("0.00")</span>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            }
         </div>
 
     </div>
@@ -199,7 +213,7 @@
     </div>
 </section>
 
-<footer class="plant-footer">
+<footer class="plant-footer" id="footer">
     <div class="container">
         <div class="row g-4 align-items-start">
 
@@ -245,8 +259,8 @@
             <div class="col-lg-2 col-md-3 col-6">
                 <h6 class="footer-heading">COMPANY</h6>
                 <ul class="footer-links">
-                    <li><a asp-controller="Home" asp-action="About">About Us</a></li>
-                    <li><a asp-controller="Home" asp-action="Services">Our Farmers</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#sellers">Our Farmers</a></li>
                     <li><a href="#">Blog</a></li>
                     <li><a href="#">Careers</a></li>
                 </ul>

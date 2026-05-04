@@ -15,7 +15,7 @@
         var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
         var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
         string IsActive(string ctrl, string act = "Index") =>
-            currentController == ctrl && currentAction == act ? "active" : "";
+        currentController == ctrl && currentAction == act ? "active" : "";
 
         var loggedInUser = Context.Session.GetString("UserEmail");
     }
@@ -41,16 +41,13 @@
                            asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-spy @IsActive("Home", "About")" data-section="about"
-                           asp-controller="Home" asp-action="About">About</a>
+                        <a class="nav-link @IsActive("Home", "About")" href="/#about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link nav-spy @IsActive("Home", "Services")" data-section="sellers"
-                           asp-controller="Home" asp-action="Services">Sellers</a>
+                        <a class="nav-link @IsActive("Home", "Sellers")" href="/#sellers">Sellers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @IsActive("Home", "Contact")"
-                           asp-controller="Home" asp-action="Contact">Contact</a>
+                        <a class="nav-link @IsActive("Home", "Contact")" href="/#footer">Contact</a>
                     </li>
                 </ul>
 

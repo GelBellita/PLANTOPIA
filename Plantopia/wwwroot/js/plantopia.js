@@ -1,40 +1,15 @@
 ﻿(function () {
     'use strict';
 
-    const SECTION_IDS = ['hero', 'collection', 'about', 'sellers', 'cta'];
-    const SECTION_TO_NAV = {
-        hero: 'hero',
-        collection: 'hero',
-        about: 'about',
-        sellers: 'sellers',
-        cta: 'cta',
-    };
-
-    const navLinks = document.querySelectorAll('.nav-spy');
-
-    function setActive(sectionId) {
-        const targetKey = SECTION_TO_NAV[sectionId];
-        navLinks.forEach(link => {
-            link.classList.toggle('active', link.dataset.section === targetKey);
-        });
+    // Jump to #collection instantly when a category tab was clicked
+    if (window.location.search.includes('category=')) {
+        const section = document.getElementById('collection');
+        if (section) {
+            section.scrollIntoView({ behavior: 'instant', block: 'start' });
+        }
     }
 
-    const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                setActive(entry.target.id);
-            }
-        });
-    }, {
-        root: null,
-        threshold: 0.35,
-    });
-
-    SECTION_IDS.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) observer.observe(el);
-    });
-
+    // Smooth scroll for all links (Our Story, Meet Farmers, etc.)
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
             const selector = this.getAttribute('href');
@@ -46,4 +21,5 @@
             }
         });
     });
+
 })();
