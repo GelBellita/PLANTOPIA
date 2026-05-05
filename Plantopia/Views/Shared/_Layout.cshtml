@@ -37,17 +37,16 @@
             <div class="collapse navbar-collapse" id="navMenu">
                 <ul class="navbar-nav mx-auto gap-1 gap-lg-3">
                     <li class="nav-item">
-                        <a class="nav-link nav-spy @IsActive("Home")" data-section="hero"
-                           asp-controller="Home" asp-action="Index">Home</a>
+                        <a class="nav-link" href="#hero" data-section="hero">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @IsActive("Home", "About")" href="/#about">About</a>
+                        <a class="nav-link" href="#about" data-section="about">About</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @IsActive("Home", "Sellers")" href="/#sellers">Sellers</a>
+                        <a class="nav-link" href="#sellers" data-section="sellers">Sellers</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link @IsActive("Home", "Contact")" href="/#footer">Contact</a>
+                        <a class="nav-link" href="#footer" data-section="footer">Contact</a>
                     </li>
                 </ul>
 
@@ -84,16 +83,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.21.0/jquery.validate.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/4.0.0/jquery.validate.unobtrusive.min.js"></script>
-    <script>
-        const navbar = document.getElementById('mainNavbar');
-        window.addEventListener('scroll', () => {
-        navbar.classList.toggle('scrolled', window.scrollY > 40);
-        });
-        setTimeout(() => {
-        const flash = document.getElementById('flashMsg');
-        if (flash) { flash.style.transition = 'opacity 0.6s'; flash.style.opacity = '0'; }
-        }, 3000);
-    </script>
+
     @RenderSection("Scripts", required: false)
 </body>
 </html>
