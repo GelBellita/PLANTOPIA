@@ -17,7 +17,9 @@
     --nav-h: 80px;
     --transition: 0.28s ease;
 }
-
+html {
+    scroll-behavior: smooth;
+}
 /* ── Global Base ────────────────────────────────────────────── */
 body {
     font-family: 'DM Sans', sans-serif;
