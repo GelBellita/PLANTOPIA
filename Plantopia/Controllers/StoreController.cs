@@ -59,21 +59,11 @@ namespace Plantopia.Controllers
             ViewData["Query"] = query;
             return View(plants);
         }
-        public IActionResult PotsAndPlanters()
-        {
-            return View();
-        }
-
+     
         public IActionResult PlantCare()
         {
             return View();
         }
-
-        public IActionResult Accessories()
-        {
-            return View();
-        }
-
         public IActionResult BestSellers()
         {
             return View();

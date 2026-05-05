@@ -1,0 +1,135 @@
+﻿@model List<Plantopia.Models.Address>
+
+@{
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+    ViewData["Title"] = "Manage Addresses";
+}
+
+<div class="profile-page">
+
+    <div class="profile-header">
+        <h1 class="profile-title">Manage Addresses <span class="profile-title-emoji">📍</span></h1>
+        <p class="profile-subtitle">Add and manage your delivery addresses.</p>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert" style="background:#f0f8f0; color:#2d5a27; border-radius:10px; padding:12px 18px; margin-bottom:16px;">
+            ✅ @TempData["Success"]
+        </div>
+    }
+
+    <div class="profile-grid">
+
+        @* LEFT — Add New Address Form *@
+        <div class="profile-card">
+            <h2 class="profile-card-title">Add New Address</h2>
+
+            <form asp-controller="Account" asp-action="AddAddress" method="post" class="profile-form">
+
+                <div class="form-group-plantopia">
+                    <label class="form-label-plantopia">Label</label>
+                    <select name="label" class="form-input-plantopia">
+                        <option value="Home">🏠 Home</option>
+                        <option value="Work">💼 Work</option>
+                        <option value="Other">📦 Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group-plantopia">
+                    <label class="form-label-plantopia">Full Address</label>
+                    <input type="text" name="fullAddress" class="form-input-plantopia"
+                           placeholder="House No., Street, Barangay" required />
+                </div>
+
+                <div class="form-group-plantopia">
+                    <label class="form-label-plantopia">City</label>
+                    <input type="text" name="city" class="form-input-plantopia"
+                           placeholder="e.g. Cebu City" required />
+                </div>
+
+                <div class="form-group-plantopia">
+                    <label class="form-label-plantopia">Province</label>
+                    <input type="text" name="province" class="form-input-plantopia"
+                           placeholder="e.g. Cebu" required />
+                </div>
+
+                <div class="form-group-plantopia">
+                    <label class="form-label-plantopia">ZIP Code</label>
+                    <input type="text" name="zipCode" class="form-input-plantopia"
+                           placeholder="e.g. 6000" required />
+                </div>
+
+                <div class="form-group-plantopia" style="display:flex; align-items:center; gap:10px;">
+                    <input type="checkbox" name="isDefault" value="true" id="isDefault" />
+                    <label for="isDefault" class="form-label-plantopia" style="margin:0;">
+                        Set as Default Address
+                    </label>
+                </div>
+
+                <div class="profile-form-footer">
+                    <button type="submit" class="btn-save-changes">Add Address</button>
+                    <div class="profile-form-deco">🌿</div>
+                </div>
+
+            </form>
+        </div>
+
+        @* RIGHT — Saved Addresses *@
+        <div class="profile-right-col">
+            <div class="profile-card">
+                <h2 class="profile-card-title">Saved Addresses</h2>
+
+                @if (Model == null || Model.Count == 0)
+                {
+                    <p style="color:#888; font-size:14px;">No addresses saved yet. Add one! 📍</p>
+                }
+                else
+                {
+                    @foreach (var address in Model)
+                    {
+                        <div style="border:1px solid #e8f0e8; border-radius:12px; padding:16px; margin-bottom:14px; background: @(address.IsDefault ? "#f0f8f0" : "#fff");">
+
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <span style="font-weight:600; color:#2d5a27; font-size:15px;">
+                                    @(address.Label == "Home" ? "🏠" : address.Label == "Work" ? "💼" : "📦")
+                                    @address.Label
+                                </span>
+                                @if (address.IsDefault)
+                                {
+                                    <span style="background:#2d5a27; color:#fff; border-radius:20px; padding:2px 12px; font-size:12px;">
+                                        ✅ Default
+                                    </span>
+                                }
+                            </div>
+
+                            <p style="margin:0; color:#444; font-size:14px;">@address.FullAddress</p>
+                            <p style="margin:0; color:#666; font-size:13px;">@address.City, @address.Province @address.ZipCode</p>
+
+                            <div style="display:flex; gap:8px; margin-top:12px;">
+                                @if (!address.IsDefault)
+                                {
+                                    <form asp-controller="Account" asp-action="SetDefaultAddress" method="post">
+                                        <input type="hidden" name="id" value="@address.Id" />
+                                        <button type="submit" style="background:#f0f8f0; color:#2d5a27; border:1px solid #2d5a27; border-radius:8px; padding:6px 14px; font-size:13px; cursor:pointer;">
+                                            Set as Default
+                                        </button>
+                                    </form>
+                                }
+                                <form asp-controller="Account" asp-action="DeleteAddress" method="post">
+                                    <input type="hidden" name="id" value="@address.Id" />
+                                    <button type="submit" style="background:#fff0f0; color:#a00; border:1px solid #ffcccc; border-radius:8px; padding:6px 14px; font-size:13px; cursor:pointer;"
+                                            onclick="return confirm('Delete this address?')">
+                                        🗑 Delete
+                                    </button>
+                                </form>
+                            </div>
+
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+
+    </div>
+</div>
