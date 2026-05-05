@@ -31,10 +31,9 @@ namespace Plantopia.Controllers
 
             // ── LINQ query sa database 
             var user = _context.Users
-                .FirstOrDefault(u => u.Email == model.Email &&
-                                     u.Password == model.Password);
+    .FirstOrDefault(u => u.Email == model.Email);
 
-            if (user == null)
+            if (user == null || !BCrypt.Net.BCrypt.Verify(model.Password, user.Password))
             {
                 ModelState.AddModelError("", "Invalid email or password.");
                 return View(model);
@@ -68,12 +67,12 @@ namespace Plantopia.Controllers
                 return View(model);
             }
 
-           
+
             var user = new User
             {
                 FullName = model.FullName,
                 Email = model.Email,
-                Password = model.Password,
+                Password = BCrypt.Net.BCrypt.HashPassword(model.Password),
                 Role = "Customer"
             };
 
