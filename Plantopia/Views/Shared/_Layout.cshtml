@@ -14,9 +14,6 @@
     @{
         var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
         var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
-        string IsActive(string ctrl, string act = "Index") =>
-        currentController == ctrl && currentAction == act ? "active" : "";
-
         var loggedInUser = Context.Session.GetString("UserEmail");
     }
 
