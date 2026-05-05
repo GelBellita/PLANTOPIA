@@ -42,6 +42,7 @@
     <link rel="stylesheet" href="~/css/user-dropdown.css" />
     @RenderSection("Styles", required: false)
 </head>
+
 <body>
 
     <div class="store-wrapper">
@@ -49,8 +50,10 @@
         @*  SIDEBAR — once lang diri, shared sa tanan store pages *@
         <aside class="store-sidebar">
             <div class="sidebar-logo">
-                <a asp-controller="Store" asp-action="Index" class="sidebar-logo-name">🌿 Plantopia</a>
-                <div class="sidebar-logo-sub">Your green space, our passion</div>
+                <a asp-controller="Store" asp-action="Index" class="sidebar-logo-name">
+                    <img src="/images/PLANTOPIA_LOGOO (1).png" alt="Plantopia" style="height:170px; width:auto; max-width:100%;" />
+                </a>
+            
             </div>
 
             <nav class="sidebar-nav">
@@ -123,14 +126,45 @@
                 <div class="topbar-actions">
 
                     @* Notifications button *@
-                    <button class="topbar-icon-btn" style="position:relative;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-                        </svg>
-                        <span class="topbar-cart-badge">5</span>
-                        Notifications
-                    </button>
+                    @{
+                        var notifEmail = Context.Session.GetString("UserEmail");
+                        var notifUser = string.IsNullOrEmpty(notifEmail) ? null :
+                        Context.RequestServices.GetService<Plantopia.Data.AppDbContext>()
+                        ?.Users.FirstOrDefault(u => u.Email == notifEmail);
+                        var unreadCount = notifUser == null ? 0 :
+                        Context.RequestServices.GetService<Plantopia.Data.AppDbContext>()
+                        ?.Notifications.Count(n => n.UserId == notifUser.Id && !n.IsRead) ?? 0;
+                    }
+
+                    <div class="notif-wrapper" id="notifWrapper">
+                        <button class="topbar-icon-btn" id="notifBtn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2">
+                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+                                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+                            </svg>
+                            @if (unreadCount > 0)
+                            {
+                                <span class="topbar-cart-badge" id="notifBadge">@unreadCount</span>
+                            }
+                            else
+                            {
+                                <span class="topbar-cart-badge" id="notifBadge"
+                                      style="display:none">0</span>
+                            }
+                            Notifications
+                        </button>
+
+                        <div class="notif-dropdown" id="notifDropdown">
+                            <div class="notif-dropdown-header">
+                                <span class="notif-dropdown-title">Notifications</span>
+                                <button class="notif-mark-all" id="markAllBtn">Mark all read</button>
+                            </div>
+                            <div class="notif-list" id="notifList">
+                                <div class="notif-loading">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
 
                     @* Cart button *@
                     <button class="topbar-icon-btn" style="position:relative;">
@@ -260,6 +294,84 @@
                     userMenuToggle.classList.remove('open');
                 }
             });
+    </script>
+
+    <script>
+        (function () {
+            const wrapper = document.getElementById('notifWrapper');
+            const btn     = document.getElementById('notifBtn');
+            const list    = document.getElementById('notifList');
+            const badge   = document.getElementById('notifBadge');
+            const markAll = document.getElementById('markAllBtn');
+
+            const icons = { Order: '🛒', Promo: '🏷️', Stock: '🌿' };
+            const links = { Order: '/Account/Purchases', Promo: '/Store/Sale', Stock: '/Store/NewArrivals' };
+
+            function renderNotifs(data) {
+                if (!data.length) {
+                    list.innerHTML = '<div class="notif-empty">No notifications yet 🌱</div>';
+                    return;
+                }
+                list.innerHTML = data.map(n => `
+                    <div class="notif-item ${n.isRead ? '' : 'unread'}"
+                         data-id="${n.id}" onclick="handleNotifClick(${n.id}, '${n.type}', this)">
+                        <div class="notif-icon ${n.type}">${icons[n.type] ?? '🔔'}</div>
+                        <div class="notif-body">
+                            <div class="notif-title">${n.title}</div>
+                            <div class="notif-msg">${n.message}</div>
+                            <div class="notif-time">${n.createdAt}</div>
+                        </div>
+                        ${!n.isRead ? '<div class="notif-unread-dot"></div>' : ''}
+                    </div>`).join('');
+            }
+
+            function loadNotifs() {
+                fetch('/Notification/GetAll')
+                    .then(r => r.json())
+                    .then(renderNotifs);
+            }
+
+            function updateBadge() {
+                fetch('/Notification/GetUnreadCount')
+                    .then(r => r.json())
+                    .then(data => {
+                        badge.textContent = data.count;
+                        badge.style.display = data.count > 0 ? 'inline-flex' : 'none';
+                    });
+            }
+
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                wrapper.classList.toggle('open');
+                if (wrapper.classList.contains('open')) loadNotifs();
+            });
+
+            document.addEventListener('click', function (e) {
+                if (!wrapper.contains(e.target)) wrapper.classList.remove('open');
+            });
+
+            markAll.addEventListener('click', function () {
+                fetch('/Notification/MarkAllRead', { method: 'POST' })
+                    .then(() => { loadNotifs(); updateBadge(); });
+            });
+
+            // ── Click = mark read + redirect ──
+            window.handleNotifClick = function (id, type, el) {
+                if (el.classList.contains('unread')) {
+                    fetch('/Notification/MarkAsRead', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: 'id=' + id
+                    }).then(() => {
+                        window.location.href = links[type] ?? '/Store';
+                    });
+                } else {
+                    window.location.href = links[type] ?? '/Store';
+                }
+            };
+
+            updateBadge();
+        })();
     </script>
 
     @RenderSection("Scripts", required: false)

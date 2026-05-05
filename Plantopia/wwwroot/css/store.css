@@ -27,9 +27,12 @@ html, body {
 }
 
 .sidebar-logo {
-    padding: 0 24px 28px;
+    padding: 16px 24px;
     border-bottom: 1px solid #ede9e2;
-    text
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 }
 
 .sidebar-logo-name {
@@ -479,4 +482,174 @@ html, body {
     font-size: 0.97rem;
     font-weight: 700;
     color: #1a3a1a;
+}
+
+/* ── Notification Wrapper ── */
+.notif-wrapper {
+    position: relative;
+}
+
+.notif-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 14px); /* space for arrow */
+    right: 0;
+    width: 300px; /* smaller, like Shopee */
+    background: #fff;
+    border: 1px solid #e5e7e0;
+    border-radius: 10px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    z-index: 1000;
+    overflow: visible; /* needed para makita ang arrow */
+}
+
+.notif-wrapper.open .notif-dropdown {
+    display: block;
+}
+
+/* ── Arrow/caret pointing up ── */
+.notif-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 16px; /* align sa bell button */
+    width: 14px;
+    height: 14px;
+    background: #fff;
+    border-left: 1px solid #e5e7e0;
+    border-top: 1px solid #e5e7e0;
+    transform: rotate(45deg);
+    z-index: 1001;
+}
+
+.notif-dropdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 14px 8px;
+    border-bottom: 1px solid #f0f0ea;
+    position: relative;
+    z-index: 1002; /* above the arrow */
+    background: #fff;
+    border-radius: 10px 10px 0 0;
+}
+
+.notif-dropdown-title {
+    font-weight: 600;
+    font-size: 13px;
+    color: #1a2e1a;
+}
+
+.notif-mark-all {
+    background: none;
+    border: none;
+    font-size: 11px;
+    color: #3a7d44;
+    cursor: pointer;
+    padding: 0;
+}
+
+    .notif-mark-all:hover {
+        text-decoration: underline;
+    }
+
+.notif-list {
+    max-height: 260px; /* shorter list */
+    overflow-y: auto;
+    border-radius: 0 0 10px 10px;
+}
+
+.notif-item {
+    display: flex;
+    gap: 8px;
+    padding: 9px 12px; /* tighter padding */
+    border-bottom: 1px solid #f5f5f0;
+    cursor: pointer;
+    transition: background 0.15s;
+    align-items: flex-start;
+}
+
+    .notif-item:last-child {
+        border-bottom: none;
+    }
+
+    .notif-item:hover {
+        background: #f8faf6;
+    }
+
+    .notif-item.unread {
+        background: #f0f7f1;
+    }
+
+        .notif-item.unread:hover {
+            background: #e8f3ea;
+        }
+
+.notif-icon {
+    width: 30px; /* smaller icon */
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+    .notif-icon.Order {
+        background: #e8f3ea;
+    }
+
+    .notif-icon.Promo {
+        background: #fff7e6;
+    }
+
+    .notif-icon.Stock {
+        background: #e8f0ff;
+    }
+
+.notif-body {
+    flex: 1;
+}
+
+.notif-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a2e1a;
+    margin-bottom: 1px;
+}
+
+.notif-msg {
+    font-size: 11px;
+    color: #5a6b5a;
+    line-height: 1.4;
+}
+
+.notif-time {
+    font-size: 10px;
+    color: #9aaa9a;
+    margin-top: 3px;
+}
+
+.notif-unread-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #3a7d44;
+    flex-shrink: 0;
+    margin-top: 4px;
+}
+
+.notif-empty {
+    text-align: center;
+    padding: 24px 16px;
+    color: #9aaa9a;
+    font-size: 12px;
+}
+
+.notif-loading {
+    text-align: center;
+    padding: 16px;
+    color: #9aaa9a;
+    font-size: 12px;
 }

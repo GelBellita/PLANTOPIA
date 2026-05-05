@@ -13,6 +13,7 @@ namespace Plantopia.Data
         public DbSet<Plant> Plants { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Address> Addresses { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
 
         // Add this part!
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,6 +21,14 @@ namespace Plantopia.Data
             modelBuilder.Entity<Plant>()
                 .Property(p => p.Price)
                 .HasColumnType("decimal(18,2)");
+
+
+            // ── Bag-o ──
+            modelBuilder.Entity<Notification>()
+                .HasOne(n => n.User)
+                .WithMany()
+                .HasForeignKey(n => n.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
