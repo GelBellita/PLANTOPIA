@@ -61,3 +61,65 @@
     updateActiveNav();
 
 })();
+
+document.querySelectorAll('.wishlist-btn').forEach(btn => {
+    btn.addEventListener('click', function () {
+        const plantId = this.dataset.plantId;
+
+        fetch('/Account/ToggleWishlist', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `plantId=${plantId}`
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    this.classList.toggle('wishlisted', data.wishlisted);
+                    // swap filled/outline heart
+                    this.innerHTML = data.wishlisted ? '❤️' : '🤍';
+                } else {
+                    window.location.href = '/Auth/Login';
+                }
+            });
+    });
+});
+
+// ── Wishlist Toggle ──────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.wishlist-btn').forEach(btn => {
+        btn.addEventListener('click', function () {
+            const plantId = this.dataset.plantId;
+
+            fetch('/Account/ToggleWishlist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `plantId=${plantId}`
+            })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        window.location.href = '/Auth/Login';
+                        return;
+                    }
+
+                    if (data.wishlisted) {
+                        // ── Added to wishlist ──
+                        this.classList.add('wishlisted');
+                        const svg = this.querySelector('svg');
+                        if (svg) svg.setAttribute('fill', 'currentColor');
+                        if (this.classList.contains('wishlist-heart-btn')) this.textContent = '❤️';
+                    } else {
+                        // ── Removed from wishlist ──
+                        this.classList.remove('wishlisted');
+                        const svg = this.querySelector('svg');
+                        if (svg) svg.setAttribute('fill', 'none');
+                        if (this.classList.contains('wishlist-heart-btn')) this.textContent = '🤍';
+
+                        // ── If on wishlist page, remove the card ──
+                        const card = document.getElementById('wishlist-card-' + plantId);
+                        if (card) card.remove();
+                    }
+                });
+        });
+    });
+});

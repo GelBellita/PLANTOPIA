@@ -16,7 +16,25 @@ namespace Plantopia.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var plants = _context.Plants.ToList();
+
+            var email = HttpContext.Session.GetString("UserEmail");
+            var wishlistedIds = new List<int>();
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                var user = _context.Users.FirstOrDefault(u => u.Email == email);
+                if (user != null)
+                {
+                    wishlistedIds = _context.Wishlists
+                        .Where(w => w.UserId == user.Id)
+                        .Select(w => w.PlantId)
+                        .ToList();
+                }
+            }
+
+            ViewData["WishlistedIds"] = wishlistedIds;
+            return View(plants);
         }
 
 

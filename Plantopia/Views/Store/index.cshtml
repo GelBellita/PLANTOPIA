@@ -1,9 +1,12 @@
-﻿@{
+﻿@model List<Plantopia.Models.Plant>
+@{
     Layout = "_SideTopBar";
     ViewData["Title"] = "Plantopia Store";
     ViewData["PromoTitle"] = "Bring nature<br>to your home.";
     ViewData["PromoSub"] = "Discover our best-selling plants today!";
     ViewData["PromoCta"] = "Shop Now →";
+
+    var wishlistedIds = ViewData["WishlistedIds"] as List<int> ?? new List<int>();
 }
 
 <div class="welcome-banner">
@@ -17,19 +20,11 @@
 
 <div class="section-header">
     <h4>Shop by Category</h4>
-   
 </div>
 
 <div class="row g-3 mb-4">
     <div class="col-6 col-lg-3" style="overflow:hidden;">
-        <a href="#" class="category-card" style="
-        background-color: #e0e8dc;
-        background-image: url('/images/INDOOR_1.png');
-        background-repeat: no-repeat;
-        background-size: auto 90%;
-        background-position: right center;
-        min-height: 120px;
-    ">
+        <a href="#" class="category-card" style="background-color:#e0e8dc;background-image:url('/images/INDOOR_1.png');background-repeat:no-repeat;background-size:auto 90%;background-position:right center;min-height:120px;">
             <div>
                 <div class="category-card-label">Indoor Plants</div>
                 <div class="category-card-sub">Beautiful plants for<br>your home</div>
@@ -37,13 +32,7 @@
         </a>
     </div>
     <div class="col-6 col-lg-3">
-        <a href="#" class="category-card" style="
-        background-color: #e0e8dc;
-        background-image: url('/images/OUTDOOR_1.png');
-        background-repeat: no-repeat;
-        background-size: auto 90%;
-        background-position: right center;
-        min-height: 120px;">
+        <a href="#" class="category-card" style="background-color:#e0e8dc;background-image:url('/images/OUTDOOR_1.png');background-repeat:no-repeat;background-size:auto 90%;background-position:right center;min-height:120px;">
             <div>
                 <div class="category-card-label">Outdoor Plants</div>
                 <div class="category-card-sub">Thrives in your<br>outdoor space</div>
@@ -51,13 +40,7 @@
         </a>
     </div>
     <div class="col-6 col-lg-3">
-        <a href="#" class="category-card" style="
-        background-color: #e0e8dc;
-        background-image: url('/images/SUCCULENTS_1.png');
-        background-repeat: no-repeat;
-        background-size: auto 90%;
-        background-position: 85% center;
-        min-height: 120px;">
+        <a href="#" class="category-card" style="background-color:#e0e8dc;background-image:url('/images/SUCCULENTS_1.png');background-repeat:no-repeat;background-size:auto 90%;background-position:85% center;min-height:120px;">
             <div>
                 <div class="category-card-label">Succulents</div>
                 <div class="category-card-sub">Small plants,<br>big beauty</div>
@@ -65,13 +48,7 @@
         </a>
     </div>
     <div class="col-6 col-lg-3">
-        <a href="#" class="category-card" style="
-        background-color: #e0e8dc;
-        background-image: url('/images/HANGING_1.png');
-        background-repeat: no-repeat;
-        background-size: auto 90%;
-        background-position: 85% center;
-        min-height: 120px;">
+        <a href="#" class="category-card" style="background-color:#e0e8dc;background-image:url('/images/HANGING_1.png');background-repeat:no-repeat;background-size:auto 90%;background-position:85% center;min-height:120px;">
             <div>
                 <div class="category-card-label">Hanging Plants</div>
                 <div class="category-card-sub">Perfect for<br>any corner</div>
@@ -82,123 +59,46 @@
 
 <div class="section-header mt-2">
     <h4>Best Sellers</h4>
-
 </div>
 
-<div class="row g-3">
-    <div class="col-6 col-md-4 col-lg-4">
-        <div class="product-card">
-            <div class="product-img-wrap">
-                <div class="product-img-placeholder">🌿</div>
-                <button class="product-wish-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-                </button>
-            </div>
-            <div class="product-info">
-                <div class="product-name">Monstera Deliciosa</div>
-                <div class="product-seller">By Green Haven PH</div>
-                <div class="product-rating">
-                    <span class="product-stars">★★★★★</span>
-                    <span class="product-rating-num">4.9</span>
+@if (!Model.Any())
+{
+    <p class="text-muted">No plants available yet.</p>
+}
+else
+{
+    <div class="row g-3">
+        @foreach (var plant in Model)
+        {
+            var isWishlisted = wishlistedIds.Contains(plant.Id);
+            <div class="col-6 col-md-4 col-lg-4">
+                <div class="product-card">
+                    <div class="product-img-wrap">
+                        @if (!string.IsNullOrEmpty(plant.ImageUrl))
+                        {
+                            <img src="@plant.ImageUrl" alt="@plant.Name" class="product-img"
+                                 style="width:100%;height:100%;object-fit:cover;" />
+                        }
+                        else
+                        {
+                            <div class="product-img-placeholder">🌿</div>
+                        }
+                        <button class="product-wish-btn wishlist-btn @(isWishlisted ? "wishlisted" : "")"
+                                data-plant-id="@plant.Id">
+                            <svg width="14" height="14" viewBox="0 0 24 24"
+                                 fill="@(isWishlisted ? "currentColor" : "none")"
+                                 stroke="currentColor" stroke-width="2.2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">@plant.Name</div>
+                        <div class="product-seller">@plant.Category</div>
+                        <div class="product-price">₱@plant.Price.ToString("N0")</div>
+                    </div>
                 </div>
-                <div class="product-price">₱850</div>
             </div>
-        </div>
+        }
     </div>
-    <div class="col-6 col-md-4 col-lg-4">
-        <div class="product-card">
-            <div class="product-img-wrap">
-                <div class="product-img-placeholder">🌱</div>
-                <button class="product-wish-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-                </button>
-            </div>
-            <div class="product-info">
-                <div class="product-name">Snake Plant</div>
-                <div class="product-seller">By Cebu Plant Shop</div>
-                <div class="product-rating">
-                    <span class="product-stars">★★★★★</span>
-                    <span class="product-rating-num">4.8</span>
-                </div>
-                <div class="product-price">₱450</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-4">
-        <div class="product-card">
-            <div class="product-img-wrap">
-                <div class="product-img-placeholder">🪴</div>
-                <button class="product-wish-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-                </button>
-            </div>
-            <div class="product-info">
-                <div class="product-name">Fiddle Leaf Fig</div>
-                <div class="product-seller">By Plantita Cebu</div>
-                <div class="product-rating">
-                    <span class="product-stars">★★★★★</span>
-                    <span class="product-rating-num">4.9</span>
-                </div>
-                <div class="product-price">₱1,200</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-4">
-        <div class="product-card">
-            <div class="product-img-wrap">
-                <div class="product-img-placeholder">🌾</div>
-                <button class="product-wish-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-                </button>
-            </div>
-            <div class="product-info">
-                <div class="product-name">Pothos Golden</div>
-                <div class="product-seller">By Green Haven PH</div>
-                <div class="product-rating">
-                    <span class="product-stars">★★★★★</span>
-                    <span class="product-rating-num">4.8</span>
-                </div>
-                <div class="product-price">₱350</div>
-            </div>
-        </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-4">
-        <div class="product-card">
-            <div class="product-img-wrap">
-                <div class="product-img-placeholder">🌺</div>
-                <button class="product-wish-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-                </button>
-            </div>
-            <div class="product-info">
-                <div class="product-name">Aglaonema Red</div>
-                <div class="product-seller">By Leaf &amp; Stem PH</div>
-                <div class="product-rating">
-                    <span class="product-stars">★★★★★</span>
-                    <span class="product-rating-num">4.9</span>
-                </div>
-                <div class="product-price">₱600</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-6 col-md-4 col-lg-4">
-        <div class="product-card">
-            <div class="product-img-wrap">
-                <div class="product-img-placeholder">🌵</div>
-                <button class="product-wish-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-                </button>
-            </div>
-            <div class="product-info">
-                <div class="product-name">Peace Lily</div>
-                <div class="product-seller">By Bloom & Grow PH</div>
-                <div class="product-rating">
-                    <span class="product-stars">★★★★★</span>
-                    <span class="product-rating-num">4.7</span>
-                </div>
-                <div class="product-price">₱520</div>
-            </div>
-        </div>
-    </div>
-</div>
+}
