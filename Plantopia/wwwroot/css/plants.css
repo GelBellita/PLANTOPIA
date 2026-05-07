@@ -190,3 +190,7 @@
     font-weight: 700;
     color: #1a3a1a;
 }
+.cat-card-active {
+    border: 2px solid #2d6a4f;
+    background-color: #d8f3dc !important;
+}

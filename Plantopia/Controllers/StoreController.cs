@@ -64,20 +64,29 @@ namespace Plantopia.Controllers
         }
 
         // ── Update Plants action para mag-accept ug query ──
-        public IActionResult Plants(string query)
+        public IActionResult Plants(string query, string category)
         {
-            var plants = string.IsNullOrWhiteSpace(query)
-                ? _context.Plants.ToList()
-                : _context.Plants
-                    .Where(p => p.Name.Contains(query) ||
-                                p.Category.Contains(query) ||
-                                p.Description.Contains(query))
-                    .ToList();
+            var plants = _context.Plants.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(query))
+                plants = plants.Where(p => p.Name.Contains(query) ||
+                                           p.Category.Contains(query) ||
+                                           p.Description.Contains(query));
+
+            if (!string.IsNullOrWhiteSpace(category))
+                plants = plants.Where(p => p.Category == category);
+
+            var result = plants.ToList();
+
+            if (!string.IsNullOrWhiteSpace(category))
+                result = result.Take(6).ToList();
 
             ViewData["Query"] = query;
-            return View(plants);
+            ViewData["Category"] = category;
+            return View(result);
         }
-     
+
+
         public IActionResult PlantCare()
         {
             return View();
