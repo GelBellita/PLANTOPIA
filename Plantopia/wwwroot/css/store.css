@@ -17,7 +17,7 @@ html, body {
     border-right: 1px solid #ede9e2;
     display: flex;
     flex-direction: column;
-    padding: 28px 0 24px;
+    padding: 5px 0 24px;
     position: fixed;
     top: 0;
     left: 0;
@@ -27,12 +27,11 @@ html, body {
 }
 
 .sidebar-logo {
-    padding: 16px 24px;
-    border-bottom: 1px solid #ede9e2;
+    padding: 0px 5px 0px; /* remove bottom padding */
+    margin-bottom: -10px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
 }
 
 .sidebar-logo-name {
@@ -62,12 +61,12 @@ html, body {
     display: flex;
     align-items: center;
     gap: 11px;
-    padding: 10px 24px;
+    padding: 10px 16px;
     font-size: 0.88rem;
     font-weight: 400;
     color: #4a5a4a;
     text-decoration: none;
-    border-radius: 0;
+    border-radius: 50px;
     transition: background 0.2s, color 0.2s;
     cursor: pointer;
 }
@@ -75,12 +74,16 @@ html, body {
     .sidebar-nav-item:hover {
         background: #f3f8f3;
         color: #1a3a1a;
+        border-radius: 50px;
+
     }
 
     .sidebar-nav-item.active {
         background: #edf5ed;
         color: #1a3a1a;
         font-weight: 600;
+        border-radius: 50px;
+        margin: 0 12px;
     }
 
     .sidebar-nav-item svg {
