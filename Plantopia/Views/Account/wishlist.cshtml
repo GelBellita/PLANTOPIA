@@ -104,3 +104,60 @@
     </div>
 
 </div>
+
+        @section Scripts {
+    <script>
+        document.querySelectorAll('.wishlist-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const plantId = this.dataset.plantId;
+
+                fetch('/Account/ToggleWishlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `plantId=${plantId}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) {
+                        window.location.href = '/Auth/Login';
+                        return;
+                    }
+                    if (!data.wishlisted) {
+                        // ── Remove card from page ──
+                        const card = document.getElementById('wishlist-card-' + plantId);
+                        if (card) card.remove();
+
+                        // ── Update count ──
+                        const remaining = document.querySelectorAll('.wishlist-card').length;
+                        const countEl = document.querySelector('.wishlist-count');
+                        if (countEl) countEl.textContent = `${remaining} item${remaining !== 1 ? 's' : ''} saved`;
+                    }
+                });
+            });
+        });
+
+        // ── Remove button ──
+        document.querySelectorAll('.btn-remove').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const plantId = this.dataset.plantId;
+
+                fetch('/Account/ToggleWishlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `plantId=${plantId}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && !data.wishlisted) {
+                        const card = document.getElementById('wishlist-card-' + plantId);
+                        if (card) card.remove();
+
+                        const remaining = document.querySelectorAll('.wishlist-card').length;
+                        const countEl = document.querySelector('.wishlist-count');
+                        if (countEl) countEl.textContent = `${remaining} item${remaining !== 1 ? 's' : ''} saved`;
+                    }
+                });
+            });
+        });
+    </script>
+}

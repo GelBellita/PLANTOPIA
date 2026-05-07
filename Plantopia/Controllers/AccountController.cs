@@ -137,21 +137,33 @@ namespace Plantopia.Controllers
 
             if (existing != null)
             {
-                // ── Already wishlisted → remove it ──
                 _context.Wishlists.Remove(existing);
-                _context.SaveChanges();
+                try
+                {
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    // Already removed — treat as success
+                }
                 return Json(new { success = true, wishlisted = false });
             }
             else
             {
-                // ── Not yet wishlisted → add it ──
-                _context.Wishlists.Add(new Wishlist
+                try
                 {
-                    UserId = user.Id,
-                    PlantId = plantId,
-                    AddedAt = DateTime.Now
-                });
-                _context.SaveChanges();
+                    _context.Wishlists.Add(new Wishlist
+                    {
+                        UserId = user.Id,
+                        PlantId = plantId,
+                        AddedAt = DateTime.Now
+                    });
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    // Already exists — treat as success
+                }
                 return Json(new { success = true, wishlisted = true });
             }
         }
