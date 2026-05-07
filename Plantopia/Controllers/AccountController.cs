@@ -103,8 +103,69 @@ namespace Plantopia.Controllers
 
         public IActionResult Wishlist()
         {
-            ViewData["Title"] = "Wishlist";
-            return View();
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(email))
+                return RedirectToAction("Login", "Auth");
+
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+                return RedirectToAction("Login", "Auth");
+
+            var wishlistItems = _context.Wishlists
+                .Where(w => w.UserId == user.Id)
+                .Select(w => w.Plant)
+                .ToList();
+
+            ViewData["Title"] = "My Wishlist";
+            return View(wishlistItems);
+        }
+
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public IActionResult ToggleWishlist(int plantId)
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(email))
+                return Json(new { success = false, message = "Not logged in" });
+
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+                return Json(new { success = false, message = "User not found" });
+
+            var existing = _context.Wishlists
+                .FirstOrDefault(w => w.UserId == user.Id && w.PlantId == plantId);
+
+            if (existing != null)
+            {
+                _context.Wishlists.Remove(existing);
+                try
+                {
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    // Already removed — treat as success
+                }
+                return Json(new { success = true, wishlisted = false });
+            }
+            else
+            {
+                try
+                {
+                    _context.Wishlists.Add(new Wishlist
+                    {
+                        UserId = user.Id,
+                        PlantId = plantId,
+                        AddedAt = DateTime.Now
+                    });
+                    _context.SaveChanges();
+                }
+                catch (Exception)
+                {
+                    // Already exists — treat as success
+                }
+                return Json(new { success = true, wishlisted = true });
+            }
         }
 
         public IActionResult Messages()

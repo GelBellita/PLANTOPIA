@@ -859,3 +859,8 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 .plant-input-icon {
     padding-left: 42px !important;
 }
+
+.product-wish-btn.wishlisted svg {
+    fill: #e74c3c;
+    stroke: #e74c3c;
+}

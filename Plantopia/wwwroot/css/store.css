@@ -656,3 +656,8 @@ html, body {
     color: #9aaa9a;
     font-size: 12px;
 }
+
+.product-wish-btn.wishlisted svg {
+    fill: #e74c3c;
+    stroke: #e74c3c;
+}
