@@ -90,26 +90,5 @@ namespace Plantopia.Controllers
             HttpContext.Session.Clear();
             return RedirectToAction("Index", "Home");
         }
-
-        [HttpPost]
-        public async Task<IActionResult> DemoLogin()
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Name, "Demo User"),
-                new Claim(ClaimTypes.Email, "demo@plantopia.ph"),
-                new Claim(ClaimTypes.Role, "Customer")
-            };
-
-            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-            var principal = new ClaimsPrincipal(identity);
-
-            await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                principal
-            );
-
-            return RedirectToAction("Index", "Store");
-        }
     }
 }

@@ -37,16 +37,23 @@
         'collection': 'hero',
         'about': 'about',
         'sellers': 'sellers',
-        'cta': 'footer',
         'footer': 'footer',
     };
 
     function updateActiveNav() {
         let current = 'hero';
         document.querySelectorAll('section[id], footer[id]').forEach(sec => {
-            if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+            if (window.scrollY >= sec.offsetTop - 200) current = sec.id;
         });
+
         document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+
+        const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+        if (nearBottom) {
+            document.querySelector('.nav-link[data-section="footer"]')?.classList.add('active');
+            return;
+        }
+
         const targetSection = sectionMap[current];
         if (targetSection) {
             document.querySelector(`.nav-link[data-section="${targetSection}"]`)?.classList.add('active');
@@ -170,4 +177,16 @@ function switchThumb(thumbEl) {
 // Close modal kung i-click ang backdrop
 document.getElementById('plantModal')?.addEventListener('click', function (e) {
     if (e.target === this) closePlantModal();
+});
+
+// ── Auth Gate Modal ──────────────────────────────────
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = new bootstrap.Modal(document.getElementById('authGateModal'));
+
+    document.querySelectorAll('.plant-card a').forEach(link => {
+        link.addEventListener('click', function (e) {
+            e.preventDefault();
+            modal.show();
+        });
+    });
 });

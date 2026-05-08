@@ -4,25 +4,22 @@
     ViewData["Title"] = "Home";
     var activeCategory = ViewData["ActiveCategory"]?.ToString() ?? "Indoor Plants";
 }
+    
 
 <section id="hero">
     <div class="container">
         <div class="row align-items-center" style="min-height: calc(100vh - var(--nav-h));">
-            <div class="col-lg-5 col-md-7 d-flex flex-column justify-content-center">
-
-                <div class="hero-badge">
-                    🌱 LOCALLY GROWN · CEBU, PHILIPPINES
-                </div>
+            <div class="col-lg-6 col-md-6 d-flex flex-column justify-content-center" style="padding-left: 60px;">
 
                 <h1 class="hero-title">
                     Plants Gonna Make
                     <em>People Happy</em>
                 </h1>
-
+                <a href="c:\users\april\desktop\plantopia\plantopia\views\home\index.cshtml"></a>
                 <p class="hero-sub">
                     Let's bring a new friend home. Proudly sourced from
                     local Cebuano plant growers — homegrown, heart-grown,
-                    Cebu-grown. 🇵🇭
+                    Cebu-grown.
                 </p>
 
                 <div class="d-flex gap-3 flex-wrap">
@@ -31,10 +28,10 @@
                 </div>
 
             </div>
-            <div class="col-lg-7 col-md-5 d-flex justify-content-center align-items-center">
+            <div class="col-lg-6 col-md-6 d-flex flex-column justify-content-center ps-5">
                 <img src="/images/plant.png"
                      alt="Plantopia"
-                     style="height: 420px; width: auto; object-fit: contain;" />
+                     style="height: 400px; width: auto; object-fit: contain; margin-left: 60px;" />
             </div>
         </div>
     </div>
@@ -55,9 +52,13 @@
                asp-controller="Home" asp-action="Index"
                asp-route-category="Outdoor Plants">Outdoor Plants</a>
 
-            <a class="category-tab @(activeCategory == "Balcony / Patio" ? "active" : "")"
+            <a class="category-tab @(activeCategory == "Succulents" ? "active" : "")"
                asp-controller="Home" asp-action="Index"
-               asp-route-category="Balcony / Patio">Balcony / Patio</a>
+               asp-route-category="Succulents">Succulents</a>
+
+            <a class="category-tab @(activeCategory == "Hanging Plants" ? "active" : "")"
+               asp-controller="Home" asp-action="Index"
+               asp-route-category="Hanging Plants">Hanging Plants</a>
         </div>
 
         <div class="row g-4">
@@ -81,7 +82,7 @@
                                 </span>
                             }
 
-                            <a asp-controller="Shop" asp-action="Detail" asp-route-id="@plant.Id">
+                            <a asp-controller="Shop" asp-action="Register" asp-route-id="@plant.Id">
                                 @if (!string.IsNullOrEmpty(plant.ImageUrl))
                                 {
                                     <img src="@plant.ImageUrl" alt="@plant.Name" class="plant-img" />
@@ -100,7 +101,7 @@
                                 </h5>
                                 <div class="plant-stars">★★★★★</div>
                                 <div class="plant-price-row">
-                                    @if (plant.Badge == "New")
+                                    @if (!string.IsNullOrEmpty(plant.Badge))
                                     {
                                         <span class="price-original">₱@((plant.Price * 1.14m).ToString("0"))</span>
                                     }
@@ -198,26 +199,6 @@
     </div>
 </section>
 
-<section id="cta">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <span class="section-tag d-block">LIVING THING GROWS</span>
-                <h2 class="cta-title">You Have No Plants? Are You Ready to Grow?</h2>
-                <p class="cta-sub">
-                    Come and shop with us — discover your perfect green companion,
-                    straight from the hands of our local Cebuano farmers.
-                </p>
-                <p class="cta-price">Starting from ₱260.00</p>
-            </div>
-            <div class="col-lg-5 d-flex flex-column gap-3 align-items-lg-end mt-4 mt-lg-0">
-                <a class="btn btn-plant cta-btn" asp-controller="Shop" asp-action="Index">Continue Shopping 🛒</a>
-                <a class="btn btn-outline-plant cta-btn" href="#sellers">Meet Our Farmers</a>
-            </div>
-        </div>
-    </div>
-</section>
-
 <footer class="plant-footer" id="footer">
     <div class="container">
         <div class="row g-4 align-items-start">
@@ -254,10 +235,10 @@
             <div class="col-lg-2 col-md-3 col-6">
                 <h6 class="footer-heading">SHOP</h6>
                 <ul class="footer-links">
-                    <li><a asp-controller="Shop" asp-action="Index">All Plants</a></li>
-                    <li><a asp-controller="Shop" asp-action="Index" asp-route-category="Indoor Plants">Indoor Plants</a></li>
-                    <li><a asp-controller="Shop" asp-action="Index" asp-route-category="Outdoor Plants">Outdoor Plants</a></li>
-                    <li><a asp-controller="Shop" asp-action="Index" asp-route-category="Balcony / Patio">Balcony / Patio</a></li>
+                    <li><a asp-controller="Home" asp-action="Index" asp-route-category="Indoor Plants">Indoor Plants</a></li>
+                    <li><a asp-controller="Home" asp-action="Index" asp-route-category="Outdoor Plants">Outdoor Plants</a></li>
+                    <li><a asp-controller="Home" asp-action="Index" asp-route-category="Succulents">Succulent</a></li>
+                    <li><a asp-controller="Home" asp-action="Index" asp-route-category="Hanging Plants">Hanging</a></li>
                 </ul>
             </div>
 
@@ -293,6 +274,22 @@
         </div>
     </div>
 </footer>
+<!-- Auth Gate Modal -->
+<div class="modal fade" id="authGateModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content auth-modal">
+            <div class="modal-body text-center p-5">
+                <img src="/images/small_logo.png" alt="Plantopia" style="height: 60px; width: auto; margin-bottom: 12px;" />
+                <h4 class="auth-modal-title">Join Plantopia First!</h4>
+                <p class="auth-modal-sub">Create an account or log in to continue shopping.</p>
+                <div class="d-flex gap-3 justify-content-center mt-4">
+                    <a id="authGateRegister" href="/Auth/Register" class="btn btn-plant">Register</a>
+                    <a id="authGateLogin" href="/Auth/Login" class="btn btn-outline-plant">Log In</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 @section Scripts {
     <script src="~/js/plantopia.js" asp-append-version="true"></script>

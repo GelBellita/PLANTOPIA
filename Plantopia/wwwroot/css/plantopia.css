@@ -75,8 +75,8 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 }
 
 .nav-logo-img {
-    width: 60px;
-    height: 60px;
+    width: 30px;
+    height: 30px;
     object-fit: contain;
 }
 
@@ -217,7 +217,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 /* ── HERO ───────────────────────────────────────────────────── */
 #hero {
     min-height: 100vh;
-    padding-top: var(--nav-h);
+    padding-top: 0;
     background-image: url('/images/hero-bg.png');
     background-size: cover;
     background-position: center top;
@@ -244,7 +244,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 
 .hero-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2.4rem, 5vw, 3.7rem);
+    font-size: clamp(2rem, 3.5vw, 2.9rem);
     font-weight: 700;
     color: var(--green-dark);
     line-height: 1.12;
@@ -863,4 +863,25 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 .product-wish-btn.wishlisted svg {
     fill: #e74c3c;
     stroke: #e74c3c;
+}
+/* ── AUTH GATE MODAL ────────────────────────────────────────── */
+.auth-modal {
+    border-radius: 20px;
+    border: none;
+    background: #f9f6f0;
+}
+
+.auth-modal-icon {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.auth-modal-title {
+    font-weight: 700;
+    color: #1a3a1a;
+}
+
+.auth-modal-sub {
+    color: #6b7c6b;
+    font-size: 0.95rem;
 }
