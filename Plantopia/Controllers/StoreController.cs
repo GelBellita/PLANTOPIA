@@ -8,7 +8,7 @@ namespace Plantopia.Controllers
     {
         private readonly AppDbContext _context;
 
-        
+
         public StoreController(AppDbContext context)
         {
             _context = context;
@@ -78,7 +78,10 @@ namespace Plantopia.Controllers
 
             var result = plants.ToList();
 
-            if (!string.IsNullOrWhiteSpace(category))
+            // ── Limit to 5 kung walay filter (default best sellers view) ──
+            if (string.IsNullOrWhiteSpace(query) && string.IsNullOrWhiteSpace(category))
+                result = result.Take(5).ToList();
+            else if (!string.IsNullOrWhiteSpace(category))
                 result = result.Take(6).ToList();
 
             ViewData["Query"] = query;
@@ -91,9 +94,12 @@ namespace Plantopia.Controllers
         {
             return View();
         }
+
+        // ── BestSellers karon nag-query na sa DB ──
         public IActionResult BestSellers()
         {
-            return View();
+            var bestSellers = _context.Plants.Take(6).ToList();
+            return View(bestSellers);
         }
 
         public IActionResult NewArrivals()

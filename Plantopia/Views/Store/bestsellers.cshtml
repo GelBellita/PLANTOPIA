@@ -1,4 +1,6 @@
-﻿@{
+﻿@model List<Plantopia.Models.Plant>
+
+@{
     Layout = "_SideTopBar";
     ViewData["Title"] = "Best Sellers — Plantopia";
     ViewData["PromoTitle"] = "Loved by<br>plant parents.";
@@ -30,36 +32,25 @@
 </div>
 
 <div class="row g-3">
-    @{
-        var bestSellers = new[]
-        {
-            new { Name="Fiddle Leaf Fig",    Seller="By Plantita Cebu",   Rating="4.9", Reviews="1.2k", Price="₱1,200", Img="~/images/plant.png" },
-            new { Name="Monstera Deliciosa", Seller="By Green Haven PH",  Rating="4.9", Reviews="980",  Price="₱850",   Img="~/images/monstera.jpg" },
-            new { Name="Snake Plant",        Seller="By Cebu Plant Shop", Rating="4.8", Reviews="870",  Price="₱450",   Img="~/images/snake.jpg" },
-            new { Name="Pothos Golden",      Seller="By Green Haven PH",  Rating="4.8", Reviews="760",  Price="₱350",   Img="~/images/succulent.jpg" },
-            new { Name="Aglaonema Red",      Seller="By Leaf & Stem PH",  Rating="4.9", Reviews="640",  Price="₱600",   Img="~/images/Santan.jpg" },
-            new { Name="Echeveria Elegans",  Seller="By Succulent Lover", Rating="4.8", Reviews="590",  Price="₱280",   Img="~/images/succulent.jpg" },
-        };
-    }
-    @foreach (var item in bestSellers)
+    @foreach (var item in Model)
     {
         <div class="col-6 col-md-4 col-xl-2half">
             <div class="g-card">
                 <div class="g-img-wrap">
-                    <img src="@item.Img" alt="@item.Name" class="g-img" />
+                    <img src="@item.ImageUrl" alt="@item.Name" class="g-img" />
                     <button class="g-wish-btn">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
                     </button>
                 </div>
                 <div class="g-info">
                     <div class="g-name">@item.Name</div>
-                    <div class="g-sub">@item.Seller</div>
+                    <div class="g-sub">@item.Category</div>
                     <div class="g-rating">
                         <span class="g-stars">★★★★★</span>
-                        <span>@item.Rating (@item.Reviews)</span>
+                        <span>4.9 (1.2k)</span>
                     </div>
                     <div class="g-price-row">
-                        <span class="g-price">@item.Price</span>
+                        <span class="g-price">₱@item.Price.ToString("N0")</span>
                         <button class="g-cart-btn">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" /></svg>
                         </button>
