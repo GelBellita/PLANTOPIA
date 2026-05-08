@@ -11,7 +11,7 @@
     var category = ViewData["Category"]?.ToString(); 
 }
 @section Styles {
-    <link rel="stylesheet" href="~/css/plants.css" />
+    <link rel="stylesheet" href="~/css/plants.css" asp-append-version="true" />
 }
 
 <div class="plants-banner">
@@ -49,42 +49,42 @@
     <div class="row g-3 mb-4">
         <div class="col-6 col-lg-3">
             <a asp-controller="Store" asp-action="Plants" asp-route-category="Indoor Plants"
-                   class="cat-card @(category == "Indoor Plants" ? "cat-card-active" : "")">
+                   class="cat-card @(category == "Indoor Plants" ? "cat-card-active" : "")"
+                   style="background-image:url('/images/indoor_cat.png'); background-repeat:no-repeat; background-size:auto 90%; background-position:right center;">
                 <div>
                     <div class="cat-card-label">Indoor Plants</div>
                     <div class="cat-card-sub">Beautiful plants for<br>your home</div>
                 </div>
-                <img src="~/images/snake.jpg" alt="Indoor" class="cat-card-img" />
             </a>
         </div>
         <div class="col-6 col-lg-3">
             <a asp-controller="Store" asp-action="Plants" asp-route-category="Outdoor Plants"
-                   class="cat-card @(category == "Outdoor Plants" ? "cat-card-active" : "")">
+                   class="cat-card @(category == "Outdoor Plants" ? "cat-card-active" : "")"
+                   style="background-image:url('/images/outdoor_cat.png'); background-repeat:no-repeat; background-size:auto 90%; background-position:right center;">
                 <div>
                     <div class="cat-card-label">Outdoor Plants</div>
                     <div class="cat-card-sub">Thrives in your<br>outdoor space</div>
                 </div>
-                <img src="~/images/plant.png" alt="Outdoor" class="cat-card-img" />
             </a>
         </div>
         <div class="col-6 col-lg-3">
             <a asp-controller="Store" asp-action="Plants" asp-route-category="Succulents"
-                   class="cat-card @(category == "Succulents" ? "cat-card-active" : "")">
+                   class="cat-card @(category == "Succulents" ? "cat-card-active" : "")"
+                   style="background-image:url('/images/succulent_cat.png'); background-repeat:no-repeat; background-size:auto 90%; background-position:85% center;">
                 <div>
                     <div class="cat-card-label">Succulents</div>
                     <div class="cat-card-sub">Small plants,<br>big beauty</div>
                 </div>
-                <img src="~/images/succulent.jpg" alt="Succulents" class="cat-card-img" />
             </a>
         </div>
         <div class="col-6 col-lg-3">
             <a asp-controller="Store" asp-action="Plants" asp-route-category="Hanging Plants"
-                   class="cat-card @(category == "Hanging Plants" ? "cat-card-active" : "")">
+                   class="cat-card @(category == "Hanging Plants" ? "cat-card-active" : "")"
+                   style="background-image:url('/images/hanging_cat.png'); background-repeat:no-repeat; background-size:auto 90%; background-position:85% center;">
                 <div>
                     <div class="cat-card-label">Hanging Plants</div>
                     <div class="cat-card-sub">Perfect for<br>any corner</div>
                 </div>
-                <img src="~/images/Santan.jpg" alt="Hanging" class="cat-card-img" />
             </a>
         </div>
     </div>

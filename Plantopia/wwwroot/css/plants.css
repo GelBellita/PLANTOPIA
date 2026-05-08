@@ -62,7 +62,7 @@
 
 /* ── Category Cards ──────────────────────────── */
 .cat-card {
-    background: #fff;
+    background: #e0e8dc;
     border-radius: 14px;
     padding: 18px 16px;
     display: flex;
@@ -73,13 +73,14 @@
     box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     transition: transform 0.22s, box-shadow 0.22s;
     overflow: hidden;
+    min-height: 120px; 
 }
 
-    .cat-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 8px 28px rgba(0,0,0,0.10);
-        color: inherit;
-    }
+.cat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+    color: inherit;
+}
 
 .cat-card-label {
     font-size: 0.9rem;
@@ -95,10 +96,11 @@
 }
 
 .cat-card-img {
-    width: 80px;
-    height: 80px;
-    object-fit: contain;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
     flex-shrink: 0;
+    border-radius: 8px;
 }
 
 /* ── Product Cards ───────────────────────────── */
