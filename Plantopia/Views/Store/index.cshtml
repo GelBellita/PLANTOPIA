@@ -12,7 +12,7 @@
 <div class="welcome-banner">
     <div class="welcome-banner-bg"></div>
     <div class="welcome-banner-text">
-        <h2>Welcome back, @(Context.Session.GetString("UserName")?.Split(' ')[0] ?? "Guest")! 🌿</h2>
+        <h2>Welcome back, @(Context.Session.GetString("UserName")?.Split(' ')[0] ?? "Guest")!</h2>
         <p>Find the perfect plants to bring life and freshness to your space.</p>
         <a asp-controller="Store" asp-action="Plants" class="btn btn-plant">Shop Now</a>
     </div>
@@ -142,7 +142,6 @@ else
                         <span style="color:#2e7d32; font-size:14px;">★</span>
                         <span style="font-size:0.8rem; color:#444;">4.9 (1.2k reviews)</span>
                     </div>
- ->
                     <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
                         <span id="pm-price" style="font-size:1.6rem; font-weight:700; color:#111;"></span>
                         <span id="pm-orig-price" style="font-size:0.9rem; color:#bbb; text-decoration:line-through;"></span>
@@ -379,7 +378,7 @@ else
                             </div>
                         </div>
                         <div style="height:80px; background:linear-gradient(135deg,#c8dcc8,#a8c4a8); border-radius:10px; overflow:hidden;">
-                            <img id="pm-care-img-tips" src="" style="width:100%;height:100%;object-fit:cover;" onerror=/>
+                            <img id="pm-care-img-tips" src="" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'" />
                         </div>
                     </div>
 

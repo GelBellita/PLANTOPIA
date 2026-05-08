@@ -53,30 +53,31 @@
                 <span asp-validation-for="Email" class="text-danger small"></span>
             </div>
 
-            <div class="mb-3 text-start">
-                <label asp-for="Password" class="form-label fw-semibold">Password</label>
-                <div class="input-icon-wrap">
-                    <span class="input-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                    </span>
-                    <input asp-for="Password" type="password" class="form-control plant-input plant-input-icon" placeholder="Create a password" />
+            <div class="row mb-3">
+                <div class="col-6 text-start">
+                    <label asp-for="Password" class="form-label fw-semibold">Password</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </span>
+                        <input asp-for="Password" type="password" class="form-control plant-input plant-input-icon" placeholder="Create a password" />
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger small"></span>
                 </div>
-                <span asp-validation-for="Password" class="text-danger small"></span>
-            </div>
-
-            <div class="mb-4 text-start">
-                <label asp-for="ConfirmPassword" class="form-label fw-semibold">Confirm Password</label>
-                <div class="input-icon-wrap">
-                    <span class="input-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                        </svg>
-                    </span>
-                    <input asp-for="ConfirmPassword" type="password" class="form-control plant-input plant-input-icon" placeholder="Repeat your password" />
+                <div class="col-6 text-start">
+                    <label asp-for="ConfirmPassword" class="form-label fw-semibold">Confirm Password</label>
+                    <div class="input-icon-wrap">
+                        <span class="input-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" width="16" height="16">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </span>
+                        <input asp-for="ConfirmPassword" type="password" class="form-control plant-input plant-input-icon" placeholder="Repeat your password" />
+                    </div>
+                    <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
                 </div>
-                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
             </div>
 
             <button type="submit" class="btn btn-plant w-100">Create My Account</button>

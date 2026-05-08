@@ -39,11 +39,9 @@
         <a asp-controller="Store" asp-action="Plants" class="view-all-link">Clear filter ×</a>
     </div>
 }
-}
 
 <div class="section-header">
     <h4>Shop by Category</h4>
-    <a href="#" class="view-all-link">View all ›</a>
 </div>
 
 @* Category cards — show lang kung walay search query *@
@@ -90,7 +88,7 @@
             </a>
         </div>
     </div>
-}
+</div>
 @* ── Products Section ── *@
 <div class="section-header mt-2">
         <h4>@(!string.IsNullOrEmpty(category) ? category + " Plants" : string.IsNullOrEmpty(query) ? "Best Sellers" : $"Found {Model.Count} result(s)")</h4>

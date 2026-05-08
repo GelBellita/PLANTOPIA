@@ -15,7 +15,7 @@
 
         <form asp-controller="Auth" asp-action="Login" method="post">
 
-            <div class="mb-3 text-start">
+            <div class="mb-1 text-start">
                 <label asp-for="Email" class="form-label fw-semibold"></label>
                 <div class="input-icon-wrap">
                     <span class="input-icon">
@@ -32,7 +32,7 @@
                 <span asp-validation-for="Email" class="text-danger small"></span>
             </div>
 
-            <div class="mb-4 text-start">
+            <div class="mb-2 text-start">
                 <label asp-for="Password" class="form-label fw-semibold"></label>
                 <div class="input-icon-wrap">
                     <span class="input-icon">
@@ -48,14 +48,14 @@
                 </div>
                 <span asp-validation-for="Password" class="text-danger small"></span>
                 <div class="text-end mt-1">
-                    <a href="#" style="font-size:0.82rem; color:var(--text-muted);">Forgot password?</a>
+                    <a href="#" style="font-size:0.76rem; color:var(--text-muted);">Forgot password?</a>
                 </div>
             </div>
 
             <button type="submit" class="btn btn-plant w-100">Login</button>
         </form>
 
-        <p class="auth-switch mt-3">
+        <p class="auth-switch mt-2">
             Don't have an account?
             <a asp-controller="Auth" asp-action="Register">Register here</a>
         </p>

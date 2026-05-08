@@ -99,11 +99,10 @@
                 </a>
             </nav>
 
-            @* Sidebar promo box — customizable per page via ViewData["PromoTitle"] etc. *@
-            <div class="sidebar-promo">
-                <div class="sidebar-promo-title">@Html.Raw(promoTitle)</div>
-                <div class="sidebar-promo-sub">@promoSub</div>
-                <a href="#" class="btn btn-plant btn-sm">@promoCta</a>
+            <div class="sidebar-promo p-0" style="background:none; box-shadow:none; position:absolute; bottom:15px; left:0; right:0;">
+                <div class="d-flex justify-content-center">
+                    <img src="/images/SideBarEmojii.png" alt="Plantopia" style="width:87%; border-radius:14px;" />
+                </div>
             </div>
         </aside>
 
