@@ -2,7 +2,7 @@
 
 /* ── Plants Banner ───────────────────────────── */
 .plants-banner {
-    border-radius: 18px;
+    border-radius: 0;
     padding: 40px 44px;
     display: flex;
     align-items: center;
@@ -10,6 +10,9 @@
     position: relative;
     margin-bottom: 36px;
     min-height: 300px;
+    margin-left: -32px;
+    margin-right: -32px;
+    margin-top: -28px;
 }
 
 .plants-banner-bg {
@@ -18,7 +21,7 @@
     background-image: url('/images/plants.png');
     background-size: cover;
     background-position: center bottom;
-    border-radius: 18px;
+    border-radius: 0;
 }
 
 .plants-banner-text {
@@ -57,7 +60,7 @@
     object-fit: cover;
     object-position: left center;
     z-index: 1;
-    border-radius: 0 18px 18px 0;
+    border-radius: 0;
 }
 
 /* ── Category Cards ──────────────────────────── */

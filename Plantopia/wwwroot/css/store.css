@@ -267,7 +267,7 @@ html, body {
 /* ── Welcome Banner ─────────────────────────── */
 .welcome-banner {
     background: linear-gradient(120deg, #d6e8d6 0%, #c4dbc4 60%, #b5cfb5 100%);
-    border-radius: 18px;
+    border-radius: 0;
     padding: 40px 44px;
     display: flex;
     align-items: center;
@@ -276,6 +276,9 @@ html, body {
     position: relative;
     margin-bottom: 36px;
     min-height: 300px;
+    margin-left: -32px;
+    margin-right: -32px;
+    margin-top: -28px;
 }
 
 .welcome-banner-bg {
@@ -283,19 +286,19 @@ html, body {
     inset: 0;
     background-image: url('/images/home_page_bg.png');
     background-size: cover;
-    border-radius: 18px;
+    border-radius: 0;
     background-position: center;
 }
 
 .welcome-banner-text {
     position: relative;
     z-index: 2;
-    padding-left: 120px;
+    padding-left: 135px;
 }
 
 .welcome-banner h2 {
     font-family: 'Playfair Display', serif;
-    font-size: 1.85rem;
+    font-size: 2rem;
     font-weight: 700;
     color: #1a3a1a;
     margin-bottom: 8px;

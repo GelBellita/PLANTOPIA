@@ -4,6 +4,8 @@
    profile page, shared components.
    ============================================================ */
 
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
+
 /* ── CSS Variables ── */
 :root {
     --green-dark: #1e3a1e;
@@ -25,10 +27,10 @@
     --radius-sm: 8px;
     --radius-md: 12px;
     --radius-lg: 16px;
-    --sidebar-w: 220px;
+    --sidebar-w: 240px;
     --topbar-h: 68px;
-    --font-main: 'Georgia', 'Times New Roman', serif;
-    --font-ui: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-main: 'DM Serif Display', 'Georgia', serif;
+    --font-ui: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
 
 /* ── Reset ── */
@@ -56,19 +58,280 @@ a {
     display: flex;
     flex-direction: row;
     min-height: 100vh;
-    overflow-x: hidden; /* ← add */
+    overflow-x: hidden;
 }
 
 .account-right {
-    margin-left: 240px;
+    margin-left: var(--sidebar-w);
     flex: 1;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     min-width: 0;
-    overflow-x: hidden; /* ← add */
-    width: calc(100% - 240px); /* ← add */
+    overflow-x: hidden;
+    width: calc(100% - var(--sidebar-w));
 }
+
+/* ============================================================
+   ACCOUNT BODY + SIDEBAR
+   ============================================================ */
+.account-body {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow-x: hidden;
+}
+
+/* ── SIDEBAR ── */
+.account-sidebar {
+    width: 240px;
+    min-width: 240px;
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 32px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+    overflow-y: auto;
+    overflow-x: hidden;
+    background-image: none;
+    background-color: #ffffff;
+}
+
+/* ── Sidebar logo block ── */
+.sidebar-logo-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 5px 0px;
+    margin-bottom: -10px;
+}
+
+    .sidebar-logo-block a {
+        display: block;
+        text-decoration: none;
+    }
+
+    .sidebar-logo-block img {
+        height: 100px;
+        width: auto;
+        object-fit: contain;
+    }
+
+/* ── Divider under logo ── */
+.sidebar-divider {
+    border: none;
+    border-top: 1px solid rgba(100, 140, 70, 0.20);
+    margin: 6px 20px 14px;
+}
+
+/* ── User card ── */
+.account-sidebar-user-card {
+    margin: 0 14px 18px;
+    background: rgba(255, 255, 255, 0.72);
+    border-radius: 18px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 14px rgba(60, 90, 30, 0.10);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    position: relative;
+    overflow: hidden;
+    border: none;
+}
+
+.account-sidebar-user {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    border: none;
+    padding: 0;
+}
+
+/* avatar circle */
+.account-sidebar-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ccdcb0 0%, #8aaa60 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 2.5px solid rgba(255, 255, 255, 0.88);
+    box-shadow: 0 2px 10px rgba(70, 100, 40, 0.18);
+}
+
+    .account-sidebar-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+.account-sidebar-avatar-fallback {
+    font-family: var(--font-main);
+    font-size: 18px;
+    color: #2d4a18;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.account-sidebar-userinfo {
+    flex: 1;
+    min-width: 0;
+}
+
+.account-sidebar-name {
+    font-family: var(--font-ui);
+    font-weight: 700;
+    font-size: 14.5px;
+    color: #1e3010;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.account-sidebar-email {
+    font-family: var(--font-ui);
+    font-size: 11px;
+    color: #5a7840;
+    font-weight: 400;
+    margin-top: 3px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.account-sidebar-leaf {
+    margin-left: auto;
+    font-size: 18px;
+    opacity: 0.5;
+    flex-shrink: 0;
+}
+
+/* ── Sidebar nav ── */
+.account-sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 0 12px;
+    gap: 3px;
+    flex: 1;
+}
+
+/* ── Nav items ── */
+.account-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 12px 18px;
+    font-family: var(--font-ui);
+    font-size: 14px;
+    font-weight: 500;
+    color: #3a5225;
+    text-decoration: none;
+    border-radius: 50px;
+    transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    cursor: pointer;
+    margin: 0;
+    letter-spacing: 0.01em;
+}
+
+    .account-nav-item svg {
+        flex-shrink: 0;
+        stroke: #567a35;
+        transition: stroke 0.18s ease;
+    }
+
+    .account-nav-item:hover {
+        background: rgba(255, 255, 255, 0.55);
+        color: #1e3010;
+        transform: translateX(3px);
+        text-decoration: none;
+    }
+
+        .account-nav-item:hover svg {
+            stroke: #1e3010;
+        }
+
+    /* active pill — matches screenshot */
+    .account-nav-item.active {
+        background: rgba(198, 220, 168, 0.70);
+        color: #152808;
+        font-weight: 600;
+        box-shadow: 0 2px 12px rgba(60, 100, 30, 0.12);
+        transform: none;
+    }
+
+        .account-nav-item.active svg {
+            stroke: #152808;
+        }
+
+/* badge (cart count) */
+.account-nav-badge {
+    margin-left: auto;
+    background: #1e3a1e;
+    color: #fff;
+    font-family: var(--font-ui);
+    font-size: 10.5px;
+    font-weight: 700;
+    min-width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 5px;
+}
+
+.account-sidebar-divider {
+    height: 1px;
+    background: rgba(100, 140, 70, 0.18);
+    margin: 8px 20px;
+}
+
+/* logout link */
+.account-nav-logout {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 22px;
+    font-family: var(--font-ui);
+    font-size: 13.5px;
+    color: var(--red);
+    font-weight: 500;
+    transition: background 0.15s;
+    text-decoration: none;
+    border-radius: 50px;
+    margin: 0 12px;
+}
+
+    .account-nav-logout:hover {
+        background: var(--red-bg);
+        text-decoration: none;
+    }
+
+    .account-nav-logout svg {
+        stroke: var(--red);
+        flex-shrink: 0;
+    }
+
+/* decorative bottom plants */
+.account-sidebar-deco {
+    margin-top: auto;
+    padding: 12px 10px 0;
+}
+
+    .account-sidebar-deco img {
+        width: 100%;
+        display: block;
+    }
 
 /* ============================================================
    TOP BAR
@@ -85,7 +348,6 @@ a {
     z-index: 50;
 }
 
-/* Logo */
 .account-topbar-logo {
     display: flex;
     flex-direction: column;
@@ -134,6 +396,7 @@ a {
         border: none;
         background: transparent;
         outline: none;
+        font-family: var(--font-ui);
         font-size: 13.5px;
         color: var(--text-dark);
         width: 100%;
@@ -157,6 +420,7 @@ a {
     gap: 6px;
     padding: 7px 14px;
     border-radius: 20px;
+    font-family: var(--font-ui);
     font-size: 13.5px;
     color: var(--text-mid);
     font-weight: 500;
@@ -200,6 +464,7 @@ a {
     border-radius: 24px;
     transition: background 0.15s;
     color: var(--text-dark);
+    font-family: var(--font-ui);
 }
 
     .topbar-user-btn:hover {
@@ -234,6 +499,7 @@ a {
 }
 
 .topbar-user-name {
+    font-family: var(--font-ui);
     font-size: 13.5px;
     font-weight: 600;
     color: var(--text-dark);
@@ -289,12 +555,14 @@ a {
 }
 
 .topbar-dropdown-name {
+    font-family: var(--font-ui);
     font-size: 14px;
     font-weight: 700;
     color: var(--text-dark);
 }
 
 .topbar-dropdown-email {
+    font-family: var(--font-ui);
     font-size: 12px;
     color: var(--text-muted);
     margin-top: 2px;
@@ -314,6 +582,7 @@ a {
     align-items: center;
     gap: 10px;
     padding: 9px 16px;
+    font-family: var(--font-ui);
     font-size: 13.5px;
     color: var(--text-mid);
     transition: background 0.15s;
@@ -359,6 +628,7 @@ a {
     align-items: center;
     gap: 10px;
     padding: 9px 16px;
+    font-family: var(--font-ui);
     font-size: 13.5px;
     color: var(--red);
     transition: background 0.15s;
@@ -375,204 +645,13 @@ a {
     }
 
 /* ============================================================
-   ACCOUNT BODY + SIDEBAR
-   ============================================================ */
-.account-body {
-    display: flex;
-    flex: 1;
-    min-height: 0;
-    overflow-x: hidden; /* ← add */
-}
-
-/* Sidebar */
-.account-sidebar {
-    width: 240px;
-    min-width: 240px;
-    background: #fff;
-    border-right: 1px solid #ede9e2;
-    display: flex;
-    flex-direction: column;
-    padding: 0 0 24px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 100;
-    overflow-y: auto;
-}
-
-/* Sidebar user info */
-.account-sidebar-user {
-    display: flex;
-    border: none;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 18px 12px;
-    position: relative;
-}
-
-.account-sidebar-avatar {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: var(--green-light);
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-    .account-sidebar-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-.account-sidebar-avatar-fallback {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--green-dark);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 100%;
-    height: 100%;
-}
-
-.account-sidebar-name {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--text-dark);
-    line-height: 1.2;
-}
-
-.account-sidebar-email {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin-top: 2px;
-}
-
-.account-sidebar-leaf {
-    margin-left: auto;
-    font-size: 18px;
-    opacity: 0.6;
-}
-
-/* Nav items */
-.account-sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    padding: 0 10px;
-    gap: 2px;
-}
-
-.account-nav-item {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    padding: 11px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 13.5px;
-    color: var(--text-mid);
-    font-weight: 500;
-    transition: background 0.15s, color 0.15s;
-    position: relative;
-    text-decoration: none;
-}
-
-.account-sidebar-user-card {
-    margin: 0 14px 16px;
-    border: none;
-    border-bottom: 1px solid #e8e4de; /* ← subtle divider line */
-    border-radius: 0;
-    background: transparent;
-    padding: 0 4px 0 10px;
-    margin: 0 0 8px 0; /* ← stretch full width */
-}
-
-    .account-nav-item:hover {
-        background: var(--green-pale);
-        color: var(--green-mid);
-        text-decoration: none;
-    }
-
-    .account-nav-item.active {
-        background: var(--green-pale);
-        color: var(--green-mid);
-        font-weight: 600;
-    }
-
-    .account-nav-item svg {
-        flex-shrink: 0;
-        stroke: var(--green-soft);
-    }
-
-    .account-nav-item.active svg {
-        stroke: var(--green-mid);
-    }
-
-.account-nav-badge {
-    margin-left: auto;
-    background: var(--green-dark);
-    color: var(--white);
-    font-size: 10px;
-    font-weight: 700;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.account-sidebar-divider {
-    height: 1px;
-    background: var(--border);
-    margin: 10px 18px;
-}
-
-.account-nav-logout {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 22px;
-    font-size: 13.5px;
-    color: var(--red);
-    font-weight: 500;
-    transition: background 0.15s;
-    text-decoration: none;
-}
-
-    .account-nav-logout:hover {
-        background: var(--red-bg);
-        text-decoration: none;
-    }
-
-    .account-nav-logout svg {
-        stroke: var(--red);
-        flex-shrink: 0;
-    }
-
-/* Decorative plants at bottom */
-.account-sidebar-deco {
-    margin-top: auto;
-    padding: 12px 10px 0;
-}
-
-    .account-sidebar-deco img {
-        width: 100%;
-        display: block;
-    }
-
-/* ============================================================
    MAIN CONTENT AREA
    ============================================================ */
 .account-main {
     flex: 1;
-    padding: 28px 32px;
+    padding: 18px 22px;
     overflow-y: auto;
-    overflow-x: hidden; /* ← add this */
+    overflow-x: hidden;
     margin-left: 0;
 }
 
@@ -582,17 +661,16 @@ a {
 .profile-page {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 10px;
 }
 
-/* Header */
 .profile-header {
-    margin-bottom: 4px;
+    margin-bottom: 0;
 }
 
 .profile-title {
     font-family: var(--font-main);
-    font-size: 26px;
+    font-size: 20px;
     font-weight: 700;
     color: var(--text-dark);
     display: flex;
@@ -605,41 +683,45 @@ a {
 }
 
 .profile-subtitle {
-    font-size: 14px;
+    font-family: var(--font-ui);
+    font-size: 12px;
     color: var(--text-muted);
     margin-top: 4px;
 }
 
-/* Grid: left form + right col */
 .profile-grid {
     display: grid;
-    grid-template-columns: 1fr 340px;
-    gap: 20px;
-    align-items: start;
+    grid-template-columns: 1fr 280px;
+    gap: 14px;
+    align-items: stretch;
 }
 
 .profile-right-col {
     display: flex;
     flex-direction: column;
     gap: 20px;
+    height: 100%;
 }
 
-/* Cards */
+    .profile-right-col .profile-card:last-child {
+        flex: 1;
+    }
+
 .profile-card {
     background: var(--white);
     border-radius: var(--radius-lg);
-    padding: 24px;
+    padding: 16px;
     box-shadow: var(--shadow-sm);
 }
 
 .profile-card-title {
-    font-size: 15px;
+    font-family: var(--font-ui);
+    font-size: 13px;
     font-weight: 700;
     color: var(--text-dark);
-    margin-bottom: 18px;
+    margin-bottom: 12px;
 }
 
-/* Form */
 .profile-form {
     display: flex;
     flex-direction: column;
@@ -653,7 +735,8 @@ a {
 }
 
 .form-label-plantopia {
-    font-size: 13px;
+    font-family: var(--font-ui);
+    font-size: 11.5px;
     font-weight: 600;
     color: var(--text-mid);
 }
@@ -661,13 +744,13 @@ a {
 .form-input-plantopia {
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 10px 14px;
-    font-size: 14px;
+    padding: 8px 12px;
+    font-family: var(--font-ui);
+    font-size: 13px;
     color: var(--text-dark);
     background: var(--white);
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
-    font-family: var(--font-ui);
 }
 
     .form-input-plantopia:focus {
@@ -687,12 +770,12 @@ a {
     color: var(--white);
     border: none;
     border-radius: var(--radius-sm);
-    padding: 11px 32px;
-    font-size: 14px;
+    padding: 8px 24px;
+    font-family: var(--font-ui);
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     transition: background 0.15s, transform 0.1s;
-    font-family: var(--font-ui);
 }
 
     .btn-save-changes:hover {
@@ -767,7 +850,15 @@ a {
         stroke: var(--white);
     }
 
+.profile-picture-wrap,
+.profile-picture-img,
+.profile-picture-fallback {
+    width: 75px;
+    height: 75px;
+}
+
 .profile-picture-label {
+    font-family: var(--font-ui);
     font-size: 13px;
     color: var(--text-muted);
     text-align: center;
@@ -778,12 +869,12 @@ a {
     background: var(--white);
     border-radius: var(--radius-sm);
     padding: 8px 22px;
+    font-family: var(--font-ui);
     font-size: 13.5px;
     color: var(--text-dark);
     cursor: pointer;
     font-weight: 500;
     transition: border-color 0.15s, background 0.15s;
-    font-family: var(--font-ui);
 }
 
     .btn-upload-photo:hover {
@@ -802,6 +893,7 @@ a {
     align-items: center;
     gap: 12px;
     padding: 12px 0;
+    font-family: var(--font-ui);
     font-size: 14px;
     color: var(--text-mid);
     border-bottom: 1px solid var(--border);
@@ -838,6 +930,7 @@ a {
     gap: 20px;
     position: relative;
     overflow: hidden;
+    margin-top: 10px;
 }
 
 .promo-banner-left {
@@ -862,12 +955,14 @@ a {
 }
 
 .promo-banner-title {
+    font-family: var(--font-ui);
     font-size: 16px;
     font-weight: 700;
     color: var(--text-dark);
 }
 
 .promo-banner-sub {
+    font-family: var(--font-ui);
     font-size: 13px;
     color: var(--text-muted);
     margin-top: 2px;
@@ -878,6 +973,7 @@ a {
     color: var(--white);
     border-radius: var(--radius-sm);
     padding: 11px 24px;
+    font-family: var(--font-ui);
     font-size: 14px;
     font-weight: 600;
     white-space: nowrap;
@@ -892,9 +988,20 @@ a {
         text-decoration: none;
     }
 
+.profile-page-wrapper {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    box-shadow: var(--shadow-sm);
+}
+
 .promo-banner-deco {
     font-size: 28px;
     margin-left: 10px;
     opacity: 0.7;
     letter-spacing: 4px;
+}
+
+.store-wrapper .store-content {
+    padding: 18px 32px 45px !important;
 }
