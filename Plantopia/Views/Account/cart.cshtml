@@ -1,404 +1,254 @@
 ﻿@* Views/Account/Cart.cshtml *@
+@model List<Plantopia.Models.CartItemViewModel>
 @{
     Layout = "~/Views/Shared/_AccountLayout.cshtml";
     ViewData["Title"] = "My Cart";
+
+    var subtotal     = (decimal)(ViewData["Subtotal"] ?? 0m);
+    var shippingFee  = (decimal)(ViewData["ShippingFee"] ?? 150m);
+    var total        = (decimal)(ViewData["Total"] ?? 0m);
+    var itemCount    = (int)(ViewData["ItemCount"] ?? 0);
+    var amountToFree = (decimal)(ViewData["AmountToFreeShipping"] ?? 4000m);
+    var freeProgress = (decimal)(ViewData["FreeShippingProgress"] ?? 0m);
 }
 
 <style>
-   .cart-page {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    }
+    .cart-page { display:flex; flex-direction:column; gap:14px; }
 
     .cart-grid {
-        display: grid;
-        grid-template-columns: 1fr 240px;
-        gap: 14px;
-        align-items: start;
+        display:grid;
+        grid-template-columns:1fr 240px;
+        gap:14px;
+        align-items:start;
     }
 
     .cart-items-card {
-        background: var(--white);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--shadow-sm);
-        overflow: hidden;
+        background:var(--white);
+        border-radius:var(--radius-lg);
+        box-shadow:var(--shadow-sm);
+        overflow:hidden;
     }
 
     .cart-item {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 12px 16px;
-        border-bottom: 1px solid var(--border);
-        transition: background 0.15s;
+        display:flex;
+        align-items:center;
+        gap:12px;
+        padding:12px 16px;
+        border-bottom:1px solid var(--border);
+        transition:background 0.15s;
     }
-
-    .cart-item:last-child { border-bottom: none; }
-    .cart-item:hover { background: var(--green-bg); }
+    .cart-item:last-child { border-bottom:none; }
+    .cart-item:hover { background:var(--green-bg); }
 
     .cart-item-img {
-        width: 58px;
-        height: 58px;
-        border-radius: var(--radius-md);
-        object-fit: cover;
-        background: var(--green-pale);
-        flex-shrink: 0;
+        width:58px; height:58px;
+        border-radius:var(--radius-md);
+        object-fit:cover;
+        background:var(--green-pale);
+        flex-shrink:0;
     }
 
-    .cart-item-info { flex: 1; }
+    .cart-item-info { flex:1; }
+    .cart-item-name  { font-size:13px; font-weight:700; color:var(--text-dark); }
+    .cart-item-price { font-size:12px; color:var(--text-muted); margin-top:3px; }
 
-    .cart-item-name {
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--text-dark);
-    }
-
-    .cart-item-price {
-        font-size: 12px;
-        color: var(--text-muted);
-        margin-top: 3px;
-    }
-
-    .cart-qty-controls {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
+    .cart-qty-controls { display:flex; align-items:center; gap:10px; }
 
     .cart-qty-btn {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        border: 1.5px solid var(--border);
-        background: var(--white);
-        font-size: 14px;
-        color: var(--text-mid);
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: border-color 0.15s, background 0.15s;
-        font-family: var(--font-ui);
-        line-height: 1;
+        width:24px; height:24px;
+        border-radius:50%;
+        border:1.5px solid var(--border);
+        background:var(--white);
+        font-size:14px;
+        color:var(--text-mid);
+        cursor:pointer;
+        display:flex; align-items:center; justify-content:center;
+        transition:border-color 0.15s, background 0.15s;
+        font-family:var(--font-ui);
+        line-height:1;
     }
-
     .cart-qty-btn:hover {
-        border-color: var(--green-soft);
-        background: var(--green-pale);
-        color: var(--green-mid);
+        border-color:var(--green-soft);
+        background:var(--green-pale);
+        color:var(--green-mid);
     }
 
     .cart-qty-num {
-        font-size: 13px;
-        font-weight: 600;
-        color: var(--text-dark);
-        min-width: 14px;
-        text-align: center;
+        font-size:13px; font-weight:600;
+        color:var(--text-dark);
+        min-width:14px; text-align:center;
     }
 
     .cart-delete-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: var(--text-muted);
-        display: flex;
-        align-items: center;
-        padding: 4px;
-        border-radius: var(--radius-sm);
-        transition: color 0.15s, background 0.15s;
-        margin-left: 4px;
+        background:none; border:none; cursor:pointer;
+        color:var(--text-muted);
+        display:flex; align-items:center;
+        padding:4px;
+        border-radius:var(--radius-sm);
+        transition:color 0.15s, background 0.15s;
+        margin-left:4px;
     }
-
-    .cart-delete-btn:hover {
-        color: var(--red);
-        background: var(--red-bg);
-    }
+    .cart-delete-btn:hover { color:var(--red); background:var(--red-bg); }
 
     .cart-footer {
-        padding: 10px 16px;
-        border-top: 1px solid var(--border);
-        background: var(--white);
-        border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+        padding:10px 16px;
+        border-top:1px solid var(--border);
+        background:var(--white);
+        border-radius:0 0 var(--radius-lg) var(--radius-lg);
     }
 
     .btn-continue-shopping {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 12px;
-        font-weight: 500;
-        color: var(--text-mid);
-        text-decoration: none;
-        transition: color 0.15s;
+        display:inline-flex; align-items:center; gap:6px;
+        font-size:12px; font-weight:500;
+        color:var(--text-mid); text-decoration:none;
+        transition:color 0.15s;
     }
-
-    .btn-continue-shopping:hover { color: var(--green-mid); }
+    .btn-continue-shopping:hover { color:var(--green-mid); }
 
     .order-summary-card {
-        background: var(--white);
-        border-radius: var(--radius-lg);
-        padding: 16px;
-        box-shadow: var(--shadow-sm);
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
+        background:var(--white);
+        border-radius:var(--radius-lg);
+        padding:16px;
+        box-shadow:var(--shadow-sm);
+        display:flex; flex-direction:column; gap:10px;
     }
 
-    .order-summary-title {
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--text-dark);
-        margin-bottom: 2px;
-    }
+    .order-summary-title { font-size:13px; font-weight:700; color:var(--text-dark); margin-bottom:2px; }
 
     .order-summary-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-size: 12px;
-        color: var(--text-mid);
+        display:flex; align-items:center; justify-content:space-between;
+        font-size:12px; color:var(--text-mid);
     }
+    .order-summary-row.discount { color:#c0392b; }
+    .order-summary-row-label { display:flex; align-items:center; gap:4px; }
+    .order-summary-divider { height:1px; background:var(--border); margin:2px 0; }
 
-    .order-summary-row.discount { color: #c0392b; }
-
-    .order-summary-row-label {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .order-summary-divider {
-        height: 1px;
-        background: var(--border);
-        margin: 2px 0;
-    }
-
-    .order-total-row {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    .order-total-label {
-        font-size: 13px;
-        font-weight: 700;
-        color: var(--text-dark);
-    }
-
-    .order-total-amount {
-        font-size: 15px;
-        font-weight: 800;
-        color: var(--green-dark);
-    }
+    .order-total-row { display:flex; align-items:center; justify-content:space-between; }
+    .order-total-label  { font-size:13px; font-weight:700; color:var(--text-dark); }
+    .order-total-amount { font-size:15px; font-weight:800; color:var(--green-dark); }
 
     .free-shipping-banner {
-        background: var(--green-pale);
-        border-radius: var(--radius-sm);
-        padding: 8px 10px;
-        display: flex;
-        align-items: flex-start;
-        gap: 8px;
+        background:var(--green-pale); border-radius:var(--radius-sm);
+        padding:8px 10px;
+        display:flex; align-items:flex-start; gap:8px;
     }
-
-    .free-shipping-icon { font-size: 14px; flex-shrink: 0; }
-
-    .free-shipping-text {
-        font-size: 11px;
-        color: var(--text-mid);
-        flex: 1;
-    }
-
-    .free-shipping-text strong { color: var(--green-dark); }
-
-    .free-shipping-bar {
-        height: 4px;
-        background: var(--border);
-        border-radius: 10px;
-        margin-top: 6px;
-        overflow: hidden;
-    }
-
-    .free-shipping-fill {
-        height: 100%;
-        width: 55%;
-        background: var(--green-mid);
-        border-radius: 10px;
-    }
+    .free-shipping-icon { font-size:14px; flex-shrink:0; }
+    .free-shipping-text { font-size:11px; color:var(--text-mid); flex:1; }
+    .free-shipping-text strong { color:var(--green-dark); }
+    .free-shipping-bar { height:4px; background:var(--border); border-radius:10px; margin-top:6px; overflow:hidden; }
+    .free-shipping-fill { height:100%; background:var(--green-mid); border-radius:10px; transition:width 0.3s; }
 
     .btn-checkout {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 7px;
-        width: 100%;
-        padding: 10px;
-        background: var(--green-dark);
-        color: var(--white);
-        border: none;
-        border-radius: var(--radius-sm);
-        font-size: 13px;
-        font-weight: 700;
-        cursor: pointer;
-        transition: background 0.15s;
-        font-family: var(--font-ui);
-        text-decoration: none;
+        display:flex; align-items:center; justify-content:center; gap:7px;
+        width:100%; padding:10px;
+        background:var(--green-dark); color:var(--white);
+        border:none; border-radius:var(--radius-sm);
+        font-size:13px; font-weight:700;
+        cursor:pointer; transition:background 0.15s;
+        font-family:var(--font-ui); text-decoration:none;
     }
+    .btn-checkout:hover { background:var(--green-mid); color:var(--white); }
 
-    .btn-checkout:hover {
-        background: var(--green-mid);
-        color: var(--white);
+    .empty-cart {
+        text-align:center; padding:48px 20px;
+        display:flex; flex-direction:column; align-items:center; gap:12px;
     }
+    .empty-cart-icon { font-size:48px; }
+    .empty-cart-title { font-size:16px; font-weight:700; color:var(--text-dark); }
+    .empty-cart-sub   { font-size:13px; color:var(--text-muted); }
 
-    .payment-methods {
-        display: flex;
-        flex-direction: column;
-        gap: 6px;
-    }
-
-    .payment-label {
-        font-size: 11px;
-        color: var(--text-muted);
-    }
-
-    .payment-icons {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        flex-wrap: wrap;
-    }
-
+    .payment-methods { display:flex; flex-direction:column; gap:6px; }
+    .payment-label   { font-size:11px; color:var(--text-muted); }
+    .payment-icons   { display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
     .payment-chip {
-        padding: 4px 9px;
-        border: 1.5px solid var(--border);
-        border-radius: 6px;
-        font-size: 11px;
-        font-weight: 700;
-        color: var(--text-mid);
-        background: var(--white);
+        padding:4px 9px; border:1.5px solid var(--border);
+        border-radius:6px; font-size:11px; font-weight:700;
+        color:var(--text-mid); background:var(--white);
     }
+    .payment-chip.gcash { color:#0070ff; }
 
-    .payment-chip.visa   { color: #1a1f71; }
-    .payment-chip.master { color: #eb001b; }
-    .payment-chip.gcash  { color: #0070ff; }
-    .payment-chip.paypal { color: #003087; }
+
+    #cart-toast {
+        position:fixed; bottom:24px; right:24px; z-index:99999;
+        background:#1a3a1a; color:#fff;
+        padding:10px 18px; border-radius:10px;
+        font-size:13px; font-weight:600;
+        box-shadow:0 4px 16px rgba(0,0,0,0.18);
+        opacity:0; transform:translateY(12px);
+        transition:opacity 0.25s, transform 0.25s;
+        pointer-events:none;
+    }
+    #cart-toast.show { opacity:1; transform:translateY(0); }
 </style>
+
+<div id="cart-toast"></div>
 
 <div class="profile-page-wrapper">
 <div class="cart-page">
 
-    @* Header *@
     <div class="profile-header">
         <h1 class="profile-title">My Cart <span class="profile-title-emoji">🌿</span></h1>
         <p class="profile-subtitle">Review the items you've added before checkout.</p>
     </div>
 
+    @if (Model == null || !Model.Any())
+    {
+        <div class="cart-items-card">
+            <div class="empty-cart">
+                <div class="empty-cart-icon"></div>
+                <div class="empty-cart-title">Your cart is empty</div>
+                <div class="empty-cart-sub">Add some plants to get started!</div>
+                <a asp-controller="Store" asp-action="Index" class="btn-checkout" style="width:auto;padding:10px 24px;margin-top:8px;">
+                    Shop Now
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
     <div class="cart-grid">
 
-        @* LEFT — Cart Items *@
+
         <div>
             <div class="cart-items-card">
-
-                @* Item 1 *@
-                <div class="cart-item">
-                    <img class="cart-item-img"
-                         src="~/images/fiddle-leaf.png" alt="Fiddle Leaf Fig"
-                         onerror="this.src='https://placehold.co/80x80/eef4eb/4a7c4a?text=🌿'" />
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">Fiddle Leaf Fig</div>
-                        <div class="cart-item-price">₱899.00</div>
+                @foreach (var item in Model)
+                {
+                    <div class="cart-item" id="cart-row-@item.CartItemId">
+                        <img class="cart-item-img"
+                             src="@item.ImageUrl" alt="@item.Name"
+                             onerror="this.src='https://placehold.co/80x80/eef4eb/4a7c4a?text=🌿'" />
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">@item.Name</div>
+                            <div class="cart-item-price">
+                                ₱@item.Price.ToString("N2")
+                                @if (item.DiscountPercent.HasValue)
+                                {
+                                    <span style="text-decoration:line-through;color:#bbb;margin-left:4px;">₱@item.OriginalPrice.ToString("N2")</span>
+                                    <span style="color:#e53935;font-size:10px;margin-left:3px;">-@item.DiscountPercent%</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="cart-qty-controls">
+                            <button class="cart-qty-btn"
+                                    onclick="changeQuantity(@item.CartItemId, -1, this)">−</button>
+                            <span class="cart-qty-num" id="qty-@item.CartItemId">@item.Quantity</span>
+                            <button class="cart-qty-btn"
+                                    onclick="changeQuantity(@item.CartItemId, 1, this)">+</button>
+                        </div>
+                        <button class="cart-delete-btn" title="Remove item"
+                                onclick="removeItem(@item.CartItemId)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"/>
+                                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                                <path d="M10 11v6M14 11v6"/>
+                                <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                            </svg>
+                        </button>
                     </div>
-                    <div class="cart-qty-controls">
-                        <button class="cart-qty-btn">−</button>
-                        <span class="cart-qty-num">1</span>
-                        <button class="cart-qty-btn">+</button>
-                    </div>
-                    <button class="cart-delete-btn" title="Remove item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                            <path d="M10 11v6M14 11v6"/>
-                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                        </svg>
-                    </button>
-                </div>
-
-                @* Item 2 *@
-                <div class="cart-item">
-                    <img class="cart-item-img"
-                         src="~/images/snake-plant.png" alt="Snake Plant"
-                         onerror="this.src='https://placehold.co/80x80/eef4eb/4a7c4a?text=🪴'" />
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">Snake Plant</div>
-                        <div class="cart-item-price">₱499.00</div>
-                    </div>
-                    <div class="cart-qty-controls">
-                        <button class="cart-qty-btn">−</button>
-                        <span class="cart-qty-num">2</span>
-                        <button class="cart-qty-btn">+</button>
-                    </div>
-                    <button class="cart-delete-btn" title="Remove item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                            <path d="M10 11v6M14 11v6"/>
-                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                        </svg>
-                    </button>
-                </div>
-
-                @* Item 3 *@
-                <div class="cart-item">
-                    <img class="cart-item-img"
-                         src="~/images/monstera.png" alt="Monstera Deliciosa"
-                         onerror="this.src='https://placehold.co/80x80/eef4eb/4a7c4a?text=🌱'" />
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">Monstera Deliciosa</div>
-                        <div class="cart-item-price">₱1,299.00</div>
-                    </div>
-                    <div class="cart-qty-controls">
-                        <button class="cart-qty-btn">−</button>
-                        <span class="cart-qty-num">1</span>
-                        <button class="cart-qty-btn">+</button>
-                    </div>
-                    <button class="cart-delete-btn" title="Remove item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                            <path d="M10 11v6M14 11v6"/>
-                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                        </svg>
-                    </button>
-                </div>
-
-                @* Item 4 *@
-                <div class="cart-item">
-                    <img class="cart-item-img"
-                         src="~/images/terracotta-pot.png" alt="Terracotta Pot"
-                         onerror="this.src='https://placehold.co/80x80/eef4eb/4a7c4a?text=🪣'" />
-                    <div class="cart-item-info">
-                        <div class="cart-item-name">Terracotta Pot (Medium)</div>
-                        <div class="cart-item-price">₱199.00</div>
-                    </div>
-                    <div class="cart-qty-controls">
-                        <button class="cart-qty-btn">−</button>
-                        <span class="cart-qty-num">1</span>
-                        <button class="cart-qty-btn">+</button>
-                    </div>
-                    <button class="cart-delete-btn" title="Remove item">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="3 6 5 6 21 6"/>
-                            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
-                            <path d="M10 11v6M14 11v6"/>
-                            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
-                        </svg>
-                    </button>
-                </div>
-
+                }
             </div>
 
-            @* Continue Shopping *@
-            <div style="margin-top: 16px;">
+            <div style="margin-top:16px;">
                 <a asp-controller="Store" asp-action="Index" class="btn-continue-shopping">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <line x1="19" y1="12" x2="5" y2="12"/>
@@ -409,13 +259,12 @@
             </div>
         </div>
 
-        @* RIGHT — Order Summary *@
         <div class="order-summary-card">
             <div class="order-summary-title">Order Summary</div>
 
             <div class="order-summary-row">
-                <span>Subtotal (4 items)</span>
-                <span>₱3,395.00</span>
+                <span id="summary-item-label">Subtotal (@itemCount item@(itemCount != 1 ? "s" : ""))</span>
+                <span id="summary-subtotal">₱@subtotal.ToString("N2")</span>
             </div>
 
             <div class="order-summary-row">
@@ -427,33 +276,40 @@
                         <line x1="12" y1="16" x2="12.01" y2="16"/>
                     </svg>
                 </span>
-                <span>₱150.00</span>
-            </div>
-
-            <div class="order-summary-row discount">
-                <span>Discount</span>
-                <span>-₱200.00</span>
+                <span id="summary-shipping">
+                    @(shippingFee == 0 ? "FREE" : "₱" + shippingFee.ToString("N2"))
+                </span>
             </div>
 
             <div class="order-summary-divider"></div>
 
             <div class="order-total-row">
                 <span class="order-total-label">Total</span>
-                <span class="order-total-amount">₱3,345.00</span>
+                <span class="order-total-amount" id="summary-total">₱@total.ToString("N2")</span>
             </div>
 
-            @* Free Shipping Progress *@
+            @if (amountToFree > 0)
+            {
             <div class="free-shipping-banner">
-                <div class="free-shipping-icon">🌿</div>
+                <div class="free-shipping-icon"></div>
                 <div class="free-shipping-text">
-                    You're <strong>₱655.00</strong> away from <strong>FREE shipping!</strong>
+                    You're <strong id="amount-to-free">₱@amountToFree.ToString("N2")</strong> away from <strong>FREE shipping!</strong>
                     <div class="free-shipping-bar">
-                        <div class="free-shipping-fill"></div>
+                        <div class="free-shipping-fill" id="free-progress-bar" style="width:@freeProgress%"></div>
                     </div>
                 </div>
             </div>
+            }
+            else
+            {
+            <div class="free-shipping-banner" style="background:#e8f5e9;">
+                <div class="free-shipping-icon"></div>
+                <div class="free-shipping-text">
+                    <strong>You've unlocked FREE shipping!</strong>
+                </div>
+            </div>
+            }
 
-            @* Checkout Button *@
             <a asp-controller="Store" asp-action="Checkout" class="btn-checkout">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -462,7 +318,6 @@
                 Proceed to Checkout
             </a>
 
-            @* Payment Methods *@
             <div class="payment-methods">
                 <div class="payment-label">We accept:</div>
                 <div class="payment-icons">
@@ -472,5 +327,86 @@
         </div>
 
     </div>
+    }
+
 </div>
 </div>
+
+@section Scripts {
+<script>
+    function showToast(msg) {
+        var t = document.getElementById('cart-toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 2500);
+    }
+
+    function updateSummaryUI(data) {
+        var subtotalEl  = document.getElementById('summary-subtotal');
+        var shippingEl  = document.getElementById('summary-shipping');
+        var totalEl     = document.getElementById('summary-total');
+        var toFreeEl    = document.getElementById('amount-to-free');
+        var progressEl  = document.getElementById('free-progress-bar');
+
+        if (subtotalEl)  subtotalEl.textContent  = '₱' + data.subtotal;
+        if (shippingEl)  shippingEl.textContent  = parseFloat(data.shippingFee) === 0 ? 'FREE' : '₱' + data.shippingFee;
+        if (totalEl)     totalEl.textContent     = '₱' + data.total;
+        if (toFreeEl)    toFreeEl.textContent    = '₱' + data.amountToFreeShipping;
+        if (progressEl)  progressEl.style.width  = data.freeShippingProgress + '%';
+
+        var badge = document.querySelector('.cart-count-badge');
+        if (badge) badge.textContent = data.cartCount;
+    }
+
+    function changeQuantity(cartItemId, delta, btn) {
+    var qtyEl  = document.getElementById('qty-' + cartItemId);
+    var newQty = parseInt(qtyEl.textContent) + delta;
+    if (newQty < 1) return;
+
+        fetch('/Account/UpdateCartQuantity', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `cartItemId=${cartItemId}&quantity=${newQty}`
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) return;
+            if (newQty === 0) {
+                var row = document.getElementById('cart-row-' + cartItemId);
+                if (row) row.remove();
+                checkEmpty();
+            } else {
+                qtyEl.textContent = newQty;
+            }
+            updateSummaryUI(data);
+        });
+    }
+
+    function removeItem(cartItemId) {
+        fetch('/Account/RemoveFromCart', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `cartItemId=${cartItemId}`
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (!data.success) return;
+            var row = document.getElementById('cart-row-' + cartItemId);
+            if (row) {
+                row.style.opacity = '0';
+                row.style.transition = 'opacity 0.25s';
+                setTimeout(() => { row.remove(); checkEmpty(); }, 250);
+            }
+            updateSummaryUI(data);
+            showToast('Item removed from cart');
+        });
+    }
+
+    function checkEmpty() {
+        var rows = document.querySelectorAll('.cart-item');
+        if (rows.length === 0) {
+            window.location.reload();
+        }
+    }
+</script>
+}

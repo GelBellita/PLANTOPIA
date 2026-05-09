@@ -1005,3 +1005,280 @@ a {
 .store-wrapper .store-content {
     padding: 18px 32px 45px !important;
 }
+/* ============================================================
+   CHECKOUT_CSHTML CSS
+   ============================================================ */
+
+.checkout-grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 16px;
+    align-items: start;
+}
+
+.checkout-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    padding: 20px 24px;
+    margin-bottom: 14px;
+}
+
+.checkout-section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a3a1a;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkout-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.checkout-form-full {
+    margin-bottom: 10px;
+}
+
+.checkout-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.checkout-input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 9px;
+    font-size: 12.5px;
+    color: #1a1a1a;
+    font-family: 'Segoe UI',sans-serif;
+    outline: none;
+    transition: border-color .15s;
+    box-sizing: border-box;
+}
+
+    .checkout-input:focus {
+        border-color: #3a7d44;
+    }
+
+.gcash-box {
+    background: #f0f6ff;
+    border: 1.5px solid #b3d0ff;
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+
+.gcash-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #0070ff;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.gcash-instruction {
+    font-size: 11px;
+    color: #555;
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.gcash-number-display {
+    background: #0070ff;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.order-summary-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.07);
+    padding: 16px;
+    position: sticky;
+    top: 20px;
+}
+
+.summary-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #1a3a1a;
+    margin-bottom: 12px;
+}
+
+.summary-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.summary-item-img {
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #f0f4f0;
+    flex-shrink: 0;
+}
+
+.summary-item-name {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #1a1a1a;
+}
+
+.summary-item-price {
+    font-size: 11px;
+    color: #888;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 6px;
+}
+
+.summary-divider {
+    height: 1px;
+    background: #eee;
+    margin: 8px 0;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    font-weight: 800;
+    color: #1a1a1a;
+}
+
+.btn-place-order {
+    width: 100%;
+    padding: 12px;
+    background: #1a3a1a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    margin-top: 12px;
+    font-family: 'Segoe UI',sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background .15s;
+}
+
+    .btn-place-order:hover {
+        background: #2e7d32;
+    }
+
+    .btn-place-order:disabled {
+        background: #aaa;
+        cursor: not-allowed;
+    }
+
+/* Confirmation Modal */
+#confirmModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+}
+
+    #confirmModal.show {
+        display: flex;
+    }
+
+.confirm-box {
+    background: #fff;
+    border-radius: 20px;
+    padding: 36px 32px;
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    font-family: 'Segoe UI',sans-serif;
+    animation: popIn .3s ease;
+}
+
+@@keyframes popIn {
+    from {
+        transform: scale(0.85);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.confirm-icon {
+    font-size: 52px;
+    margin-bottom: 10px;
+}
+
+.confirm-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: #1a3a1a;
+    margin-bottom: 6px;
+}
+
+.confirm-sub {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.confirm-order-id {
+    background: #f0f4f0;
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #2e7d32;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.btn-confirm-ok {
+    background: #1a3a1a;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 11px 32px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: 'Segoe UI',sans-serif;
+}
+
+    .btn-confirm-ok:hover {
+        background: #2e7d32;
+    }

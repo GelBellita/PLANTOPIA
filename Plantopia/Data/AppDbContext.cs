@@ -13,6 +13,10 @@ namespace Plantopia.Data
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Wishlist> Wishlists { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -42,6 +46,23 @@ namespace Plantopia.Data
             // ── Prevent duplicate wishlist entries ──
             modelBuilder.Entity<Wishlist>()
                 .HasIndex(w => new { w.UserId, w.PlantId })
+                .IsUnique();
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(c => c.User)
+                .WithMany()
+                .HasForeignKey(c => c.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CartItem>()
+                .HasOne(c => c.Plant)
+                .WithMany()
+                .HasForeignKey(c => c.PlantId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Prevent duplicate cart entries per user per plant
+            modelBuilder.Entity<CartItem>()
+                .HasIndex(c => new { c.UserId, c.PlantId })
                 .IsUnique();
 
             // ── Plants ──

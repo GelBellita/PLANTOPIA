@@ -146,5 +146,54 @@ namespace Plantopia.Controllers
         {
             return RedirectToAction("Cart", "Account");
         }
+
+        public IActionResult Checkout()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(email))
+                return RedirectToAction("Login", "Auth");
+
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+                return RedirectToAction("Login", "Auth");
+
+            var cartItems = _context.CartItems
+                .Where(c => c.UserId == user.Id)
+                .Select(c => new CartItemViewModel
+                {
+                    CartItemId = c.Id,
+                    PlantId = c.PlantId,
+                    Name = c.Plant.Name,
+                    Price = c.Plant.DiscountPercent.HasValue
+                        ? c.Plant.Price * (1 - c.Plant.DiscountPercent.Value / 100m)
+                        : c.Plant.Price,
+                    OriginalPrice = c.Plant.Price,
+                    ImageUrl = c.Plant.ImageUrl,
+                    Quantity = c.Quantity,
+                    DiscountPercent = c.Plant.DiscountPercent
+                })
+                .ToList();
+
+            if (!cartItems.Any())
+                return RedirectToAction("Cart", "Account");
+
+            decimal subtotal = cartItems.Sum(c => c.Price * c.Quantity);
+            decimal shippingFee = subtotal >= 4000 ? 0 : 150;
+            decimal total = subtotal + shippingFee;
+
+            // Pre-fill from saved address
+            var defaultAddress = _context.Addresses
+                .FirstOrDefault(a => a.UserId == user.Id && a.IsDefault)
+                ?? _context.Addresses.FirstOrDefault(a => a.UserId == user.Id);
+
+            ViewData["User"] = user;
+            ViewData["DefaultAddress"] = defaultAddress;
+            ViewData["Subtotal"] = subtotal;
+            ViewData["ShippingFee"] = shippingFee;
+            ViewData["Total"] = total;
+            ViewData["ItemCount"] = cartItems.Sum(c => c.Quantity);
+
+            return View(cartItems);
+        }
     }
 }
