@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Plantopia.Data;
 
@@ -11,9 +12,15 @@ using Plantopia.Data;
 namespace Plantopia.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+<<<<<<<< HEAD:Plantopia/Migrations/20260509101707_InitialCreate.Designer.cs
+    [Migration("20260509101707_InitialCreate")]
+========
+    [Migration("20260509081916_InitialCreate")]
+>>>>>>>> 805475753983eab61de025a6d55389dea200e8d7:Plantopia/Migrations/20260509081916_InitialCreate.Designer.cs
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

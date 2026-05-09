@@ -1,12 +1,11 @@
 ﻿@model List<Plantopia.Models.Plant>
+
 @{
     Layout = "_SideTopBar";
     ViewData["Title"] = "New Arrivals — Plantopia";
     ViewData["PromoTitle"] = "Fresh finds<br>for your space.";
     ViewData["PromoSub"] = "Be the first to bring home our newest plants and accessories.";
     ViewData["PromoCta"] = "Shop Now →";
-
-    var wishlistedIds = ViewData["WishlistedIds"] as List<int> ?? new List<int>();
 }
 
 <div class="page-banner">
@@ -32,27 +31,27 @@
 </div>
 
 <div class="row g-3">
-    @foreach (var p in Model)
+    @foreach (var item in Model)
     {
-        var isWishlisted = wishlistedIds.Contains(p.Id);
         <div class="col-6 col-md-4 col-lg-4">
             <div class="g-card">
                 <div class="g-img-wrap">
-                    <img src="@p.ImageUrl" alt="@p.Name" class="g-img" />
-                    <button class="g-wish-btn wishlist-btn @(isWishlisted ? "wishlisted" : "")"
-                            data-plant-id="@p.Id">
-                        <svg width="13" height="13" viewBox="0 0 24 24"
-                             fill="@(isWishlisted ? "currentColor" : "none")"
-                             stroke="currentColor" stroke-width="2.2">
+                    <img src="@item.ImageUrl" alt="@item.Name" class="g-img" />
+                    <button class="g-wish-btn">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                         </svg>
                     </button>
                 </div>
                 <div class="g-info">
-                    <div class="g-name">@p.Name</div>
-                    <div class="g-sub">@p.Category</div>
+                    <div class="g-name">@item.Name</div>
+                    <div class="g-sub">@item.Category</div>
+                    <div class="g-rating">
+                        <span class="g-stars">★★★★★</span>
+                        <span>@item.Rating</span>
+                    </div>
                     <div class="g-price-row">
-                        <span class="g-price">₱@p.Price.ToString("N0")</span>
+                        <span class="g-price">₱@item.Price.ToString("N0")</span>
                         <button class="g-cart-btn">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                                 <circle cx="9" cy="21" r="1" />
@@ -66,30 +65,3 @@
         </div>
     }
 </div>
-
-@section Scripts {
-    <script>
-        document.querySelectorAll('.wishlist-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const plantId = this.dataset.plantId;
-                fetch('/Account/ToggleWishlist', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `plantId=${plantId}`
-                })
-                .then(res => res.json())
-                .then(data => {
-                    if (!data.success) { window.location.href = '/Auth/Login'; return; }
-                    const svg = this.querySelector('svg');
-                    if (data.wishlisted) {
-                        this.classList.add('wishlisted');
-                        if (svg) svg.setAttribute('fill', 'currentColor');
-                    } else {
-                        this.classList.remove('wishlisted');
-                        if (svg) svg.setAttribute('fill', 'none');
-                    }
-                });
-            });
-        });
-    </script>
-}

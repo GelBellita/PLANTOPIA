@@ -8,52 +8,62 @@ namespace Plantopia.Controllers
     {
         private readonly AppDbContext _context;
 
+
         public StoreController(AppDbContext context)
         {
             _context = context;
         }
 
-        // ── Helper to get wishlisted plant IDs for current user ──
-        private List<int> GetWishlistedIds()
-        {
-            var email = HttpContext.Session.GetString("UserEmail");
-            if (string.IsNullOrEmpty(email)) return new List<int>();
-            var user = _context.Users.FirstOrDefault(u => u.Email == email);
-            if (user == null) return new List<int>();
-            return _context.Wishlists
-                .Where(w => w.UserId == user.Id)
-                .Select(w => w.PlantId)
-                .ToList();
-        }
-
         public IActionResult Index()
         {
             var plants = _context.Plants.ToList();
-            ViewData["WishlistedIds"] = GetWishlistedIds();
+
+            var email = HttpContext.Session.GetString("UserEmail");
+            var wishlistedIds = new List<int>();
+
+            if (!string.IsNullOrEmpty(email))
+            {
+                var user = _context.Users.FirstOrDefault(u => u.Email == email);
+                if (user != null)
+                {
+                    wishlistedIds = _context.Wishlists
+                        .Where(w => w.UserId == user.Id)
+                        .Select(w => w.PlantId)
+                        .ToList();
+                }
+            }
+
+            ViewData["WishlistedIds"] = wishlistedIds;
             return View(plants);
         }
+
 
         [HttpGet]
         public IActionResult Search(string query)
         {
+            // ── kung walay query, balik sa Index ──
             if (string.IsNullOrWhiteSpace(query))
                 return RedirectToAction("Index");
 
+            // ── check kung naa bay results sa database ──
             var results = _context.Plants
                 .Where(p => p.Name.Contains(query) ||
                             p.Category.Contains(query) ||
                             p.Description.Contains(query))
                 .ToList();
 
+            // ── kung walay results, redirect sa Plants with no results flag ──
             if (results.Count == 0)
             {
                 TempData["NoResults"] = $"No plants found for \"{query}\".";
                 return RedirectToAction("Plants");
             }
 
+            // ── kung naa, redirect sa Plants page with query filter ──
             return RedirectToAction("Plants", new { query = query });
         }
 
+        // ── Update Plants action para mag-accept ug query ──
         public IActionResult Plants(string query, string category)
         {
             var plants = _context.Plants.AsQueryable();
@@ -68,6 +78,7 @@ namespace Plantopia.Controllers
 
             var result = plants.ToList();
 
+            // ── Limit to 5 kung walay filter (default best sellers view) ──
             if (string.IsNullOrWhiteSpace(query) && string.IsNullOrWhiteSpace(category))
                 result = result.Take(5).ToList();
             else if (!string.IsNullOrWhiteSpace(category))
@@ -75,34 +86,40 @@ namespace Plantopia.Controllers
 
             ViewData["Query"] = query;
             ViewData["Category"] = category;
-            ViewData["WishlistedIds"] = GetWishlistedIds();
             return View(result);
         }
+
 
         public IActionResult PlantCare()
         {
             return View();
         }
 
+        // query sa db with the use of their tags to filter plants per page (BestSeller, NewArrival, Sale)
+
         public IActionResult BestSellers()
         {
-            var plants = _context.Plants.ToList();
-            ViewData["WishlistedIds"] = GetWishlistedIds();
-            return View(plants);
+            var bestSellers = _context.Plants
+                .Where(p => p.Tags.Contains("BestSeller"))
+                .ToList();
+            return View(bestSellers);
         }
+
 
         public IActionResult NewArrivals()
         {
-            var plants = _context.Plants
-                .OrderByDescending(p => p.Id)
+            var newArrivals = _context.Plants
+                .Where(p => p.Tags.Contains("NewArrival"))
                 .ToList();
-            ViewData["WishlistedIds"] = GetWishlistedIds();
-            return View(plants);
+            return View(newArrivals);
         }
 
         public IActionResult Sale()
         {
-            return View();
+            var saleItems = _context.Plants
+                .Where(p => p.Tags.Contains("Sale"))
+                .ToList();
+            return View(saleItems);
         }
 
         public IActionResult Profile()

@@ -284,7 +284,7 @@ html, body {
 .welcome-banner-bg {
     position: absolute;
     inset: 0;
-    background-image: url('/images/home_page_bg.png');
+    background-image: url('/images/background/home_page_bg.png');
     background-size: cover;
     border-radius: 0;
     background-position: center;
