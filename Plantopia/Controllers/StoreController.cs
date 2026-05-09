@@ -95,21 +95,31 @@ namespace Plantopia.Controllers
             return View();
         }
 
-        // ── BestSellers karon nag-query na sa DB ──
+        // query sa db with the use of their tags to filter plants per page (BestSeller, NewArrival, Sale)
+
         public IActionResult BestSellers()
         {
-            var bestSellers = _context.Plants.Take(6).ToList();
+            var bestSellers = _context.Plants
+                .Where(p => p.Tags.Contains("BestSeller"))
+                .ToList();
             return View(bestSellers);
         }
 
+
         public IActionResult NewArrivals()
         {
-            return View();
+            var newArrivals = _context.Plants
+                .Where(p => p.Tags.Contains("NewArrival"))
+                .ToList();
+            return View(newArrivals);
         }
 
         public IActionResult Sale()
         {
-            return View();
+            var saleItems = _context.Plants
+                .Where(p => p.Tags.Contains("Sale"))
+                .ToList();
+            return View(saleItems);
         }
 
         public IActionResult Profile()

@@ -218,7 +218,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 #hero {
     min-height: 100vh;
     padding-top: 0;
-    background-image: url('/images/hero-bg.png');
+    background-image: url('/images/background/hero-bg.png');
     background-size: cover;
     background-position: center top;
     background-color: #c5dde8;
@@ -398,7 +398,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 
 /* ── OUR STORY ──────────────────────────────────────────────── */
 #about {
-    background-image: url('/images/about-bg.png');
+    background-image: url('/images/background/about-bg.png');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -540,7 +540,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 
 /* ── FOOTER ─────────────────────────────────────────────────── */
 .plant-footer {
-    background-image: linear-gradient(rgba(10, 30, 10, 0.72), rgba(10, 30, 10, 0.82)), url('/images/footer_image.png');
+    background-image: linear-gradient(rgba(10, 30, 10, 0.72), rgba(10, 30, 10, 0.82)), url('/images/background/footer_image.png');
     background-size: cover;
     background-position: center bottom;
     background-repeat: no-repeat;
@@ -727,7 +727,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 /* ── LOGIN / REGISTER PAGE ──────────────────────────────────── */
 .auth-page {
     min-height: 100vh;
-    background-image: url('/images/new_log_reg_bg.png');
+    background-image: url('/images/background/new_log_reg_bg.png');
     background-size: cover;
     background-position: center bottom;
     display: flex;
