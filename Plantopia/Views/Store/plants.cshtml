@@ -8,7 +8,8 @@
     ViewData["PromoCta"] = "Shop Now →";
 
     var query = ViewData["Query"]?.ToString();
-    var category = ViewData["Category"]?.ToString(); 
+    var category = ViewData["Category"]?.ToString();
+    var wishlistedIds = ViewData["WishlistedIds"] as List<int> ?? new List<int>();
 }
 @section Styles {
     <link rel="stylesheet" href="~/css/plants.css" asp-append-version="true" />
@@ -91,7 +92,7 @@
 </div>
 @* ── Products Section ── *@
 <div class="section-header" mt-1>
-        <h4>@(!string.IsNullOrEmpty(category) ? category + " Plants" : string.IsNullOrEmpty(query) ? "Best Sellers" : $"Found {Model.Count} result(s)")</h4>
+    <h4>@(!string.IsNullOrEmpty(category) ? category : string.IsNullOrEmpty(query) ? "Best Sellers" : $"Found {Model.Count} result(s)")</h4>
     @if (string.IsNullOrEmpty(query))
     {
         <a asp-controller="Store" asp-action="BestSellers" class="view-all-link">View all ›</a>
@@ -119,13 +120,13 @@ else
                          onclick="openPlantModal('@plant.Name', '@plant.Category', '@plant.Price', '@plant.ImageUrl', '@plant.Description')">
                     <div class="plant-product-img-wrap">
                         <img src="@plant.ImageUrl" alt="@plant.Name" class="plant-product-img" />
-                        <button class="plant-wish-btn">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                        <button class="plant-wish-btn wishlist-btn @(wishlistedIds.Contains(plant.Id) ? "wishlisted" : "")"
+                                data-plant-id="@plant.Id"
+                                onclick="event.stopPropagation()">
+                            <svg width="14" height="14" viewBox="0 0 24 24"
+                                 fill="@(wishlistedIds.Contains(plant.Id) ? "currentColor" : "none")"
                                  stroke="currentColor" stroke-width="2.2">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67
-                                l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06
-                                1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5
-                                0 0 0 0-7.78z" />
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
                             </svg>
                         </button>
                     </div>
@@ -142,4 +143,31 @@ else
             </div>
         }
     </div>
+}
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.wishlist-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const plantId = this.dataset.plantId;
+                fetch('/Account/ToggleWishlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `plantId=${plantId}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) { window.location.href = '/Auth/Login'; return; }
+                    const svg = this.querySelector('svg');
+                    if (data.wishlisted) {
+                        this.classList.add('wishlisted');
+                        if (svg) svg.setAttribute('fill', 'currentColor');
+                    } else {
+                        this.classList.remove('wishlisted');
+                        if (svg) svg.setAttribute('fill', 'none');
+                    }
+                });
+            });
+        });
+    </script>
 }

@@ -6,6 +6,8 @@
     ViewData["PromoTitle"] = "Loved by<br>plant parents.";
     ViewData["PromoSub"] = "Our best sellers are chosen by thousands of happy customers!";
     ViewData["PromoCta"] = "Shop Now →";
+
+    var wishlistedIds = ViewData["WishlistedIds"] as List<int> ?? new List<int>();
 }
 
 <div class="page-banner">
@@ -38,8 +40,13 @@
             <div class="g-card">
                 <div class="g-img-wrap">
                     <img src="@item.ImageUrl" alt="@item.Name" class="g-img" />
-                    <button class="g-wish-btn">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+                    <button class="g-wish-btn wishlist-btn @(wishlistedIds.Contains(item.Id) ? "wishlisted" : "")"
+                            data-plant-id="@item.Id">
+                        <svg width="14" height="14" viewBox="0 0 24 24"
+                             fill="@(wishlistedIds.Contains(item.Id) ? "currentColor" : "none")"
+                             stroke="currentColor" stroke-width="2.2">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                        </svg>
                     </button>
                 </div>
                 <div class="g-info">
@@ -60,3 +67,30 @@
         </div>
     }
 </div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.wishlist-btn').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const plantId = this.dataset.plantId;
+                fetch('/Account/ToggleWishlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `plantId=${plantId}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) { window.location.href = '/Auth/Login'; return; }
+                    const svg = this.querySelector('svg');
+                    if (data.wishlisted) {
+                        this.classList.add('wishlisted');
+                        if (svg) svg.setAttribute('fill', 'currentColor');
+                    } else {
+                        this.classList.remove('wishlisted');
+                        if (svg) svg.setAttribute('fill', 'none');
+                    }
+                });
+            });
+        });
+    </script>
+}

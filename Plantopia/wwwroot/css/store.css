@@ -667,3 +667,10 @@ html, body {
     fill: #e74c3c;
     stroke: #e74c3c;
 }
+
+.plant-wish-btn.wishlisted svg,
+.g-wish-btn.wishlisted svg,
+.product-wish-btn.wishlisted svg {
+    fill: #e74c3c;
+    stroke: #e74c3c;
+}

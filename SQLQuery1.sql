@@ -1,7 +1,9 @@
-﻿INSERT INTO Notifications (UserId, Title, Message, Type, IsRead, CreatedAt)
-VALUES (1, 'Flash Sale!', '20% off all succulents today!', 'Promo', 0, GETDATE())
-
--- Insert notification para sa TANAN users
-INSERT INTO dbo.Notifications (UserId, Title, Message, Type, IsRead, CreatedAt)
-SELECT Id, 'Flash Sale!', '20% off all succulents today!', 'Promo', 0, GETDATE()
-FROM dbo.Users
+﻿CREATE TABLE Wishlists (
+    Id       INT IDENTITY(1,1) PRIMARY KEY,
+    UserId   INT NOT NULL,
+    PlantId  INT NOT NULL,
+    AddedAt  DATETIME NOT NULL DEFAULT GETDATE(),
+    CONSTRAINT FK_Wishlists_Users  FOREIGN KEY (UserId)  REFERENCES Users(Id)  ON DELETE CASCADE,
+    CONSTRAINT FK_Wishlists_Plants FOREIGN KEY (PlantId) REFERENCES Plants(Id) ON DELETE CASCADE,
+    CONSTRAINT UQ_Wishlists UNIQUE (UserId, PlantId)
+);

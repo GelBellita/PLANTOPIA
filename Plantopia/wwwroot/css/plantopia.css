@@ -866,6 +866,12 @@ h1, h2, h3, h4, h5, h6, .font-serif {
     fill: #e74c3c;
     stroke: #e74c3c;
 }
+
+.plant-wish-btn.wishlisted svg,
+.g-wish-btn.wishlisted svg {
+    fill: #e74c3c;
+    stroke: #e74c3c;
+}
 /* ── AUTH GATE MODAL ────────────────────────────────────────── */
 .auth-modal {
     border-radius: 20px;

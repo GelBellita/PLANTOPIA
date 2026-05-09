@@ -12,8 +12,8 @@ using Plantopia.Data;
 namespace Plantopia.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260508190948_PlantTableData")]
-    partial class PlantTableData
+    [Migration("20260509101707_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

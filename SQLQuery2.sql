@@ -1,23 +1,12 @@
-﻿-- Enable identity insert
-SET IDENTITY_INSERT dbo.Plants ON;
-
--- Clear existing data first
-DELETE FROM dbo.Plants;
-
--- Insert all plants
-INSERT INTO dbo.Plants (Id, Name, Category, Badge, ImageUrl, Price, Description) VALUES
-(1,  'Succulent Trio Set', 'Indoor Plants',   'New', '/images/succulent.jpg',    280, 'A beautiful set of three succulents perfect for your desk or shelf.'),
-(2,  'Snake Plant',        'Indoor Plants',   'Hot', '/images/snake.jpg',        260, 'Low-maintenance plant that purifies air and thrives in low light.'),
-(3,  'Monstera Plant',     'Indoor Plants',   'New', '/images/monstera.jpg',     280, 'Iconic tropical plant with large, glossy split leaves.'),
-(11, 'Peace Lily',         'Indoor Plants',   'New', '/images/peace-lily.jpg',   320, 'Elegant white flowers with dark green leaves, great for indoors.'),
-(4,  'Santan',             'Outdoor Plants',  'New', '/images/santan.jpg',       280, 'Colorful Filipino flowering shrub perfect for gardens.'),
-(5,  'Bougainvillea',      'Outdoor Plants',  'New', '/images/Bougainvillea.jpg',320, 'Vibrant climbing plant with bright papery flowers.'),
-(6,  'Ylang-Ylang',        'Outdoor Plants',  'New', '/images/ylang-ylang.jpg',  450, 'Fragrant tropical tree famous for its sweet-scented flowers.'),
-(7,  'Gumamela',           'Outdoor Plants',  'Hot', '/images/gumamela.jpeg',    180, 'Classic Filipino hibiscus with large colorful blooms.'),
-(8,  'Dwarf Ixora',        'Balcony / Patio', 'New', '/images/dwarf-ixora.jpg',  220, 'Compact flowering shrub ideal for pots and balconies.'),
-(9,  'Caladium',           'Balcony / Patio', 'Hot', '/images/caladium.jpg',     260, 'Stunning heart-shaped leaves with vibrant color patterns.'),
-(14, 'Sampaguita',         'Balcony / Patio', 'New', '/images/sampaguita.jpg',   175, 'Philippines national flower, known for its sweet fragrance.'),
-(10, 'Pandan Plant',       'Balcony / Patio', 'New', '/images/pandan.jpg',       150, 'Aromatic plant used in Filipino cooking and as air freshener.');
-
--- Disable identity insert after
-SET IDENTITY_INSERT dbo.Plants OFF;
+﻿INSERT INTO Plants (Name, Category, Badge, ImageUrl, Price, Description) VALUES
+('Monstera Deliciosa', 'Indoor Plants', 'New', '/images/Monstera Deliciosa.png', 850, 'A popular tropical plant with iconic split leaves.'),
+('Snake Plant', 'Indoor Plants', 'Hot', '/images/Snake Plant.png', 450, 'Low-maintenance plant perfect for any room.'),
+('Fiddle Leaf Fig', 'Indoor Plants', '', '/images/Fiddle Leaf Fig.png', 1200, 'A stunning plant with large violin-shaped leaves.'),
+('Pothos Golden', 'Hanging Plants', '', '/images/Pothos Golden.png', 350, 'Easy-care trailing plant great for shelves.'),
+('Aglaonema Red', 'Indoor Plants', 'New', '/images/Aglaonema Red.png', 600, 'Vibrant red-green leaves that brighten any space.'),
+('Peace Lily', 'Indoor Plants', '', '/images/Peace Lily.png', 520, 'Elegant white flowers with air-purifying properties.'),
+('Bougainvillea', 'Outdoor Plants', 'Hot', '/images/Bougainvillea.png', 380, 'Bright flowering vine perfect for gardens.'),
+('Gumamela', 'Outdoor Plants', '', '/images/Gumamela.png', 280, 'Classic Filipino flower known for its vibrant colors.'),
+('Echeveria', 'Succulents', 'New', '/images/Echeveria.png', 250, 'Beautiful rosette-shaped succulent.'),
+('Calachuchi', 'Outdoor Plants', '', '/images/Calachuchi.png', 320, 'Fragrant flowering tree loved in Filipino gardens.'),
+('String of Pearls', 'Hanging Plants', 'Hot', '/images/String of Pearls.png', 450, 'Unique trailing succulent with bead-like leaves.');
