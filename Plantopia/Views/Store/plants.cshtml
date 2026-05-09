@@ -40,7 +40,7 @@
     </div>
 }
 
-<div class="section-header">
+<div class="section-header mb-1">
     <h4>Shop by Category</h4>
 </div>
 
@@ -70,7 +70,7 @@
         <div class="col-6 col-lg-3">
             <a asp-controller="Store" asp-action="Plants" asp-route-category="Succulents"
                    class="cat-card @(category == "Succulents" ? "cat-card-active" : "")"
-                   style="background-image:url('/images/succulent_cat.png'); background-repeat:no-repeat; background-size:auto 90%; background-position:85% center;">
+                   style="background-image:url('/images/succulent_cat.png'); background-repeat:no-repeat; background-size:auto 90%; background-position:right center;">
                 <div>
                     <div class="cat-card-label">Succulents</div>
                     <div class="cat-card-sub">Small plants,<br>big beauty</div>
@@ -80,7 +80,7 @@
         <div class="col-6 col-lg-3">
             <a asp-controller="Store" asp-action="Plants" asp-route-category="Hanging Plants"
                    class="cat-card @(category == "Hanging Plants" ? "cat-card-active" : "")"
-                   style="background-image:url('/images/hanging_cat.png'); background-repeat:no-repeat; background-size:auto 90%; background-position:85% center;">
+                   style="background-image:url('/images/hanging_cat.png'); background-repeat:no-repeat; background-size:auto 90%; background-position:right center;">
                 <div>
                     <div class="cat-card-label">Hanging Plants</div>
                     <div class="cat-card-sub">Perfect for<br>any corner</div>
@@ -90,7 +90,7 @@
     </div>
 </div>
 @* ── Products Section ── *@
-<div class="section-header mt-2">
+<div class="section-header" mt-1>
         <h4>@(!string.IsNullOrEmpty(category) ? category + " Plants" : string.IsNullOrEmpty(query) ? "Best Sellers" : $"Found {Model.Count} result(s)")</h4>
     @if (string.IsNullOrEmpty(query))
     {

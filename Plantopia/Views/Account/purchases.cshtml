@@ -10,15 +10,15 @@
         display: flex;
         gap: 6px;
         flex-wrap: wrap;
-        margin-bottom: 24px;
+        margin-bottom: 14px;
     }
 
     .purchase-tab {
-        padding: 8px 20px;
+        padding: 6px 14px;
+        font-size: 12px;
         border-radius: 20px;
         border: 1.5px solid var(--border);
         background: var(--white);
-        font-size: 13.5px;
         font-weight: 500;
         color: var(--text-mid);
         cursor: pointer;
@@ -43,17 +43,17 @@
     .purchase-list {
         display: flex;
         flex-direction: column;
-        gap: 14px;
+        gap: 10px;
     }
 
     .order-card {
         background: var(--white);
         border-radius: var(--radius-lg);
-        padding: 20px 24px;
+        padding:  14px 16px;
         box-shadow: var(--shadow-sm);
         display: flex;
         align-items: center;
-        gap: 20px;
+        gap: 14px;
         cursor: pointer;
         transition: box-shadow 0.15s;
         text-decoration: none;
@@ -70,19 +70,19 @@
     }
 
     .order-number {
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 700;
         color: var(--text-dark);
     }
 
     .order-date {
-        font-size: 12px;
+        font-size: 11px;
         color: var(--text-muted);
         margin-top: 3px;
     }
 
     .order-total {
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 700;
         color: var(--green-dark);
         margin-top: 8px;
@@ -113,6 +113,12 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    .order-img-wrap,
+    .order-img-more {
+        width: 52px;
+        height: 52px;
     }
 
         .order-img-wrap img {
@@ -156,9 +162,9 @@
         display: inline-flex;
         align-items: center;
         gap: 6px;
-        padding: 5px 12px;
+        padding: 4px 10px;
         border-radius: 20px;
-        font-size: 12px;
+        font-size: 11px;
         font-weight: 700;
         width: fit-content;
     }
@@ -171,13 +177,13 @@
     .status-refund   { background: #fce4ec; color: #ad1457; }
 
     .order-status-desc {
-        font-size: 13px;
+        font-size: 12px;
         font-weight: 600;
         color: var(--text-dark);
     }
 
     .order-status-sub {
-        font-size: 12px;
+        font-size: 11px;
         color: var(--text-muted);
         line-height: 1.4;
     }
@@ -187,8 +193,8 @@
         color: var(--white);
         border: none;
         border-radius: var(--radius-sm);
-        padding: 8px 18px;
-        font-size: 13px;
+        padding: 6px 14px;
+        font-size: 12px;
         font-weight: 600;
         cursor: pointer;
         margin-top: 4px;
@@ -208,6 +214,7 @@
     }
 </style>
 
+<div class="profile-page-wrapper">
 <div class="profile-page">
 
     @* Header *@
@@ -427,5 +434,6 @@
             </svg>
         </div>
 
+    </div>
     </div>
 </div>
