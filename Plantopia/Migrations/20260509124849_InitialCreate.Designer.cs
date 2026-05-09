@@ -12,7 +12,7 @@ using Plantopia.Data;
 namespace Plantopia.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260509081916_InitialCreate")]
+    [Migration("20260509124849_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
