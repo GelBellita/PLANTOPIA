@@ -67,10 +67,11 @@ namespace Plantopia.Controllers
                 return View(model);
             }
 
+            var fullName = $"{model.FirstName} {model.LastName}".Trim();
 
             var user = new User
             {
-                FullName = model.FullName,
+                FullName = fullName,
                 Email = model.Email,
                 Password = BCrypt.Net.BCrypt.HashPassword(model.Password),
                 Role = "Customer"
@@ -79,16 +80,8 @@ namespace Plantopia.Controllers
             _context.Users.Add(user);
             _context.SaveChanges();
 
-            TempData["Success"] = $"Welcome, {model.FullName}! Please log in.";
+            TempData["Success"] = $"Welcome, {fullName}! Please log in.";
             return RedirectToAction("Login");
-        }
-
-        // ── Logout ──
-        [HttpGet("logout")]
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Home");
         }
     }
 }

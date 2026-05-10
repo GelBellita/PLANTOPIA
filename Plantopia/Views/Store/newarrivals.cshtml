@@ -24,10 +24,10 @@
     <h4>All New Arrivals</h4>
     <div class="filter-sort">
         Sort by:
-        <select class="sort-select">
-            <option>Newest First</option>
-            <option>Price: Low to High</option>
-            <option>Bestselling</option>
+        <select class="sort-select" onchange="sortPage(this.value)">
+            <option value="newest">Newest First</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="bestselling">Bestselling</option>
         </select>
     </div>
 </div>
@@ -60,7 +60,8 @@
                     </div>
                     <div class="g-price-row">
                         <span class="g-price">₱@item.Price.ToString("N0")</span>
-                        <button class="g-cart-btn" onclick="event.stopPropagation()">
+                        <button class="g-cart-btn"
+                                onclick="event.stopPropagation(); addToCartDirect(@item.Id, this)">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                                 <circle cx="9" cy="21" r="1" />
                                 <circle cx="20" cy="21" r="1" />
@@ -97,8 +98,8 @@
  
             <div style="width:300px; height:300px; border-radius:16px; background:#f5f5f3; overflow:hidden; position:relative; flex-shrink:0;">
                 <img id="pm-main-img" src="" style="width:100%; height:100%; object-fit:cover;" />
-                <button style="position:absolute; top:12px; right:12px; background:rgba(255,255,255,0.92); border:none; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#bbb;">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
+                <button id="modal-wish-btn" onclick="toggleModalWishlist()" style="position:absolute; top:12px; right:12px; background:rgba(255,255,255,0.92); border:none; border-radius:50%; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#bbb; transition:color 0.2s;">
+                    <svg id="modal-wish-svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
                 </button>
             </div>
  
@@ -634,6 +635,57 @@
 
 @section Scripts {
     <script>
+
+                var wishlistedIds = @Html.Raw(
+                    System.Text.Json.JsonSerializer.Serialize(
+                            ViewData["WishlistedIds"] as List<int> ?? new List<int>()
+                    )
+            );
+
+                function addToCartDirect(plantId, btn) {
+            btn.disabled = true;
+            btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+            fetch('/Account/AddToCart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `plantId=${plantId}&quantity=1`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success && data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                document.querySelectorAll('.cart-count-badge').forEach(el => {
+                    el.textContent = data.cartCount;
+                    el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
+                });
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`;
+                }, 1500);
+            })
+            .catch(() => { btn.disabled = false; });
+        }
+
+
+
+        function sortPage(value) {
+            var url = new URL(window.location.href);
+            url.searchParams.set('sort', value);
+            window.location.href = url.toString();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var params = new URLSearchParams(window.location.search);
+            var current = params.get('sort');
+            if (current) {
+                var select = document.querySelector('.sort-select');
+                if (select) select.value = current;
+            }
+        });
+
         document.querySelectorAll('.wishlist-btn').forEach(btn => {
             btn.addEventListener('click', function (e) {
                 e.stopPropagation();
@@ -647,8 +699,24 @@
                 .then(data => {
                     if (!data.success) { window.location.href = '/Auth/Login'; return; }
                     const svg = this.querySelector('svg');
-                    if (data.wishlisted) { this.classList.add('wishlisted'); if (svg) svg.setAttribute('fill', 'currentColor'); }
-                    else { this.classList.remove('wishlisted'); if (svg) svg.setAttribute('fill', 'none'); }
+                            if (data.wishlisted) {
+            this.classList.add('wishlisted');
+            if (svg) svg.setAttribute('fill', 'currentColor');
+        } else {
+            this.classList.remove('wishlisted');
+            if (svg) svg.setAttribute('fill', 'none');
+        }
+
+        var id = parseInt(plantId);
+        if (data.wishlisted) {
+            if (!wishlistedIds.includes(id)) wishlistedIds.push(id);
+        } else {
+            wishlistedIds = wishlistedIds.filter(x => x !== id);
+        }
+
+        if (currentPlantId && parseInt(currentPlantId) === id) {
+                    updateModalWishBtn(data.wishlisted);
+                }
                 });
             });
         });
@@ -702,6 +770,8 @@
                 if (thumb) thumb.src = imageUrl;
             }
 
+            var isWishlisted = wishlistedIds.includes(parseInt(plantId));
+            updateModalWishBtn(isWishlisted);
             document.getElementById('pm-qty').textContent = '1';
             document.getElementById('plantModal').style.display = 'flex';
             document.body.style.overflow = 'hidden';
@@ -820,5 +890,39 @@
         document.getElementById('plantModal').addEventListener('click', function(e) {
             if (e.target === this) closePlantModal();
         });
+        function updateModalWishBtn(wishlisted) {
+                var btn = document.getElementById('modal-wish-btn');
+                var svg = document.getElementById('modal-wish-svg');
+                if (!btn || !svg) return;
+                svg.setAttribute('fill', wishlisted ? '#e53935' : 'none');
+                svg.setAttribute('stroke', wishlisted ? '#e53935' : 'currentColor');
+                btn.style.color = wishlisted ? '#e53935' : '#bbb';
+            }
+
+            function toggleModalWishlist() {
+                if (!currentPlantId) return;
+                fetch('/Account/ToggleWishlist', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: `plantId=${currentPlantId}`
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (!data.success) { window.location.href = '/Auth/Login'; return; }
+                    updateModalWishBtn(data.wishlisted);
+                    var id = parseInt(currentPlantId);
+                    if (data.wishlisted) {
+                        if (!wishlistedIds.includes(id)) wishlistedIds.push(id);
+                    } else {
+                        wishlistedIds = wishlistedIds.filter(function(x) { return x !== id; });
+                    }
+                    var cardBtn = document.querySelector('.wishlist-btn[data-plant-id="' + currentPlantId + '"]');
+                    if (cardBtn) {
+                        var cardSvg = cardBtn.querySelector('svg');
+                        if (data.wishlisted) { cardBtn.classList.add('wishlisted'); if (cardSvg) cardSvg.setAttribute('fill', 'currentColor'); }
+                        else { cardBtn.classList.remove('wishlisted'); if (cardSvg) cardSvg.setAttribute('fill', 'none'); }
+                    }
+                });
+            }
     </script>
 }
