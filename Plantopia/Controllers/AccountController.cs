@@ -651,5 +651,23 @@ namespace Plantopia.Controllers
 
             return Json(new { success = true });
         }
+        [HttpGet]
+        [IgnoreAntiforgeryToken]
+        public IActionResult GetCartCount()
+        {
+            var email = HttpContext.Session.GetString("UserEmail");
+            if (string.IsNullOrEmpty(email))
+                return Json(new { count = 0 });
+
+            var user = _context.Users.FirstOrDefault(u => u.Email == email);
+            if (user == null)
+                return Json(new { count = 0 });
+
+            var count = _context.CartItems
+                .Where(c => c.UserId == user.Id)
+                .Sum(c => (int?)c.Quantity) ?? 0;
+
+            return Json(new { count });
+        }
     }
 }

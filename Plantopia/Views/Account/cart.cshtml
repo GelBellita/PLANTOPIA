@@ -346,8 +346,10 @@
         if (toFreeEl)    toFreeEl.textContent    = '₱' + data.amountToFreeShipping;
         if (progressEl)  progressEl.style.width  = data.freeShippingProgress + '%';
 
-        var badge = document.querySelector('.cart-count-badge');
-        if (badge) badge.textContent = data.cartCount;
+        document.querySelectorAll('.cart-count-badge').forEach(el => {
+            el.textContent = data.cartCount;
+            el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
+        });
     }
 
     function changeQuantity(cartItemId, delta, btn) {

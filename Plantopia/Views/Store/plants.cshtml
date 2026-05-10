@@ -92,7 +92,7 @@
 </div>
 @* ── Products Section ── *@
 <div class="section-header" mt-1>
-    <h4>@(!string.IsNullOrEmpty(category) ? category : string.IsNullOrEmpty(query) ? "Best Sellers" : $"Found {Model.Count} result(s)")</h4>
+    <h4>@(!string.IsNullOrEmpty(category) ? category.Replace(" Plants", "") : string.IsNullOrEmpty(query) ? "Best Sellers" : $"Found {Model.Count} result(s)")</h4>
     @if (string.IsNullOrEmpty(query))
     {
         <a asp-controller="Store" asp-action="BestSellers" class="view-all-link">View all ›</a>
@@ -821,8 +821,10 @@ else
                     btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg> Add to Cart`;
                     return;
                 }
-                var badge = document.querySelector('.cart-count-badge');
-                if (badge) badge.textContent = data.cartCount;
+                document.querySelectorAll('.cart-count-badge').forEach(el => {
+                    el.textContent = data.cartCount;
+                    el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
+                });
 
                 btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Added!`;
                 btn.style.background = '#2e7d32';
