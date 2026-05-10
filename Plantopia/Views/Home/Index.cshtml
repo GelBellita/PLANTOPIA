@@ -70,7 +70,7 @@
             }
             else
             {
-                @foreach (var plant in Model)
+                @foreach (var plant in Model.Take(4))
                 {
                     <div class="col-lg-3 col-md-4 col-sm-6">
                         <div class="plant-card h-100">

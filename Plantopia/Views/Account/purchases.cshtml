@@ -31,8 +31,34 @@
     .status-cancelled  { background:#fce4ec; color:#c62828; }
     .order-status-desc { font-size:12px; font-weight:600; color:var(--text-dark); }
     .order-status-sub  { font-size:11px; color:var(--text-muted); line-height:1.4; }
-    .btn-cancel-order  { display:inline-flex; align-items:center; gap:5px; margin-top:5px; padding:4px 10px; background:#fff; border:1.5px solid #e57373; border-radius:6px; font-size:11px; font-weight:600; color:#c62828; cursor:pointer; font-family:var(--font-ui); transition:all .15s; }
-    .btn-cancel-order:hover { background:#fce4ec; }
+   .btn-cancel-order {
+  display: flex; /* not inline-flex */
+  width: 100%; /* full width */
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  padding: 6px 12px;
+  background: #fce4ec;
+  border: 0.5px solid #ef9a9a;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #c62828;
+  cursor: pointer;
+  font-family: var(--font-ui);
+  transition: background .15s;
+}
+   .btn-cancel-order:hover { background: #f7c1c1; }
+   .order-status-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor; /* matches text color automatically */
+  display: inline-block;
+  flex-shrink: 0;
+}
     .order-arrow { color:var(--text-muted); flex-shrink:0; }
     .empty-purchases { text-align:center; padding:48px 20px; }
     .empty-purchases-icon { font-size:48px; margin-bottom:12px; }

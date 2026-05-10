@@ -27,11 +27,11 @@
     .btn-remove:hover { color:var(--red,#e74c3c); }
     .wishlist-empty { text-align:center; padding:40px 20px; color:var(--text-muted); }
     .wishlist-empty-icon { font-size:50px; margin-bottom:12px; }
-    .wishlist-promo { background:var(--green-pale); border-radius:var(--radius-lg); padding:18px 24px; display:flex; align-items:center; gap:20px; overflow:hidden; position:relative; }
+    .wishlist-promo { border-radius:var(--radius-lg); padding:18px 24px; display:flex; align-items:center; gap:20px; overflow:hidden; position:relative; }
     .wishlist-promo-left { font-size:50px; line-height:1; flex-shrink:0; }
-    .wishlist-promo-text { flex:1; }
-    .wishlist-promo-title { font-family:var(--font-main); font-size:16px; font-weight:700; color:var(--text-dark); line-height:1.3; }
-    .wishlist-promo-sub { font-size:12px; color:var(--text-muted); margin-top:4px; }
+    .wishlist-promo-text { flex:1; text-align: center; }
+    .wishlist-promo-title { font-family:var(--font-main); font-size:26px; font-weight:700; color:var(--text-dark); line-height:1.3; }
+    .wishlist-promo-sub { font-size:15px; color:var(--text-muted); margin-top:4px; }
     .btn-shop-arrivals { display:inline-flex; align-items:center; gap:6px; margin-top:10px; background:var(--green-dark); color:var(--white); border-radius:var(--radius-sm); padding:8px 16px; font-size:12px; font-weight:600; text-decoration:none; transition:background .15s; }
     .btn-shop-arrivals:hover { background:var(--green-mid); color:var(--white); }
     .wishlist-promo-right { font-size:50px; line-height:1; flex-shrink:0; opacity:.5; letter-spacing:8px; }
@@ -42,15 +42,9 @@
 
         <div class="wishlist-header-row">
             <div>
-                <h1 class="profile-title">My Wishlist <span class="profile-title-emoji">🌿</span></h1>
+                <h1 class="profile-title">My Wishlist</h1>
                 <p class="wishlist-count">@Model.Count item@(Model.Count != 1 ? "s" : "") saved</p>
             </div>
-            <a href="#" class="btn-share-wishlist">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
-                </svg>
-                Share Wishlist
-            </a>
         </div>
 
         @if (!Model.Any())
@@ -59,7 +53,7 @@
                 <div class="wishlist-empty-icon">🌱</div>
                 <h4>Your wishlist is empty</h4>
                 <p>Start adding plants you love!</p>
-                <a asp-controller="Store" asp-action="Index" class="btn-shop-arrivals">Browse Plants →</a>
+                <a asp-controller="Store" asp-action="Index" class="btn-shop-arrivals">Browse Plants</a>
             </div>
         }
         else
@@ -94,19 +88,30 @@
             </div>
         }
 
-        <div class="wishlist-promo">
-            <div class="wishlist-promo-left">🪴</div>
-            <div class="wishlist-promo-text">
-                <div class="wishlist-promo-title">Still looking for your<br>perfect plant?</div>
-                <div class="wishlist-promo-sub">Discover more greens that'll brighten up your space.</div>
-                <a asp-controller="Store" asp-action="NewArrivals" class="btn-shop-arrivals">Shop New Arrivals →</a>
+        <div class="wishlist-promo" style="
+            background: url('/images/background/PROMO_BG.png') center bottom / 100% no-repeat;">
+
+            <div style="
+                position: absolute;
+                inset: 0;
+                z-index: 0;
+                border-radius: var(--radius-lg);">
             </div>
-            <div class="wishlist-promo-right">🌿🌵🪴</div>
+
+            <div style="position: relative; z-index: 1; display: flex; align-items: center; width: 100%; min-height: 180px;">
+                <div style="display: flex; flex-direction: column; align-items: flex-start; justify-content: center; width: 100%; max-width: 400px; margin: 0 auto 0 20%; padding: 10px 0;">
+                    <div class="wishlist-promo-title">Still looking for your<br>perfect plant?</div>
+                    <div class="wishlist-promo-sub">Discover more greens that'll brighten up your space.</div>
+                    <a asp-controller="Store" asp-action="NewArrivals" class="btn-shop-arrivals">Shop New Arrivals</a>
+                </div>
+            </div>
+
         </div>
 
     </div>
 </div>
-        @section Scripts {
+
+@section Scripts {
     <script>
         document.querySelectorAll('.wishlist-btn').forEach(btn => {
             btn.addEventListener('click', function () {
@@ -124,11 +129,9 @@
                         return;
                     }
                     if (!data.wishlisted) {
-                        // ── Remove card from page ──
                         const card = document.getElementById('wishlist-card-' + plantId);
                         if (card) card.remove();
 
-                        // ── Update count ──
                         const remaining = document.querySelectorAll('.wishlist-card').length;
                         const countEl = document.querySelector('.wishlist-count');
                         if (countEl) countEl.textContent = `${remaining} item${remaining !== 1 ? 's' : ''} saved`;
@@ -137,7 +140,6 @@
             });
         });
 
-        // ── Remove button ──
         document.querySelectorAll('.btn-remove').forEach(btn => {
             btn.addEventListener('click', function () {
                 const plantId = this.dataset.plantId;
@@ -161,7 +163,6 @@
             });
         });
 
-        // ── Add to Cart ──
         document.querySelectorAll('.btn-add-to-cart').forEach(btn => {
             btn.addEventListener('click', function () {
                 const plantId = this.dataset.plantId;

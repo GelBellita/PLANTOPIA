@@ -9,12 +9,16 @@
     background: var(--white);
     border-radius: var(--radius-lg);
     padding: 20px;
+    margin-left: -20px;   /* ← cancel out the wrapper's left padding */
+    margin-right: -28px;  /* ← cancel out the wrapper's right padding */
+    margin-top: -13px;     /* ← pull up slightly */
 }
     .messages-header-row {
         display: flex;
         align-items: flex-start;
         justify-content: space-between;
         margin-bottom: 12px;
+        margin-top: -8px;
     }
 
     .messages-deco {
@@ -354,13 +358,13 @@
     .btn-send svg { stroke: white; }
 </style>
 
-
+<div class="profile-page-wrapper">
 <div class="messages-page">
 
     @* Header *@
     <div class="messages-header-row">
         <div>
-            <h1 class="profile-title">Messages <span class="profile-title-emoji">🌿</span></h1>
+            <h1 class="profile-title">Messages</h1>
             <p class="profile-subtitle">We're here to help! Chat with our team anytime.</p>
         </div>
         <div class="messages-deco">
@@ -539,5 +543,6 @@
             </div>
 
         </div>
+    </div>
     </div>
 </div>
