@@ -24,10 +24,10 @@
     <h4>All Sale Items</h4>
     <div class="filter-sort">
         Sort by:
-        <select class="sort-select">
-            <option>Featured</option>
-            <option>Price: Low to High</option>
-            <option>Biggest Discount</option>
+        <select class="sort-select" onchange="sortPage(this.value)">
+            <option value="featured">Featured</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="biggest_discount">Biggest Discount</option>
         </select>
     </div>
 </div>
@@ -71,7 +71,8 @@
                             <span class="g-price-old">₱@item.Price.ToString("N0")</span>
                             <span class="g-price">₱@salePrice.ToString("N0")</span>
                         </div>
-                        <button class="g-cart-btn" onclick="event.stopPropagation()">
+                        <button class="g-cart-btn"
+                                onclick="event.stopPropagation(); addToCartDirect(@item.Id, this)">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
                                 <circle cx="9" cy="21" r="1" />
                                 <circle cx="20" cy="21" r="1" />
@@ -383,6 +384,52 @@
 
 @section Scripts {
     <script>
+
+        function addToCartDirect(plantId, btn) {
+            btn.disabled = true;
+            btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+            fetch('/Account/AddToCart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `plantId=${plantId}&quantity=1`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success && data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                document.querySelectorAll('.cart-count-badge').forEach(el => {
+                    el.textContent = data.cartCount;
+                    el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
+                });
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`;
+                }, 1500);
+            })
+            .catch(() => { btn.disabled = false; });
+        }
+
+
+
+
+        function sortPage(value) {
+            var url = new URL(window.location.href);
+            url.searchParams.set('sort', value);
+            window.location.href = url.toString();
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var params = new URLSearchParams(window.location.search);
+            var current = params.get('sort');
+            if (current) {
+                var select = document.querySelector('.sort-select');
+                if (select) select.value = current;
+            }
+        });
+
         document.querySelectorAll('.wishlist-btn').forEach(btn => {
             btn.addEventListener('click', function (e) {
                 e.stopPropagation();

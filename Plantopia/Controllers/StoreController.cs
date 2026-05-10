@@ -97,29 +97,79 @@ namespace Plantopia.Controllers
 
         // query sa db with the use of their tags to filter plants per page (BestSeller, NewArrival, Sale)
 
-        public IActionResult BestSellers()
+        public IActionResult BestSellers(string sort = "bestselling")
         {
-            var bestSellers = _context.Plants
+            var query = _context.Plants
                 .Where(p => p.Tags.Contains("BestSeller"))
-                .ToList();
-            return View(bestSellers);
+                .AsQueryable();
+
+            query = sort switch
+            {
+                "price_asc" => query.OrderBy(p => p.Price),
+                "price_desc" => query.OrderByDescending(p => p.Price),
+                "top_rated" => query.OrderByDescending(p => p.Rating),
+                _ => query.OrderByDescending(p => p.Id)
+            };
+
+            ViewData["CurrentSort"] = sort;
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var wishlistedIds = userId.HasValue
+                ? _context.Wishlists.Where(w => w.UserId == userId.Value).Select(w => w.PlantId).ToList()
+                : new List<int>();
+            ViewData["WishlistedIds"] = wishlistedIds;
+
+            return View(query.ToList());
         }
 
 
-        public IActionResult NewArrivals()
+        public IActionResult NewArrivals(string sort = "newest")
         {
-            var newArrivals = _context.Plants
+            var query = _context.Plants
                 .Where(p => p.Tags.Contains("NewArrival"))
-                .ToList();
-            return View(newArrivals);
+                .AsQueryable();
+
+            query = sort switch
+            {
+                "price_asc" => query.OrderBy(p => p.Price),
+                "bestselling" => query.OrderByDescending(p => p.Id),
+                _ => query.OrderByDescending(p => p.Id)
+            };
+
+            ViewData["CurrentSort"] = sort;
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var wishlistedIds = userId.HasValue
+                ? _context.Wishlists.Where(w => w.UserId == userId.Value).Select(w => w.PlantId).ToList()
+                : new List<int>();
+            ViewData["WishlistedIds"] = wishlistedIds;
+
+            return View(query.ToList());
         }
 
-        public IActionResult Sale()
+
+        public IActionResult Sale(string sort = "featured")
         {
-            var saleItems = _context.Plants
+            var query = _context.Plants
                 .Where(p => p.Tags.Contains("Sale"))
-                .ToList();
-            return View(saleItems);
+                .AsQueryable();
+
+            query = sort switch
+            {
+                "price_asc" => query.OrderBy(p => p.Price),
+                "biggest_discount" => query.OrderByDescending(p => p.DiscountPercent),
+                _ => query.OrderByDescending(p => p.Id)
+            };
+
+            ViewData["CurrentSort"] = sort;
+
+            var userId = HttpContext.Session.GetInt32("UserId");
+            var wishlistedIds = userId.HasValue
+                ? _context.Wishlists.Where(w => w.UserId == userId.Value).Select(w => w.PlantId).ToList()
+                : new List<int>();
+            ViewData["WishlistedIds"] = wishlistedIds;
+
+            return View(query.ToList());
         }
 
         public IActionResult Profile()

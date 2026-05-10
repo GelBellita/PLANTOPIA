@@ -1,0 +1,145 @@
+﻿/* ====================================================
+   manageaddresses.css — Styles for Manage Addresses
+   ==================================================== */
+
+.saved-addresses-list {
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-top: 22px;
+    justify-content: center;
+}
+
+    .checkbox-group input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        accent-color: #2d5a27;
+        flex-shrink: 0;
+    }
+
+    .checkbox-group label {
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        margin: 0;
+        color: var(--text-mid);
+    }
+
+/* ── Address Card ── */
+.address-card {
+    border: 1px solid #e8f0e8;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 14px;
+    background: #ffffff;
+}
+
+    .address-card.is-default {
+        background: #f0f8f0;
+    }
+
+.address-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.address-label {
+    font-weight: 600;
+    color: #2d5a27;
+    font-size: 15px;
+}
+
+.address-default-badge {
+    background: #2d5a27;
+    color: #fff;
+    border-radius: 20px;
+    padding: 2px 12px;
+    font-size: 12px;
+}
+
+.address-full {
+    margin: 0;
+    color: #444;
+    font-size: 14px;
+}
+
+.address-city {
+    margin: 0;
+    color: #666;
+    font-size: 13px;
+}
+
+.address-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.btn-set-default {
+    background: #f0f8f0;
+    color: #2d5a27;
+    border: 1px solid #2d5a27;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+    .btn-set-default:hover {
+        background: #d8eed8;
+    }
+
+.btn-delete-address {
+    background: #fff0f0;
+    color: #a00;
+    border: 1px solid #ffcccc;
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+    .btn-delete-address:hover {
+        background: #ffe0e0;
+    }
+
+/* ── Back Button ── */
+.btn-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-mid);
+    text-decoration: none;
+    padding: 7px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: 20px;
+    background: var(--white);
+    transition: all 0.15s;
+    margin-bottom: 12px;
+}
+
+    .btn-back:hover {
+        border-color: var(--green-soft);
+        color: var(--green-mid);
+        background: var(--green-pale);
+    }
+
+/* ── Success Alert ── */
+.alert-success {
+    background: #f0f8f0;
+    color: #2d5a27;
+    border-radius: 10px;
+    padding: 12px 18px;
+    margin-bottom: 16px;
+}

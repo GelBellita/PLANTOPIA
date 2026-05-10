@@ -99,7 +99,18 @@ else
                         <div class="product-rating">
                             <span class="product-stars">★★★★★</span>
                         </div>
-                        <div class="product-price">₱@plant.Price.ToString("N0")</div>
+                        <div class="product-price-row" style="display:flex; align-items:center; justify-content:space-between;">
+                            <div class="product-price">₱@plant.Price.ToString("N0")</div>
+                            <button class="product-cart-btn"
+                                    onclick="event.stopPropagation(); addToCartDirect(@plant.Id, this)"
+                                    style="width:34px; height:34px; background:#1a3a1a; border:none; border-radius:9px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:#fff; flex-shrink:0;">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="9" cy="21" r="1" />
+                                    <circle cx="20" cy="21" r="1" />
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -666,6 +677,35 @@ else
 }
 @section Scripts {
     <script>
+
+         function addToCartDirect(plantId, btn) {
+            btn.disabled = true;
+            btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`;
+
+            fetch('/Account/AddToCart', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `plantId=${plantId}&quantity=1`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (!data.success && data.redirect) {
+                    window.location.href = data.redirect;
+                    return;
+                }
+                document.querySelectorAll('.cart-count-badge').forEach(el => {
+                    el.textContent = data.cartCount;
+                    el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
+                });
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>`;
+                }, 1500);
+            })
+            .catch(() => { btn.disabled = false; });
+        }
+
+
         // ── Wishlist toggle ──
         document.querySelectorAll('.wishlist-btn').forEach(btn => {
             btn.addEventListener('click', function (e) {
