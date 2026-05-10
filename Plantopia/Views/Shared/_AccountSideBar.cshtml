@@ -107,7 +107,7 @@
                         <path d="M16 10a4 4 0 0 1-8 0" />
                     </svg>
                     My Cart
-                    <span class="account-nav-badge">1</span>
+                    <span class="account-nav-badge cart-count-badge">0</span>
                 </a>
             </nav>
 
@@ -158,7 +158,7 @@
                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
                         </svg>
                         Cart
-                        <span class="topbar-action-badge">1</span>
+                        <span class="topbar-action-badge cart-count-badge">0</span>
                     </a>
 
                     <div class="topbar-user-menu" id="topbarUserMenu">
@@ -226,7 +226,7 @@
                                         <path d="M16 10a4 4 0 0 1-8 0" />
                                     </svg>
                                     My Cart
-                                    <span class="topbar-dropdown-badge">1</span>
+                                    <span class="topbar-dropdown-badge cart-count-badge">0</span>
                                 </a>
                             </div>
                             <div class="topbar-dropdown-divider"></div>
@@ -271,6 +271,18 @@
                     topbarUserMenu.classList.remove('open');
                 }
             });
+
+                        (function () {
+                fetch('/Account/GetCartCount')
+                    .then(r => r.json())
+                    .then(data => {
+                        document.querySelectorAll('.cart-count-badge').forEach(el => {
+                            el.textContent = data.count;
+                            el.style.display = data.count > 0 ? 'inline-flex' : 'none';
+                        });
+                    })
+                    .catch(() => {});
+            })();
     </script>
 
     @RenderSection("Scripts", required: false)

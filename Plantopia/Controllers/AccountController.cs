@@ -292,7 +292,7 @@ namespace Plantopia.Controllers
 
             var cartCount = _context.CartItems
                 .Where(c => c.UserId == user.Id)
-                .Sum(c => c.Quantity);
+                .Count();
 
             return Json(new { success = true, cartCount });
         }
@@ -335,7 +335,9 @@ namespace Plantopia.Controllers
 
             decimal shippingFee = subtotal >= 4000 ? 0 : (subtotal > 0 ? 150 : 0);
             decimal total = subtotal + shippingFee;
-            int cartCount = cartItems.Sum(c => c.Quantity);
+            int cartCount = _context.CartItems
+                .Where(c => c.UserId == user.Id)
+                .Count();
 
             return Json(new
             {
@@ -381,7 +383,9 @@ namespace Plantopia.Controllers
 
             decimal shippingFee = subtotal >= 4000 ? 0 : (subtotal > 0 ? 150 : 0);
             decimal total = subtotal + shippingFee;
-            int cartCount = cartItems.Sum(c => c.Quantity);
+            int cartCount = _context.CartItems
+                .Where(c => c.UserId == user.Id)
+                .Count();
 
             return Json(new
             {
@@ -665,7 +669,7 @@ namespace Plantopia.Controllers
 
             var count = _context.CartItems
                 .Where(c => c.UserId == user.Id)
-                .Sum(c => (int?)c.Quantity) ?? 0;
+                .Count();
 
             return Json(new { count });
         }
