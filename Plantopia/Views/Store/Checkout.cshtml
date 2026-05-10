@@ -62,23 +62,26 @@
                     <input class="checkout-input" id="inp-address" type="text"
                            value="@(defaultAddress?.FullAddress ?? "")" placeholder="123 Rizal St., Brgy. Lahug" />
                 </div>
-                <div class="checkout-form-row">
-                    <div>
-                        <label class="checkout-label">City</label>
-                        <input class="checkout-input" id="inp-city" type="text"
-                               value="@(defaultAddress?.City ?? "")" placeholder="Cebu City" />
+                    <div class="checkout-form-row">
+                        <div>
+                            <label class="checkout-label">City</label>
+                            <input class="checkout-input" id="inp-city" type="text"
+                                   value="@(defaultAddress?.City ?? "")" placeholder="Cebu City" />
+                        </div>
+                        <div>
+                            <label class="checkout-label">Province</label>
+                            <input class="checkout-input" id="inp-province" type="text"
+                                   value="@(defaultAddress?.Province ?? "")" placeholder="Cebu" />
+                        </div>
                     </div>
-                    <div>
-                        <label class="checkout-label">Province</label>
-                        <input class="checkout-input" id="inp-province" type="text"
-                               value="@(defaultAddress?.Province ?? "")" placeholder="Cebu" />
+                    <div class="checkout-form-row">
+                        <div style="grid-column: 1 / -1;">
+                            <label class="checkout-label">ZIP Code</label>
+                            <input class="checkout-input" id="inp-zip" type="text"
+                                   value="@(defaultAddress?.ZipCode ?? "")" placeholder="6000" />
+                        </div>
+                        <div></div>
                     </div>
-                </div>
-                <div style="max-width:200px;">
-                    <label class="checkout-label">ZIP Code</label>
-                    <input class="checkout-input" id="inp-zip" type="text"
-                           value="@(defaultAddress?.ZipCode ?? "")" placeholder="6000" />
-                </div>
             </div>
 
             <!-- Payment -->
@@ -110,7 +113,6 @@
                             <div class="gcash-instruction">
                                 Send your payment to this GCash number. Enter your GCash details below so we can verify your payment.
                             </div>
-                            <div class="gcash-number-display">📱 0917 - 123 - 4567</div>
                             <div class="checkout-form-row">
                                 <div>
                                     <label class="checkout-label">Your GCash Number</label>
