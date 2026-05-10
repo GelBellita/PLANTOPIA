@@ -46,14 +46,16 @@ namespace Plantopia.Controllers
             if (user == null)
                 return RedirectToAction("Login", "Auth");
 
-            // ── Update fields ──
-            user.FullName = model.FullName;
-            user.Phone = model.Phone;
-            user.Location = model.Location;
+            // ── Update fields — use empty string fallback to prevent NULL errors ──
+            user.FullName = string.IsNullOrWhiteSpace(model.FullName) ? user.FullName : model.FullName;
+            user.Phone = model.Phone ?? "";
+            user.Location = model.Location ?? "";
 
-            // ── SaveChanges 
             _context.Users.Update(user);
             _context.SaveChanges();
+
+            // ── Update session so topbar name reflects changes immediately ──
+            HttpContext.Session.SetString("UserName", user.FullName);
 
             TempData["Success"] = "Profile updated successfully!";
             return RedirectToAction("Profile");

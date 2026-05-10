@@ -12,8 +12,8 @@ using Plantopia.Data;
 namespace Plantopia.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260509160320_FixDecimalPrecision")]
-    partial class FixDecimalPrecision
+    [Migration("20260510151831_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -154,11 +154,9 @@ namespace Plantopia.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GCashName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("GCashNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderedAt")

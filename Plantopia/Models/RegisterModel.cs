@@ -2,12 +2,15 @@
 
 namespace Plantopia.Models
 {
-
     public class RegisterModel
     {
-        [Required(ErrorMessage = "Full name is required")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "Name must be 2–100 characters")]
-        public string FullName { get; set; } = string.Empty;
+        [Required(ErrorMessage = "First name is required")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "First name must be 2–50 characters")]
+        public string FirstName { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Last name is required")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "Last name must be 2–50 characters")]
+        public string LastName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Email is required")]
         [EmailAddress(ErrorMessage = "Please enter a valid email address")]

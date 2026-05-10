@@ -84,6 +84,17 @@ namespace Plantopia.Controllers
             else if (!string.IsNullOrWhiteSpace(category))
                 result = result.Take(6).ToList();
 
+            var emailP = HttpContext.Session.GetString("UserEmail");
+            var wishlistedIdsP = new List<int>();
+            if (!string.IsNullOrEmpty(emailP))
+            {
+                var userP = _context.Users.FirstOrDefault(u => u.Email == emailP);
+                if (userP != null)
+                    wishlistedIdsP = _context.Wishlists
+                        .Where(w => w.UserId == userP.Id)
+                        .Select(w => w.PlantId).ToList();
+            }
+            ViewData["WishlistedIds"] = wishlistedIdsP;
             ViewData["Query"] = query;
             ViewData["Category"] = category;
             return View(result);
@@ -113,10 +124,16 @@ namespace Plantopia.Controllers
 
             ViewData["CurrentSort"] = sort;
 
-            var userId = HttpContext.Session.GetInt32("UserId");
-            var wishlistedIds = userId.HasValue
-                ? _context.Wishlists.Where(w => w.UserId == userId.Value).Select(w => w.PlantId).ToList()
-                : new List<int>();
+            var email = HttpContext.Session.GetString("UserEmail");
+            var wishlistedIds = new List<int>();
+            if (!string.IsNullOrEmpty(email))
+            {
+                var user = _context.Users.FirstOrDefault(u => u.Email == email);
+                if (user != null)
+                    wishlistedIds = _context.Wishlists
+                        .Where(w => w.UserId == user.Id)
+                        .Select(w => w.PlantId).ToList();
+            }
             ViewData["WishlistedIds"] = wishlistedIds;
 
             return View(query.ToList());
@@ -138,10 +155,16 @@ namespace Plantopia.Controllers
 
             ViewData["CurrentSort"] = sort;
 
-            var userId = HttpContext.Session.GetInt32("UserId");
-            var wishlistedIds = userId.HasValue
-                ? _context.Wishlists.Where(w => w.UserId == userId.Value).Select(w => w.PlantId).ToList()
-                : new List<int>();
+            var email = HttpContext.Session.GetString("UserEmail");
+            var wishlistedIds = new List<int>();
+            if (!string.IsNullOrEmpty(email))
+            {
+                var user = _context.Users.FirstOrDefault(u => u.Email == email);
+                if (user != null)
+                    wishlistedIds = _context.Wishlists
+                        .Where(w => w.UserId == user.Id)
+                        .Select(w => w.PlantId).ToList();
+            }
             ViewData["WishlistedIds"] = wishlistedIds;
 
             return View(query.ToList());
@@ -163,10 +186,16 @@ namespace Plantopia.Controllers
 
             ViewData["CurrentSort"] = sort;
 
-            var userId = HttpContext.Session.GetInt32("UserId");
-            var wishlistedIds = userId.HasValue
-                ? _context.Wishlists.Where(w => w.UserId == userId.Value).Select(w => w.PlantId).ToList()
-                : new List<int>();
+            var email = HttpContext.Session.GetString("UserEmail");
+            var wishlistedIds = new List<int>();
+            if (!string.IsNullOrEmpty(email))
+            {
+                var user = _context.Users.FirstOrDefault(u => u.Email == email);
+                if (user != null)
+                    wishlistedIds = _context.Wishlists
+                        .Where(w => w.UserId == user.Id)
+                        .Select(w => w.PlantId).ToList();
+            }
             ViewData["WishlistedIds"] = wishlistedIds;
 
             return View(query.ToList());
