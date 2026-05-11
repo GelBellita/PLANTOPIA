@@ -264,7 +264,22 @@ h1, h2, h3, h4, h5, h6, .font-serif {
     width: auto;
     object-fit: contain;
     margin-left: 60px;
-    margin-top: 40px;
+    margin-top: 50px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
 }
 
 .hero-sub {
