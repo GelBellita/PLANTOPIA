@@ -360,8 +360,8 @@
                             <div style="font-size:0.7rem; color:#555; line-height:1.5;">Wipe the leaves regularly to keep them clean and healthy. Rotate the pot occasionally for even growth.</div>
                         </div>
                     </div>
-                    <div style="height:80px; background:linear-gradient(135deg,#c8dcc8,#a8c4a8); border-radius:10px; overflow:hidden;">
-                        <img id="pm-care-img-tips" src="" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'" />
+                    <div style="height:90px; background:linear-gradient(135deg,#c8dcc8,#a8c4a8); border-radius:10px; overflow:hidden;">
+                        <img id="pm-care-img-tips" src="" style="width:100%;height:100%;object-fit:cover;object-position:center center;" />
                     </div>
                 </div>
 
@@ -750,15 +750,15 @@
             document.getElementById('pm-rev-r2').src = '/images/Peace Lily.png';
             document.getElementById('pm-rev-r3').src = '/images/Jade Plant.png';
 
-            var careImages = {
-                'pm-care-img-light': '/images/monstera.jpg',
-                'pm-care-img-water': '/images/peace-lily.jpg',
-                'pm-care-img-soil':  '/images/pandan.jpg',
-                'pm-care-img-temp':  '/images/succulent.jpg',
-                'pm-care-img-hum':   '/images/snake.jpg',
-                'pm-care-img-fert':  '/images/plant.png',
-                'pm-care-img-tips':  '/images/plants.png'
-            };
+              var careImages = {
+             'pm-care-img-light': '/images/Light1_modal.png',
+             'pm-care-img-water': '/images/Watering_modal.png',
+             'pm-care-img-soil':  '/images/Soil_modal.png',
+             'pm-care-img-temp':  '/images/Temperature_modal.png',
+             'pm-care-img-hum':   '/images/Humidity_modal.png',
+             'pm-care-img-fert':  '/images/Fertilizing_modal.png',
+             'pm-care-img-tips':  '/images/Plants_Display.png'
+         };
             Object.entries(careImages).forEach(function([id, src]) {
                 var el = document.getElementById(id);
                 if (el) el.src = src;
