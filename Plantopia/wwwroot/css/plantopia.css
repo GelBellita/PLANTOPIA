@@ -244,11 +244,12 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 
 .hero-title {
     font-family: 'Playfair Display', serif;
-    font-size: clamp(2rem, 3.5vw, 2.9rem);
+    font-size: clamp(3.1rem, 3.5vw, 2.9rem);
     font-weight: 700;
     color: var(--green-dark);
     line-height: 1.12;
     margin-bottom: 1.2rem;
+    margin-top: 50px;
 }
 
     .hero-title em {
@@ -257,6 +258,14 @@ h1, h2, h3, h4, h5, h6, .font-serif {
         color: var(--green-forest);
         display: block;
     }
+
+.hero-plant-img {
+    height: 400px;
+    width: auto;
+    object-fit: contain;
+    margin-left: 60px;
+    margin-top: 40px;
+}
 
 .hero-sub {
     font-size: 0.98rem;
@@ -733,7 +742,7 @@ h1, h2, h3, h4, h5, h6, .font-serif {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--nav-h) 16px 16px; /* ← top padding equal to navbar height */
+    padding: var(--nav-h) 16px 16px;
 }
 
 .auth-card {
