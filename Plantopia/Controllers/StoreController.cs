@@ -41,29 +41,24 @@ namespace Plantopia.Controllers
         [HttpGet]
         public IActionResult Search(string query)
         {
-            // ── kung walay query, balik sa Index ──
             if (string.IsNullOrWhiteSpace(query))
                 return RedirectToAction("Index");
 
-            // ── check kung naa bay results sa database ──
             var results = _context.Plants
                 .Where(p => p.Name.Contains(query) ||
                             p.Category.Contains(query) ||
                             p.Description.Contains(query))
                 .ToList();
 
-            // ── kung walay results, redirect sa Plants with no results flag ──
             if (results.Count == 0)
             {
                 TempData["NoResults"] = $"No plants found for \"{query}\".";
                 return RedirectToAction("Plants");
             }
 
-            // ── kung naa, redirect sa Plants page with query filter ──
             return RedirectToAction("Plants", new { query = query });
         }
 
-        // ── Update Plants action para mag-accept ug query ──
         public IActionResult Plants(string query, string category)
         {
             var plants = _context.Plants.AsQueryable();
@@ -78,7 +73,6 @@ namespace Plantopia.Controllers
 
             var result = plants.ToList();
 
-            // ── Limit to 5 kung walay filter (default best sellers view) ──
             if (string.IsNullOrWhiteSpace(query) && string.IsNullOrWhiteSpace(category))
                 result = result.Take(5).ToList();
             else if (!string.IsNullOrWhiteSpace(category))
@@ -105,8 +99,6 @@ namespace Plantopia.Controllers
         {
             return View();
         }
-
-        // query sa db with the use of their tags to filter plants per page (BestSeller, NewArrival, Sale)
 
         public IActionResult BestSellers(string sort = "bestselling")
         {
@@ -226,7 +218,8 @@ namespace Plantopia.Controllers
             return RedirectToAction("Cart", "Account");
         }
 
-        public IActionResult Checkout()
+        // ── FIX: accept selectedIds and filter cart items accordingly ──
+        public IActionResult Checkout(string selectedIds = "")
         {
             var email = HttpContext.Session.GetString("UserEmail");
             if (string.IsNullOrEmpty(email))
@@ -236,8 +229,19 @@ namespace Plantopia.Controllers
             if (user == null)
                 return RedirectToAction("Login", "Auth");
 
-            var cartItems = _context.CartItems
-                .Where(c => c.UserId == user.Id)
+            // Parse the comma-separated cart item IDs sent from the cart page
+            var selectedIdList = selectedIds
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => int.TryParse(s.Trim(), out var id) ? id : -1)
+                .Where(id => id > 0)
+                .ToHashSet();
+
+            // Build the cart query — filter to selected items only
+            var query = _context.CartItems.Where(c => c.UserId == user.Id);
+            if (selectedIdList.Any())
+                query = query.Where(c => selectedIdList.Contains(c.Id));
+
+            var cartItems = query
                 .Select(c => new CartItemViewModel
                 {
                     CartItemId = c.Id,
@@ -256,11 +260,11 @@ namespace Plantopia.Controllers
             if (!cartItems.Any())
                 return RedirectToAction("Cart", "Account");
 
+            // Compute totals from selected items only
             decimal subtotal = cartItems.Sum(c => c.Price * c.Quantity);
             decimal shippingFee = subtotal >= 4000 ? 0 : 150;
             decimal total = subtotal + shippingFee;
 
-            // Pre-fill from saved address
             var defaultAddress = _context.Addresses
                 .FirstOrDefault(a => a.UserId == user.Id && a.IsDefault)
                 ?? _context.Addresses.FirstOrDefault(a => a.UserId == user.Id);

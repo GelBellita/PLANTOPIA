@@ -9,6 +9,9 @@
     var shippingFee = (decimal)(ViewData["ShippingFee"] ?? 150m);
     var total = (decimal)(ViewData["Total"] ?? 0m);
     var itemCount = (int)(ViewData["ItemCount"] ?? 0);
+
+    // Capture selectedIds from query string
+    var selectedIds = Context.Request.Query["selectedIds"].ToString();
 }
 
 
@@ -19,19 +22,22 @@
         <div class="confirm-title">Order Placed!</div>
         <div class="confirm-sub">Thank you for your order! We'll process it right away and notify you once it ships.</div>
         <div class="confirm-order-id" id="confirm-order-id">Order #---</div>
-        <br/>
+        <br />
         <button class="btn-confirm-ok" onclick="goToPurchases()">View My Orders</button>
     </div>
 </div>
 
+<!-- Hidden field to carry selectedIds into JS -->
+<input type="hidden" id="selected-ids" value="@selectedIds" />
+
 <div class="profile-page-wrapper">
-<div class="profile-page">
+    <div class="profile-page">
 
         <div style="margin-bottom:12px;">
             <a href="/Account/Cart"
-                   style="display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500; color:var(--text-mid); text-decoration:none; padding:7px 16px; border:1.5px solid var(--border); border-radius:20px; background:var(--white); transition:all 0.15s;"
-                   onmouseover="this.style.borderColor='var(--green-soft)'; this.style.color='var(--green-mid)'; this.style.background='var(--green-pale)';"
-                   onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-mid)'; this.style.background='var(--white)';">
+               style="display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500; color:var(--text-mid); text-decoration:none; padding:7px 16px; border:1.5px solid var(--border); border-radius:20px; background:var(--white); transition:all 0.15s;"
+               onmouseover="this.style.borderColor='var(--green-soft)'; this.style.color='var(--green-mid)'; this.style.background='var(--green-pale)';"
+               onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-mid)'; this.style.background='var(--white)';">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <line x1="19" y1="12" x2="5" y2="12" />
                     <polyline points="12 19 5 12 12 5" />
@@ -45,33 +51,33 @@
             <p class="profile-subtitle">Fill in your delivery details and confirm your order.</p>
         </div>
 
-    <div class="checkout-grid">
+        <div class="checkout-grid">
 
-        <!-- LEFT -->
-        <div>
-            <!-- Delivery Info -->
-            <div class="checkout-card">
-                <div class="checkout-section-title">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    Delivery Information
-                </div>
-                <div class="checkout-form-row">
-                    <div>
-                        <label class="checkout-label">Full Name</label>
-                        <input class="checkout-input" id="inp-fullname" type="text"
-                               value="@(user?.FullName ?? "")" placeholder="Juan Dela Cruz" />
+            <!-- LEFT -->
+            <div>
+                <!-- Delivery Info -->
+                <div class="checkout-card">
+                    <div class="checkout-section-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2e7d32" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" /><circle cx="12" cy="10" r="3" /></svg>
+                        Delivery Information
                     </div>
-                    <div>
-                        <label class="checkout-label">Phone Number</label>
-                        <input class="checkout-input" id="inp-phone" type="text"
-                               value="@(user?.Phone ?? "")" placeholder="09XXXXXXXXX" />
+                    <div class="checkout-form-row">
+                        <div>
+                            <label class="checkout-label">Full Name</label>
+                            <input class="checkout-input" id="inp-fullname" type="text"
+                                   value="@(user?.FullName ?? "")" placeholder="Juan Dela Cruz" />
+                        </div>
+                        <div>
+                            <label class="checkout-label">Phone Number</label>
+                            <input class="checkout-input" id="inp-phone" type="text"
+                                   value="@(user?.Phone ?? "")" placeholder="09XXXXXXXXX" />
+                        </div>
                     </div>
-                </div>
-                <div class="checkout-form-full">
-                    <label class="checkout-label">Full Address (House No., Street, Barangay)</label>
-                    <input class="checkout-input" id="inp-address" type="text"
-                           value="@(defaultAddress?.FullAddress ?? "")" placeholder="123 Rizal St., Brgy. Lahug" />
-                </div>
+                    <div class="checkout-form-full">
+                        <label class="checkout-label">Full Address (House No., Street, Barangay)</label>
+                        <input class="checkout-input" id="inp-address" type="text"
+                               value="@(defaultAddress?.FullAddress ?? "")" placeholder="123 Rizal St., Brgy. Lahug" />
+                    </div>
                     <div class="checkout-form-row">
                         <div>
                             <label class="checkout-label">City</label>
@@ -92,208 +98,211 @@
                         </div>
                         <div></div>
                     </div>
-            </div>
+                </div>
 
                 <!-- Payment -->
-                    <div class="checkout-card">
-                        <div class="checkout-section-title">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0070ff" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>
-                            Payment Method
-                        </div>
+                <div class="checkout-card">
+                    <div class="checkout-section-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0070ff" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>
+                        Payment Method
+                    </div>
 
-                        <!-- Payment Toggle -->
-                        <div style="display:flex; gap:10px; margin-bottom:14px;">
-                            <button type="button" id="btn-gcash" onclick="selectPayment('gcash')"
-                                    style="flex:1; padding:10px; border-radius:10px; border:2px solid #0070ff; background:#f0f6ff; font-size:12.5px; font-weight:700; color:#0070ff; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .15s;">
-                                💳 GCash
-                            </button>
-                            <button type="button" id="btn-cod" onclick="selectPayment('cod')"
-                                    style="flex:1; padding:10px; border-radius:10px; border:2px solid #e0e0e0; background:#fff; font-size:12.5px; font-weight:700; color:#888; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .15s;">
-                                💵 Cash on Delivery
-                            </button>
-                        </div>
+                    <!-- Payment Toggle -->
+                    <div style="display:flex; gap:10px; margin-bottom:14px;">
+                        <button type="button" id="btn-gcash" onclick="selectPayment('gcash')"
+                                style="flex:1; padding:10px; border-radius:10px; border:2px solid #0070ff; background:#f0f6ff; font-size:12.5px; font-weight:700; color:#0070ff; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .15s;">
+                            💳 GCash
+                        </button>
+                        <button type="button" id="btn-cod" onclick="selectPayment('cod')"
+                                style="flex:1; padding:10px; border-radius:10px; border:2px solid #e0e0e0; background:#fff; font-size:12.5px; font-weight:700; color:#888; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px; transition:all .15s;">
+                            💵 Cash on Delivery
+                        </button>
+                    </div>
 
-                        <!-- GCash Box -->
-                        <div id="gcash-section" class="gcash-box">
-                            <div class="gcash-title">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="#0070ff" stroke="none"><circle cx="12" cy="12" r="12" /><text x="12" y="16" text-anchor="middle" font-size="10" fill="white" font-weight="bold">G</text></svg>
-                                GCash Payment
+                    <!-- GCash Box -->
+                    <div id="gcash-section" class="gcash-box">
+                        <div class="gcash-title">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="#0070ff" stroke="none"><circle cx="12" cy="12" r="12" /><text x="12" y="16" text-anchor="middle" font-size="10" fill="white" font-weight="bold">G</text></svg>
+                            GCash Payment
+                        </div>
+                        <div class="gcash-instruction">
+                            Send your payment to this GCash number. Enter your GCash details below so we can verify your payment.
+                        </div>
+                        <div class="checkout-form-row">
+                            <div>
+                                <label class="checkout-label">Your GCash Number</label>
+                                <input class="checkout-input" id="inp-gcash-number" type="text" placeholder="09XXXXXXXXX" />
                             </div>
-                            <div class="gcash-instruction">
-                                Send your payment to this GCash number. Enter your GCash details below so we can verify your payment.
-                            </div>
-                            <div class="checkout-form-row">
-                                <div>
-                                    <label class="checkout-label">Your GCash Number</label>
-                                    <input class="checkout-input" id="inp-gcash-number" type="text" placeholder="09XXXXXXXXX" />
-                                </div>
-                                <div>
-                                    <label class="checkout-label">GCash Account Name</label>
-                                    <input class="checkout-input" id="inp-gcash-name" type="text" placeholder="Juan Dela Cruz" />
-                                </div>
-                            </div>
-                            <div style="font-size:11px; color:#888; margin-top:4px;">
-                                💡 Your order will be confirmed once payment is verified.
+                            <div>
+                                <label class="checkout-label">GCash Account Name</label>
+                                <input class="checkout-input" id="inp-gcash-name" type="text" placeholder="Juan Dela Cruz" />
                             </div>
                         </div>
-
-                        <!-- COD Box -->
-                        <div id="cod-section" style="display:none; background:#f9fdf9; border:1.5px solid #c8e6c9; border-radius:12px; padding:14px 16px;">
-                            <div style="font-size:12px; font-weight:700; color:#2e7d32; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
-                                💵 Cash on Delivery
-                            </div>
-                            <div style="font-size:11px; color:#555; line-height:1.6;">
-                                Pay with cash when your order arrives. Make sure to prepare the exact amount.
-                            </div>
-                            <div style="margin-top:10px; background:#e8f5e9; border-radius:8px; padding:10px 14px; font-size:12px; color:#1b5e20; font-weight:600;">
-                                💰 Total to pay upon delivery: <span id="cod-total">₱@total.ToString("N2")</span>
-                            </div>
-                            <div style="font-size:11px; color:#888; margin-top:8px;">
-                                💡 Our delivery rider will collect payment upon delivery.
-                            </div>
+                        <div style="font-size:11px; color:#888; margin-top:4px;">
+                            💡 Your order will be confirmed once payment is verified.
                         </div>
                     </div>
-        </div>
 
-        <!-- RIGHT — Order Summary -->
-        <div class="order-summary-card">
-            <div class="summary-title">Order Summary</div>
-
-            @foreach (var item in Model)
-            {
-                <div class="summary-item">
-                    <img class="summary-item-img" src="@item.ImageUrl" alt="@item.Name"
-                         onerror="this.src='https://placehold.co/44x44/eef4eb/4a7c4a?text=🌿'" />
-                    <div style="flex:1; min-width:0;">
-                        <div class="summary-item-name">@item.Name</div>
-                        <div class="summary-item-price">₱@item.Price.ToString("N2") × @item.Quantity</div>
-                    </div>
-                    <div style="font-size:12px; font-weight:700; color:#1a1a1a; flex-shrink:0;">
-                        ₱@((item.Price * item.Quantity).ToString("N2"))
+                    <!-- COD Box -->
+                    <div id="cod-section" style="display:none; background:#f9fdf9; border:1.5px solid #c8e6c9; border-radius:12px; padding:14px 16px;">
+                        <div style="font-size:12px; font-weight:700; color:#2e7d32; margin-bottom:8px; display:flex; align-items:center; gap:6px;">
+                            💵 Cash on Delivery
+                        </div>
+                        <div style="font-size:11px; color:#555; line-height:1.6;">
+                            Pay with cash when your order arrives. Make sure to prepare the exact amount.
+                        </div>
+                        <div style="margin-top:10px; background:#e8f5e9; border-radius:8px; padding:10px 14px; font-size:12px; color:#1b5e20; font-weight:600;">
+                            💰 Total to pay upon delivery: <span id="cod-total">₱@total.ToString("N2")</span>
+                        </div>
+                        <div style="font-size:11px; color:#888; margin-top:8px;">
+                            💡 Our delivery rider will collect payment upon delivery.
+                        </div>
                     </div>
                 </div>
-            }
-
-            <div class="summary-divider"></div>
-            <div class="summary-row">
-                <span>Subtotal (@itemCount item@(itemCount != 1 ? "s" : ""))</span>
-                <span>₱@subtotal.ToString("N2")</span>
-            </div>
-            <div class="summary-row">
-                <span>Shipping Fee</span>
-                <span>@(shippingFee == 0 ? "FREE" : "₱" + shippingFee.ToString("N2"))</span>
-            </div>
-            <div class="summary-divider"></div>
-            <div class="summary-total">
-                <span>Total</span>
-                <span>₱@total.ToString("N2")</span>
             </div>
 
-            <button class="btn-place-order" id="btn-place-order" onclick="placeOrder()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <polyline points="20 6 9 17 4 12"/>
-                </svg>
-                Place Order
-            </button>
+            <!-- RIGHT — Order Summary -->
+            <div class="order-summary-card">
+                <div class="summary-title">Order Summary</div>
 
-            <div style="font-size:10.5px; color:#aaa; text-align:center; margin-top:8px; line-height:1.5;">
-                By placing your order, you agree to our<br/>Terms & Conditions.
+                @foreach (var item in Model)
+                {
+                    <div class="summary-item">
+                        <img class="summary-item-img" src="@item.ImageUrl" alt="@item.Name"
+                             onerror="this.src='https://placehold.co/44x44/eef4eb/4a7c4a?text=🌿'" />
+                        <div style="flex:1; min-width:0;">
+                            <div class="summary-item-name">@item.Name</div>
+                            <div class="summary-item-price">₱@item.Price.ToString("N2") × @item.Quantity</div>
+                        </div>
+                        <div style="font-size:12px; font-weight:700; color:#1a1a1a; flex-shrink:0;">
+                            ₱@((item.Price * item.Quantity).ToString("N2"))
+                        </div>
+                    </div>
+                }
+
+                <div class="summary-divider"></div>
+                <div class="summary-row">
+                    <span>Subtotal (@itemCount item@(itemCount != 1 ? "s" : ""))</span>
+                    <span>₱@subtotal.ToString("N2")</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping Fee</span>
+                    <span>@(shippingFee == 0 ? "FREE" : "₱" + shippingFee.ToString("N2"))</span>
+                </div>
+                <div class="summary-divider"></div>
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span>₱@total.ToString("N2")</span>
+                </div>
+
+                <button class="btn-place-order" id="btn-place-order" onclick="placeOrder()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Place Order
+                </button>
+
+                <div style="font-size:10.5px; color:#aaa; text-align:center; margin-top:8px; line-height:1.5;">
+                    By placing your order, you agree to our<br />Terms & Conditions.
+                </div>
             </div>
+
         </div>
-
     </div>
 </div>
-</div>
 
-    @section Scripts {
-        <script>
-            var selectedPayment = 'gcash';
+@section Scripts {
+    <script>
+        var selectedPayment = 'gcash';
 
-            function selectPayment(type) {
-                selectedPayment = type;
+        function selectPayment(type) {
+            selectedPayment = type;
 
-                var btnGcash = document.getElementById('btn-gcash');
-                var btnCod   = document.getElementById('btn-cod');
-                var gcashSec = document.getElementById('gcash-section');
-                var codSec   = document.getElementById('cod-section');
+            var btnGcash = document.getElementById('btn-gcash');
+            var btnCod   = document.getElementById('btn-cod');
+            var gcashSec = document.getElementById('gcash-section');
+            var codSec   = document.getElementById('cod-section');
 
-                if (type === 'gcash') {
-                    btnGcash.style.border = '2px solid #0070ff';
-                    btnGcash.style.background = '#f0f6ff';
-                    btnGcash.style.color = '#0070ff';
-                    btnCod.style.border = '2px solid #e0e0e0';
-                    btnCod.style.background = '#fff';
-                    btnCod.style.color = '#888';
-                    gcashSec.style.display = 'block';
-                    codSec.style.display = 'none';
-                } else {
-                    btnCod.style.border = '2px solid #2e7d32';
-                    btnCod.style.background = '#f9fdf9';
-                    btnCod.style.color = '#2e7d32';
-                    btnGcash.style.border = '2px solid #e0e0e0';
-                    btnGcash.style.background = '#fff';
-                    btnGcash.style.color = '#888';
-                    codSec.style.display = 'block';
-                    gcashSec.style.display = 'none';
-                }
+            if (type === 'gcash') {
+                btnGcash.style.border = '2px solid #0070ff';
+                btnGcash.style.background = '#f0f6ff';
+                btnGcash.style.color = '#0070ff';
+                btnCod.style.border = '2px solid #e0e0e0';
+                btnCod.style.background = '#fff';
+                btnCod.style.color = '#888';
+                gcashSec.style.display = 'block';
+                codSec.style.display = 'none';
+            } else {
+                btnCod.style.border = '2px solid #2e7d32';
+                btnCod.style.background = '#f9fdf9';
+                btnCod.style.color = '#2e7d32';
+                btnGcash.style.border = '2px solid #e0e0e0';
+                btnGcash.style.background = '#fff';
+                btnGcash.style.color = '#888';
+                codSec.style.display = 'block';
+                gcashSec.style.display = 'none';
+            }
+        }
+
+        function placeOrder() {
+            var fullName   = document.getElementById('inp-fullname').value.trim();
+            var phone      = document.getElementById('inp-phone').value.trim();
+            var address    = document.getElementById('inp-address').value.trim();
+            var city       = document.getElementById('inp-city').value.trim();
+            var province   = document.getElementById('inp-province').value.trim();
+            var zip        = document.getElementById('inp-zip').value.trim();
+            // ── Grab the selected cart item IDs passed from the cart page ──
+            var selectedIds = document.getElementById('selected-ids').value;
+            var gcashNum   = '';
+            var gcashName  = '';
+
+            if (!fullName || !phone || !address || !city || !province || !zip) {
+                alert('Please fill in all delivery details.');
+                return;
             }
 
-            function placeOrder() {
-                var fullName  = document.getElementById('inp-fullname').value.trim();
-                var phone     = document.getElementById('inp-phone').value.trim();
-                var address   = document.getElementById('inp-address').value.trim();
-                var city      = document.getElementById('inp-city').value.trim();
-                var province  = document.getElementById('inp-province').value.trim();
-                var zip       = document.getElementById('inp-zip').value.trim();
-                var gcashNum  = '';
-                var gcashName = '';
-
-                if (!fullName || !phone || !address || !city || !province || !zip) {
-                    alert('Please fill in all delivery details.');
+            if (selectedPayment === 'gcash') {
+                gcashNum  = document.getElementById('inp-gcash-number').value.trim();
+                gcashName = document.getElementById('inp-gcash-name').value.trim();
+                if (!gcashNum || !gcashName) {
+                    alert('Please fill in your GCash details.');
                     return;
                 }
+            }
 
-                if (selectedPayment === 'gcash') {
-                    gcashNum  = document.getElementById('inp-gcash-number').value.trim();
-                    gcashName = document.getElementById('inp-gcash-name').value.trim();
-                    if (!gcashNum || !gcashName) {
-                        alert('Please fill in your GCash details.');
-                        return;
-                    }
-                }
+            var btn = document.getElementById('btn-place-order');
+            btn.disabled = true;
+            btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Processing...`;
 
-                var btn = document.getElementById('btn-place-order');
-                btn.disabled = true;
-                btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Processing...`;
-
-                fetch('/Account/PlaceOrder', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: `fullName=${encodeURIComponent(fullName)}&phone=${encodeURIComponent(phone)}&fullAddress=${encodeURIComponent(address)}&city=${encodeURIComponent(city)}&province=${encodeURIComponent(province)}&zipCode=${encodeURIComponent(zip)}&gcashNumber=${encodeURIComponent(gcashNum)}&gcashName=${encodeURIComponent(gcashName)}&paymentMethod=${encodeURIComponent(selectedPayment === 'gcash' ? 'GCash' : 'COD')}`
-                })
-                .then(r => r.json())
-                .then(data => {
-                    if (!data.success) {
-                        if (data.redirect) { window.location.href = data.redirect; return; }
-                        btn.disabled = false;
-                        btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Place Order`;
-                        alert('Something went wrong. Please try again.');
-                        return;
-                    }
-                    document.getElementById('confirm-order-id').textContent = 'Order #' + data.orderId;
-                    document.getElementById('confirmModal').classList.add('show');
-                    var badge = document.querySelector('.cart-count-badge');
-                    if (badge) badge.textContent = '0';
-                })
-                .catch(() => {
+            fetch('/Account/PlaceOrder', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                // ── Include selectedIds in the POST body ──
+                body: `fullName=${encodeURIComponent(fullName)}&phone=${encodeURIComponent(phone)}&fullAddress=${encodeURIComponent(address)}&city=${encodeURIComponent(city)}&province=${encodeURIComponent(province)}&zipCode=${encodeURIComponent(zip)}&gcashNumber=${encodeURIComponent(gcashNum)}&gcashName=${encodeURIComponent(gcashName)}&paymentMethod=${encodeURIComponent(selectedPayment === 'gcash' ? 'GCash' : 'COD')}&selectedIds=${encodeURIComponent(selectedIds)}`
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (!data.success) {
+                    if (data.redirect) { window.location.href = data.redirect; return; }
                     btn.disabled = false;
                     btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Place Order`;
-                    alert('Network error. Please try again.');
-                });
-            }
+                    alert('Something went wrong. Please try again.');
+                    return;
+                }
+                document.getElementById('confirm-order-id').textContent = 'Order #' + data.orderId;
+                document.getElementById('confirmModal').classList.add('show');
+                var badge = document.querySelector('.cart-count-badge');
+                if (badge) badge.textContent = '0';
+            })
+            .catch(() => {
+                btn.disabled = false;
+                btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Place Order`;
+                alert('Network error. Please try again.');
+            });
+        }
 
-            function goToPurchases() {
-                window.location.href = '/Account/Purchases';
-            }
-        </script>
-    }
+        function goToPurchases() {
+            window.location.href = '/Account/Purchases';
+        }
+    </script>
+}

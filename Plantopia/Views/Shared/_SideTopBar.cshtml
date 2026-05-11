@@ -17,10 +17,12 @@
         var currentUser = dbContext?.Users.FirstOrDefault(u => u.Email == userEmail);
         profilePhoto = currentUser?.ProfilePhoto ?? "";
 
-        // ── Fetch real cart count ──
+        // ── Distinct plant types, not total quantity ──
         cartCount = dbContext?.CartItems
             .Where(c => c.User.Email == userEmail)
-            .Sum(c => c.Quantity) ?? 0;
+            .Select(c => c.PlantId)
+            .Distinct()
+            .Count() ?? 0;
     }
 }
 @{
@@ -162,7 +164,7 @@
                         </div>
                     </div>
 
-                    @* Cart button — now uses dynamic cartCount *@
+                    @* Cart button — badge shows distinct plant types *@
                     <a asp-controller="Store" asp-action="Cart" class="topbar-icon-btn" style="position:relative;">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="9" cy="21" r="1" />
@@ -371,7 +373,7 @@
                 }
             };
 
-            // ── Also keep cart badges in sync when JS updates them ──
+            // ── Keep all cart badges in sync when JS updates them ──
             window.updateCartBadges = function(count) {
                 document.querySelectorAll('.cart-count-badge').forEach(function(el) {
                     el.textContent = count;

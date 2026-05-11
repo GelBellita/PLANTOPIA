@@ -110,17 +110,6 @@
             });
         });
 
-                var id = parseInt(plantId);
-        if (data.wishlisted) {
-            if (!wishlistedIds.includes(id)) wishlistedIds.push(id);
-        } else {
-            wishlistedIds = wishlistedIds.filter(x => x !== id);
-        }
-
-        if (currentPlantId && parseInt(currentPlantId) === id) {
-            updateModalWishBtn(data.wishlisted);
-        }
-
         document.querySelectorAll('.btn-remove').forEach(btn => {
             btn.addEventListener('click', function () {
                 const plantId = this.dataset.plantId;
@@ -164,10 +153,10 @@
                         this.innerHTML = originalHTML;
                         return;
                     }
-                document.querySelectorAll('.cart-count-badge').forEach(el => {
-                     el.textContent = data.cartCount;
-                     el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
-                });
+                    document.querySelectorAll('.cart-count-badge').forEach(el => {
+                        el.textContent = data.cartCount;
+                        el.style.display = data.cartCount > 0 ? 'inline-flex' : 'none';
+                    });
 
                     this.innerHTML = `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Added!`;
                     this.style.background = '#e8f5e9';

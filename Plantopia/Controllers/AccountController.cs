@@ -534,90 +534,103 @@ namespace Plantopia.Controllers
         [HttpPost]
         [IgnoreAntiforgeryToken]
         public IActionResult PlaceOrder(string fullName, string phone, string fullAddress,
-            string city, string province, string zipCode,
-            string gcashNumber, string gcashName, string paymentMethod = "GCash")
-        {
-            var email = HttpContext.Session.GetString("UserEmail");
-            if (string.IsNullOrEmpty(email))
-                return Json(new { success = false, redirect = "/Auth/Login" });
-
-            var user = _context.Users.FirstOrDefault(u => u.Email == email);
-            if (user == null)
-                return Json(new { success = false });
-
-            var cartItems = _context.CartItems
-                .Where(c => c.UserId == user.Id)
-                .Select(c => new
-                {
-                    c.Id,
-                    c.PlantId,
-                    c.Plant.Name,
-                    c.Plant.ImageUrl,
-                    Price = c.Plant.DiscountPercent.HasValue
-                        ? c.Plant.Price * (1 - c.Plant.DiscountPercent.Value / 100m)
-                        : c.Plant.Price,
-                    c.Quantity
-                })
-                .ToList();
-
-            if (!cartItems.Any())
-                return Json(new { success = false, message = "Cart is empty" });
-
-            decimal subtotal = cartItems.Sum(c => c.Price * c.Quantity);
-            decimal shippingFee = subtotal >= 4000 ? 0 : 150;
-            decimal total = subtotal + shippingFee;
-
-            // ── Create Order ──
-            var order = new Order
+        string city, string province, string zipCode,
+        string gcashNumber, string gcashName,
+        string paymentMethod = "GCash",
+        string selectedIds = "")
             {
-                UserId = user.Id,
-                FullName = fullName,
-                Phone = phone,
-                FullAddress = fullAddress,
-                City = city,
-                Province = province,
-                ZipCode = zipCode,
-                PaymentMethod = paymentMethod,
-                GCashNumber = gcashNumber,
-                GCashName = gcashName,
-                Status = paymentMethod == "COD" ? "ToShip" : "Pending",
-                Subtotal = subtotal,
-                ShippingFee = shippingFee,
-                Total = total,
-                OrderedAt = DateTime.Now,
-                Items = cartItems.Select(c => new OrderItem
+                var email = HttpContext.Session.GetString("UserEmail");
+                if (string.IsNullOrEmpty(email))
+                    return Json(new { success = false, redirect = "/Auth/Login" });
+
+                var user = _context.Users.FirstOrDefault(u => u.Email == email);
+                if (user == null)
+                    return Json(new { success = false });
+
+            
+                var selectedIdList = selectedIds
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                    .Select(s => int.TryParse(s.Trim(), out var id) ? id : -1)
+                    .Where(id => id > 0)
+                    .ToHashSet();
+
+                // ── Fetch ONLY the selected cart items ──
+                var query = _context.CartItems.Where(c => c.UserId == user.Id);
+                if (selectedIdList.Any())
+                    query = query.Where(c => selectedIdList.Contains(c.Id));
+
+                var cartItems = query
+                    .Select(c => new
+                    {
+                        c.Id,
+                        c.PlantId,
+                        c.Plant.Name,
+                        c.Plant.ImageUrl,
+                        Price = c.Plant.DiscountPercent.HasValue
+                            ? c.Plant.Price * (1 - c.Plant.DiscountPercent.Value / 100m)
+                            : c.Plant.Price,
+                        c.Quantity
+                    })
+                    .ToList();
+
+                if (!cartItems.Any())
+                    return Json(new { success = false, message = "No items selected" });
+
+                decimal subtotal = cartItems.Sum(c => c.Price * c.Quantity);
+                decimal shippingFee = subtotal >= 4000 ? 0 : 150;
+                decimal total = subtotal + shippingFee;
+
+                var order = new Order
                 {
-                    PlantId = c.PlantId,
-                    PlantName = c.Name,
-                    PlantImageUrl = c.ImageUrl,
-                    Price = c.Price,
-                    Quantity = c.Quantity
-                }).ToList()
-            };
+                    UserId = user.Id,
+                    FullName = fullName,
+                    Phone = phone,
+                    FullAddress = fullAddress,
+                    City = city,
+                    Province = province,
+                    ZipCode = zipCode,
+                    PaymentMethod = paymentMethod,
+                    GCashNumber = gcashNumber,
+                    GCashName = gcashName,
+                    Status = paymentMethod == "COD" ? "ToShip" : "Pending",
+                    Subtotal = subtotal,
+                    ShippingFee = shippingFee,
+                    Total = total,
+                    OrderedAt = DateTime.Now,
+                    Items = cartItems.Select(c => new OrderItem
+                    {
+                        PlantId = c.PlantId,
+                        PlantName = c.Name,
+                        PlantImageUrl = c.ImageUrl,
+                        Price = c.Price,
+                        Quantity = c.Quantity
+                    }).ToList()
+                };
 
-            _context.Orders.Add(order);
+                _context.Orders.Add(order);
 
-            // ── Clear Cart ──
-            var cartRows = _context.CartItems.Where(c => c.UserId == user.Id);
-            _context.CartItems.RemoveRange(cartRows);
+                // ── Remove ONLY the ordered items, leave the rest in cart ──
+                var cartRows = _context.CartItems
+                    .Where(c => c.UserId == user.Id && selectedIdList.Contains(c.Id));
+                _context.CartItems.RemoveRange(cartRows);
 
-            // ── Create Notification ──
-            _context.Notifications.Add(new Notification
-            {
-                UserId = user.Id,
-                Title = "Order Placed! 🌿",
-                Message = paymentMethod == "COD"
-                    ? $"Your order of {cartItems.Count} item(s) worth ₱{total:N2} has been placed! Pay ₱{total:N2} upon delivery."
-                    : $"Your order of {cartItems.Count} item(s) worth ₱{total:N2} has been placed! We'll verify your GCash payment shortly.",
-                Type = "Order",
-                IsRead = false,
-                CreatedAt = DateTime.Now
-            });
+                _context.Notifications.Add(new Notification
+                {
+                    UserId = user.Id,
+                    Title = "Order Placed! 🌿",
+                    Message = paymentMethod == "COD"
+                        ? $"Your order of {cartItems.Count} item(s) worth ₱{total:N2} has been placed! Pay ₱{total:N2} upon delivery."
+                        : $"Your order of {cartItems.Count} item(s) worth ₱{total:N2} has been placed! We'll verify your GCash payment shortly.",
+                    Type = "Order",
+                    IsRead = false,
+                    CreatedAt = DateTime.Now
+                });
 
-            _context.SaveChanges();
+                _context.SaveChanges();
 
-            return Json(new { success = true, orderId = order.Id });
-        }
+                return Json(new { success = true, orderId = order.Id });
+            }
+
         [HttpPost]
         [IgnoreAntiforgeryToken]
         public IActionResult CancelOrder(int orderId, string reason)
