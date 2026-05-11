@@ -99,6 +99,8 @@ a {
     overflow-x: hidden;
     background-image: none;
     background-color: #ffffff;
+    border-right: 2px solid #b5cfa0 !important;
+    box-shadow: 3px 0 16px rgba(60, 90, 30, 0.12) !important;
 }
 
 /* ── Sidebar logo block ── */
@@ -1008,10 +1010,23 @@ a {
     flex-direction: column;
     background: url('/images/background/CARD_BG.png') top center / 100% no-repeat;
     background-attachment: fixed;
-    border-radius: var(--radius-lg);
+    border-radius: 0;
     padding: 28px;
-    box-shadow: var(--shadow-sm);
     position: relative;
+    min-height: 100vh;
+}
+
+.profile-page-wrapper-message {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0;
+    padding: 0px;
+    position: relative;
+    min-height: 100vh;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
 }
 
 .promo-banner-deco {
@@ -1022,7 +1037,7 @@ a {
 }
 
 .store-wrapper .store-content {
-    padding: 18px 32px 45px !important;
+    padding: 0 !important;
 }
 
 .sagad-wrapper {

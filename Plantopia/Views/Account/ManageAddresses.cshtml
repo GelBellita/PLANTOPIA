@@ -128,7 +128,7 @@
                                     <p style="margin:0; color:#444; font-size:14px;">@address.FullAddress</p>
                                     <p style="margin:0; color:#666; font-size:13px;">@address.City, @address.Province @address.ZipCode</p>
 
-                                    <div style="display:flex; gap:8px; margin-top:12px;">
+                                    <div class="address-actions">
                                         @if (!address.IsDefault)
                                         {
                                             <form asp-controller="Account" asp-action="SetDefaultAddress" method="post">

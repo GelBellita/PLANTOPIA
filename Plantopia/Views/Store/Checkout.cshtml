@@ -27,13 +27,23 @@
 <div class="profile-page-wrapper">
 <div class="profile-page">
 
-    <div class="profile-header" style="margin-bottom:16px;">
-            <a href="/Account/Cart" class="btn-back-to-cart" style="margin-bottom:8px;">
-                ← Back
+        <div style="margin-bottom:12px;">
+            <a href="/Account/Cart"
+                   style="display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500; color:var(--text-mid); text-decoration:none; padding:7px 16px; border:1.5px solid var(--border); border-radius:20px; background:var(--white); transition:all 0.15s;"
+                   onmouseover="this.style.borderColor='var(--green-soft)'; this.style.color='var(--green-mid)'; this.style.background='var(--green-pale)';"
+                   onmouseout="this.style.borderColor='var(--border)'; this.style.color='var(--text-mid)'; this.style.background='var(--white)';">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="19" y1="12" x2="5" y2="12" />
+                    <polyline points="12 19 5 12 12 5" />
+                </svg>
+                Back
             </a>
-        <h1 class="profile-title">Checkout <span class="profile-title-emoji">🛒</span></h1>
-        <p class="profile-subtitle">Fill in your delivery details and confirm your order.</p>
-    </div>
+        </div>
+
+        <div class="profile-header" style="margin-bottom:16px;">
+            <h1 class="profile-title">Checkout <span class="profile-title-emoji">🛒</span></h1>
+            <p class="profile-subtitle">Fill in your delivery details and confirm your order.</p>
+        </div>
 
     <div class="checkout-grid">
 
@@ -84,8 +94,7 @@
                     </div>
             </div>
 
-            <!-- Payment -->
-                <<!-- Payment -->
+                <!-- Payment -->
                     <div class="checkout-card">
                         <div class="checkout-section-title">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0070ff" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2" /><line x1="1" y1="10" x2="23" y2="10" /></svg>

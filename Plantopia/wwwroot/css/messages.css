@@ -4,11 +4,13 @@
 
 .messages-page {
     background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    margin-left: -20px;
-    margin-right: -28px;
-    margin-top: -13px;
+    border-radius: 0 ;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .messages-header-row {
@@ -30,11 +32,9 @@
     display: grid;
     grid-template-columns: 220px 1fr;
     background: var(--white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-sm);
     overflow: hidden;
     height: calc(100vh - var(--topbar-h) - 140px);
-    min-height: 400px;
+    min-height: 450px;
 }
 
 /* ── Conversation List Panel ── */
@@ -377,3 +377,31 @@
     .btn-send svg {
         stroke: white;
     }
+body:has(.messages-page) {
+    overflow: hidden;
+}
+
+    body:has(.messages-page) .store-content {
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: hidden;
+    }
+
+.messages-container {
+    flex: 1;
+    min-height: 0;
+    height: 100%;
+}
+
+.profile-page-wrapper-message {
+    padding: 0;
+    margin: 0;
+    min-height: unset;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    height: calc(100vh - 68px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
