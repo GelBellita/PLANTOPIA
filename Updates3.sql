@@ -1,1 +1,0 @@
-﻿UPDATE Plants SET ImageUrl = '/images/New_SucculentMix.png' WHERE Name = 'Succulent Mix';

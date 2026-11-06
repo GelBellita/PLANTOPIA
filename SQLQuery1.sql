@@ -1,9 +1,0 @@
-﻿CREATE TABLE Wishlists (
-    Id       INT IDENTITY(1,1) PRIMARY KEY,
-    UserId   INT NOT NULL,
-    PlantId  INT NOT NULL,
-    AddedAt  DATETIME NOT NULL DEFAULT GETDATE(),
-    CONSTRAINT FK_Wishlists_Users  FOREIGN KEY (UserId)  REFERENCES Users(Id)  ON DELETE CASCADE,
-    CONSTRAINT FK_Wishlists_Plants FOREIGN KEY (PlantId) REFERENCES Plants(Id) ON DELETE CASCADE,
-    CONSTRAINT UQ_Wishlists UNIQUE (UserId, PlantId)
-);

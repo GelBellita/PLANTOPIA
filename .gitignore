@@ -1,19 +1,35 @@
-# Visual Studio
+# Visual Studio / Rider
 .vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build output
 bin/
 obj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Ll]og/
+[Ll]ogs/
+*.log
 
-# Python
-venv/
-__pycache__/
-*.pyc
-
-# Node (if used)
-node_modules/
-
-# Environment files
+# Local secrets and environment overrides
 .env
+appsettings.*.local.json
+secrets.json
+
+# Local database files
+*.mdf
+*.ldf
+
+# User-uploaded profile photos (created at runtime)
+Plantopia/wwwroot/images/profiles/
 
 # OS junk
 .DS_Store
 Thumbs.db
+desktop.ini
